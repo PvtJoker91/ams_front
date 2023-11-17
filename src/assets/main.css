@@ -7,10 +7,9 @@
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+.yellow {
+  text-decoration: black;
+  color: rgb(126, 137, 5);
   transition: 0.4s;
 }
 
@@ -31,4 +30,13 @@ a,
     grid-template-columns: 20% 80%;
     padding: 0 2rem;
   }
+}
+
+.highlighted {
+  outline: 1px solid #6dbff5;
+}
+
+.highlighted:hover {
+  background-color: rgba(134, 159, 22, 0.29);
+  outline: none;
 }

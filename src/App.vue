@@ -5,7 +5,7 @@ import Menu from './components/Menu.vue'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="60" height="60" />
+    <img alt="AMS logo" class="logo" src="@/assets/logo.svg" width="60" height="60" />
 
     <div class="wrapper">
       <Menu msg="AMS" />
