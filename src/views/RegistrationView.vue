@@ -14,7 +14,7 @@
         </div>
         <div class="container-fluid">
             <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-                <form @submit.prevent="saveDossier()">
+                <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
                     <label class="form-label float-left ml-2">Enter barcode to register:</label>
                     <input type="text" class="form-control" v-model="dossier.barcode">                             
                 </form>
@@ -61,24 +61,25 @@
                     </div>
                     
                 </form>
-                <div v-if="Object.keys(this.contracts).length !==0" >
+                <div v-if="Object(this.contracts).length !==0" >
+                    <div class="row">
+                        <div class="col"><b>Product:</b></div>
+                        <div class="col"><b>Contract number: </b></div>
+                        <div class="col"><b>Client last name: </b></div>
+                        <div class="col"><b>Client name: </b></div>
+                        <div class="col"><b>Client middle name: </b></div>
+                        <div class="col"><b>Client birthday: </b></div>
+                        <div class="col"><b>Client passport: </b></div>
+                    </div>
                     <div class='highlighted' @click="saveContract(contract)" v-for="contract in contracts">            
                     <div class="row">
-                        <div class="col">
-                            {{ contract.product.name }}    
-                        </div>
-                        <div class="col">
-                            {{ contract.contract_number}}
-                        </div>
-                        <div class="col">
-                            {{ contract.client.last_name }}
-                        </div>
-                        <div class="col">
-                            {{ contract.client.name }}
-                        </div>
-                        <div class="col">
-                            {{ contract.client.middle_name }}
-                        </div>
+                        <div class="col">{{ contract.product.name }}</div>
+                        <div class="col">{{ contract.contract_number}}</div>
+                        <div class="col">{{ contract.client.last_name }}</div>
+                        <div class="col">{{ contract.client.name }}</div>
+                        <div class="col"> {{ contract.client.middle_name }}</div>
+                        <div class="col">{{ contract.client.birthday }}</div>
+                        <div class="col">{{ contract.client.passport }}</div>
                     </div>
                             
                     </div>
@@ -99,9 +100,12 @@
 
             <!-- <div>
                 <b>VARS</b><br>
+                <b>ArchiveBox</b> {{archiveBox}}<br>
+                <b>Dossier</b> {{dossier}}<br>
+                <b>Contract</b>  {{contract}}<br>
                 <b>currentArchiveBox</b> {{currentArchiveBox}}<br>
                 <b>currentDossier</b> {{currentDossier}}<br>
-                <b> currentContract</b>  {{currentContract}}<br>
+                <b>currentContract</b>  {{currentContract}}<br>
                 <b>dossiers</b> {{dossiers}}<br>
                 <b>contracts</b> {{contracts}}
 
@@ -147,10 +151,10 @@ export default{
         },
         'dossier':{
             'barcode':'',
-            'archive_box':this.currentArchiveBox,
-            'contract':this.currentContract,
+            'archive_box':'',
+            'contract':'',
             'current_sector':'1',
-            'status':'Is Registred',
+            'status':'On registration',
         },
         'contract':{
             'contract_number':'',
@@ -197,13 +201,23 @@ export default{
 
     },
 
+
     saveDossier(){
-                this.dossier.archive_box = this.currentArchiveBox.id
+        axios.get(this.api + 'registration/dossier/'+ '?barcode=' + this.dossier.barcode).then(
+            response =>{
+                console.log(response.data)
+                if (response.data.length == 0){
                 this.currentDossier = this.dossier
+                this.currentDossier.archive_box = this.currentArchiveBox.id
                 this.contracts = []
                 this.currentContract = {}
+            } else(this.currentDossier = {})   
+            }
+        ).catch(error =>{
+            console.log(error)
+        })
     },
-     
+
     searchContract(saveIfOne){
         axios.get(this.api + 'search/' + 
                     '?contract_number='+this.contract.contract_number +
@@ -229,11 +243,11 @@ export default{
             {
             this.currentContract = contract
             }
-        this.dossier.contract = this.currentContract.id     
+        this.currentDossier.contract = this.currentContract.id     
         },
   
     registerDossier(reOpenBox){
-        axios.post(this.api + 'registration/dossier/', this.dossier, reOpenBox).then(
+        axios.post(this.api + 'registration/dossier/', this.currentDossier, reOpenBox).then(
             response =>{
                 console.log(response.data)
             }
@@ -242,6 +256,8 @@ export default{
         }).then(reOpenBox)
     },
     
+
+
     }
 
 }
