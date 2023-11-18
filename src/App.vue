@@ -14,8 +14,14 @@ import Menu from './components/Menu.vue'
         <RouterLink to="/">Home</RouterLink><br>
         <RouterLink to="/search">Search</RouterLink><br>
         <RouterLink to="/registration">Registration</RouterLink><br>
-        <RouterLink to="/logistic">Logistic</RouterLink><br>
+        Logistic<br>
+        <ul>
+          <RouterLink to="/logistic/placement">Placement</RouterLink><br>
+          <RouterLink to="/logistic/completion">Completion</RouterLink><br>
+        </ul>
         <RouterLink to="/requests">Requests</RouterLink><br>
+
+      
       </nav>
     </div>
   </header>

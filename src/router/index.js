@@ -19,10 +19,16 @@ const router = createRouter({
       name: 'registration',
       component: () => import('../views/RegistrationView.vue')
     },
+
     {
-      path: '/logistic',
-      name: 'logistic',
-      component: () => import('../views/LogisticView.vue')
+      path: '/logistic/completion',
+      name: 'completion',
+      component: () => import('../views/LogisticCompletionView.vue')
+    },
+    {
+      path: '/logistic/placement',
+      name: 'placement',
+      component: () => import('../views/LogisticPlacementView.vue')
     },
     {
       path: '/requests',
