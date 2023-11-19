@@ -3,13 +3,27 @@
       <h2 class="alert alert-danger mt-2">Placement</h2>
       <div class="container-fluid">
           <div>
-              <form @submit.prevent="barcodeAddressDictMaker(insertForm)">
-                  <label class="form-label float-left ml-2">Enter archive box</label>
-                  <input type="text" class="form-control" v-model="insertForm">
-                  <button type="submit" class="btn btn-primary float-left ml-2">Разместить</button>                             
+            <p>Enter archive box</p>
+              <form id="ab" @submit.prevent="barcodeAddressDictMaker(insertForm)">
+                  <textarea autofocus rows="20" cols="30" v-model="insertForm"
+                  placeholder=
+"Insert shelf barcode then 
+archive boxes barcodes 
+then again shelf barcode 
+each on new string 
+Example:
+10.00.00.-A.00.01
+AB-00-000001
+AB-00-000002
+AB-00-000003
+10.00.00.-A.00.01
+10.00.00.-A.00.02
+AB-00-000004
+AB-00-000005
+AB-00-000006
+10.00.00.-A.00.02"></textarea>
+                  <p><button type="submit" class="btn btn-primary float-left ml-2">Place for storage</button></p>                                     
               </form>
-              {{barcodeAddressDict}}
-              {{archiveBox}}
           </div>
       </div>
   </div>
@@ -27,12 +41,12 @@ export default{
       insertForm: '',
       barcodeAddressDict: {},
       'api': 'http://127.0.0.1:8000/api/',
-      'archiveBox': {
-          'barcode':'',
-          'current_sector':'2',
-          'status':'Storage',
-          'storage_address':{
-              'shelf_code': ''
+      "archiveBox": {
+          "barcode":"",
+          "current_sector":"2",
+          "status":"Storage",
+          "storage_address":{
+                "shelf_code": ""
               }
       },
       }
@@ -42,11 +56,10 @@ export default{
 
   barcodeAddressDictMaker(string){
     const result = {};
-    const listBarcodeAddress = string.split(" ");
+    const listBarcodeAddress = string.split("\n");
     let curShelf = listBarcodeAddress[0];
     let curBox = listBarcodeAddress[1];
     let i = 1;
-
     while (i < listBarcodeAddress.length - 1) {
         if (curBox !== curShelf) {
             result[curBox] = curShelf;
@@ -59,7 +72,8 @@ export default{
     }
 
     this.barcodeAddressDict = result;
-    this.placeArchiveBox(this.barcodeAddressDict);
+    if (result){this.placeArchiveBox(this.barcodeAddressDict)};
+    
 },
 
 

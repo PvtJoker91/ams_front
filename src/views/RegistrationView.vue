@@ -140,8 +140,9 @@ export default{
         'archiveBox': {
             'id':'',
             'barcode':'',
-            'current_sector':'1',
             'status':'On registration',
+            'current_sector':'1',
+            "storage_address":"",
             'dossiers': [
                             {
                             'contract': '',
@@ -247,6 +248,7 @@ export default{
         },
   
     registerDossier(reOpenBox){
+        this.currentDossier.status = 'Is registred'
         axios.post(this.api + 'registration/dossier/', this.currentDossier, reOpenBox).then(
             response =>{
                 console.log(response.data)
