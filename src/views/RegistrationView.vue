@@ -5,7 +5,10 @@
             <div>
                 <form @submit.prevent="openArchiveBox()">
                     <label class="form-label float-left ml-2">Open archive box</label>
-                    <input type="text" class="form-control" v-model="archiveBox.barcode">                             
+                    <input type="text" class="form-control" v-model="archiveBox.barcode">
+                    <span class="danger">{{errArray['sector_error']?errArray['sector_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
+                    <span id='err' class="danger"></span>                           
                 </form>
             </div>
             <div v-if="Object.keys(this.currentArchiveBox).length !==0">
@@ -16,7 +19,10 @@
             <div v-if="Object.keys(this.currentArchiveBox).length !==0">
                 <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
                     <label class="form-label float-left ml-2">Enter barcode to register:</label>
-                    <input type="text" class="form-control" v-model="dossier.barcode">                             
+                    <input type="text" class="form-control" v-model="dossier.barcode">
+                    <span class="danger">{{errArray['sector_error']?errArray['sector_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
+                    <span id='err' class="danger"></span>                               
                 </form>
             </div>
 
@@ -95,7 +101,7 @@
                         <b>Contract date: </b> {{ currentContract.time_create}}<br>
                         
                     </div>                 
-                <button @click="registerDossier(openArchiveBox)">Register</button>
+                <button @click="registerDossier()">Register</button>
             </div>
 
             <!-- <div>
@@ -113,7 +119,8 @@
             
 
             <div v-if="Object(this.dossiers).length !==0">
-                <p>Registred in this AB:</p>
+                <p>Registred in this AB: ({{dossiers.length}})</p>
+               
                 <li v-for="dossier in dossiers">
                     {{ dossier.barcode }}
                 </li>
@@ -138,17 +145,10 @@ export default{
         contracts:[],
         'api': 'http://127.0.0.1:8000/api/',
         'archiveBox': {
-            'id':'',
             'barcode':'',
             'status':'On registration',
             'current_sector':'1',
             "storage_address":"",
-            'dossiers': [
-                            {
-                            'contract': '',
-                            'barcode': ''
-                            }
-                        ]
         },
         'dossier':{
             'barcode':'',
@@ -158,31 +158,42 @@ export default{
             'status':'On registration',
         },
         'contract':{
+            'id':'',
             'contract_number':'',
             'client__last_name':'',
             'client__name':'',
             'client__middle_name':'',
             'client__passport':'',
-        }
+        },
+        'errArray': [],
         }
     },
 
     methods: {
 
     openArchiveBox(){
+        if (this.archiveBox.barcode) {
         axios.post(this.api + 'registration/ab/', this.archiveBox).then(
             response =>{
                 console.log(response.data)
-                this.dossiers = response.data.dossiers
                 this.currentArchiveBox = response.data
+                this.dossiers = response.data.dossiers
+                this.errArray = []
                 this.contracts = []
                 this.currentDossier = {}
                 this.currentContract = {}
             }
         ).catch(error =>{
-            console.log(error)
-        })
+            if (error.response) {
+      console.log(error.response.data);
+      this.errArray = error.response.data;
+      this.currentArchiveBox = {};
+      this.dossiers = [];
 
+    }
+    })
+
+    }
     },
 
     closeArchiveBox(){
@@ -215,47 +226,55 @@ export default{
             } else(this.currentDossier = {})   
             }
         ).catch(error =>{
-            console.log(error)
+            if (error.response) {
+      console.log(error.response.data);
+      this.errArray = error.response.data;
+
+    }
         })
     },
 
-    searchContract(saveIfOne){
+    searchContract(){
         axios.get(this.api + 'search/' + 
                     '?contract_number='+this.contract.contract_number +
                     '&client__last_name='+this.contract.client__last_name +
                     '&client__name='+this.contract.client__name +
                     '&client__middle_name='+this.contract.client__middle_name +
                     '&client__passport='+this.contract.client__passport,
-                    saveIfOne
                     ).then(response =>{
                             console.log(response.data)
                             this.contracts = response.data
+                            if (this.contracts.length == 1){
+                                this.saveContract(this.contracts[0]);
+                            }                         
                             }          
                 ).catch(error =>{
                     console.log(error)
                 }
-                ).then(saveIfOne)
+                )
     },
 
     saveContract(contract){
-        if (this.contracts.length == 1){
-            this.currentContract = this.contracts[0];
-        } else 
-            {
-            this.currentContract = contract
-            }
+        this.currentContract = contract
         this.currentDossier.contract = this.currentContract.id     
         },
   
-    registerDossier(reOpenBox){
+    registerDossier(){
         this.currentDossier.status = 'Is registred'
-        axios.post(this.api + 'registration/dossier/', this.currentDossier, reOpenBox).then(
+        axios.post(this.api + 'registration/dossier/', this.currentDossier).then(
             response =>{
                 console.log(response.data)
+                if(response.data){
+                    this.dossiers.push(response.data);
+                    this.contracts = [];
+                    this.currentDossier = {};
+                    this.currentContract = {};
+                }
+                
             }
         ).catch(error =>{
             console.log(error)
-        }).then(reOpenBox)
+        })
     },
     
 
