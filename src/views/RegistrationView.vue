@@ -220,10 +220,9 @@ export default{
                 console.log(response.data)
                 if (response.data.length == 0){
                 this.currentDossier = this.dossier
-                this.currentDossier.archive_box = this.currentArchiveBox.id
                 this.contracts = []
                 this.currentContract = {}
-            } else(this.currentDossier = {})   
+            } else {this.currentDossier = {}} 
             }
         ).catch(error =>{
             if (error.response) {
@@ -261,6 +260,7 @@ export default{
   
     registerDossier(){
         this.currentDossier.status = 'Is registred'
+        this.currentDossier.archive_box = this.currentArchiveBox.id
         axios.post(this.api + 'registration/dossier/', this.currentDossier).then(
             response =>{
                 console.log(response.data)

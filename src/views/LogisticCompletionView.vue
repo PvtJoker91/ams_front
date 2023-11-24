@@ -17,7 +17,7 @@
       </div>
       <div class="container-fluid">
           <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-              <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
+              <form id="dossierBarcodeForm" @submit.prevent="addOrRemoveDossier()">
                   <label class="form-label float-left ml-2">Enter barcode to add/remove dossier:</label>
                   <input type="text" class="form-control" v-model="dossier.barcode">                             
               </form>
@@ -25,31 +25,42 @@
           <div style="width:100%; height:1px; clear:both;"></div>
                     <div id="line_block" v-if="Object(this.dossiers).length !==0">
                       <p>Dossiers in this AB: ({{dossiers.length}})</p>
-                        <li v-for="dossier in dossiers">
-                            {{ dossier.barcode }}
+                        <li v-for="d in dossiers">
+                            {{ d.barcode }}
                         </li>
                       </div> 
-                    <div id="line_block" v-if="Object(this.addedDossiers).length !==0">
+                    <div id="line_block" v-if="Object(this.addedDossiers).length !==0 || Object(this.removedDossiers).length !==0">
                       <p>Added dossiers: ({{addedDossiers.length}})</p>
-                        <li v-for="dossier in dossiers">
-                            {{ dossier.barcode }}
+                        <li v-for="d in addedDossiers">
+                            {{ d.barcode }}
                         </li>                        
                     </div> 
-                    <div id="line_block" v-if="Object(this.removedDossiers).length !==0">
+                    <div id="line_block" v-if="Object(this.addedDossiers).length !==0 || Object(this.removedDossiers).length !==0">
                       <p>Removed dossiers: ({{removedDossiers.length}})</p>
-                        <li v-for="dossier in dossiers">
-                            {{ dossier.barcode }}
+                        <li v-for="d in removedDossiers">
+                            {{ d.barcode }}
                         </li>
                     </div>  
           <div style="width:100%; height:1px; clear:both;"></div>
       </div>
   </div>
 
+              <div>
+                <b>VARS</b><br>
+                <b>ArchiveBox</b> {{archiveBox}}<br>
+                <b>Dossier</b> {{dossier}}<br>
+                <b>currentArchiveBox</b> {{currentArchiveBox}}<br>
+                <b>currentDossier</b> {{currentDossier}}<br>
+                <b>dossiers</b> {{dossiers}}<br>
+
+            </div> 
+
 </template>
 
 
 <script>
 import axios from 'axios'
+
 
 export default{
 
@@ -69,10 +80,9 @@ export default{
       },
       'dossier':{
           'barcode':'',
-          'archive_box':'',
-          'contract':'',
           'current_sector':'2',
-          'status':'On completion',
+          'status':'',
+          'archive_box':'',
       },
       'errArray': [],
       }
@@ -87,6 +97,8 @@ export default{
               this.currentArchiveBox = response.data
               this.dossiers = response.data.dossiers
               this.currentDossier = {}
+              this.addedDossiers = []
+              this.removedDossiers = []
               this.errArray = []
           }
       ).catch(error =>{
@@ -103,10 +115,12 @@ export default{
 
   closeArchiveBox(){
       this.currentArchiveBox.status = 'Is completed'
-      axios.post(this.api + 'logistic/completion/', this.currentArchiveBox).then(
+      axios.patch(this.api + 'logistic/completion/' +  this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
           response =>{
               console.log(response.data)
               this.dossiers = []
+              this.addedDossiers = []
+              this.removedDossiers = []
               this.currentArchiveBox = {}
               this.currentDossier = {}
           }
@@ -114,38 +128,71 @@ export default{
           console.log(error)
       })
 
-  },
+    },
 
-  saveDossier(){
-      axios.get(this.api + 'registration/dossier/'+ '?barcode=' + this.dossier.barcode).then(
-          response =>{
-              console.log(response.data)
-              if (response.data.length == 0){
-              this.currentDossier = this.dossier
-              this.currentDossier.archive_box = this.currentArchiveBox.id
-              this.contracts = []
-              this.currentContract = {}
-          } else(this.currentDossier = {})   
-          }
-      ).catch(error =>{
-          console.log(error)
-      })
-  },
+  isBarcodePresent(jsonData, barcodeToCheck) {
+    return jsonData.some(obj => obj.barcode === barcodeToCheck);
+    },
+
+    
+    moveToDestination(dossier, sourceArray, destinationArray) {
+      const index = sourceArray.findIndex(i => i.barcode === dossier.barcode);
+      sourceArray.splice(index, 1);
+      destinationArray.push(dossier);
+    },
 
   addOrRemoveDossier(){
-      this.currentDossier.status = 'Is registred'
-      axios.post(this.api + 'registration/dossier/', this.currentDossier).then(
+      this.currentDossier = this.dossier
+
+      if (this.isBarcodePresent(this.dossiers, this.currentDossier.barcode)){
+        this.moveToDestination(this.currentDossier, this.dossiers, this.removedDossiers);
+        this.currentDossier.archive_box = null;
+        this.currentDossier.status = 'Removed from a box';
+
+
+    } else if (this.isBarcodePresent(this.addedDossiers, this.currentDossier.barcode)){
+        this.moveToDestination(this.currentDossier, this.addedDossiers, this.removedDossiers);
+        this.currentDossier.archive_box = null;
+        this.currentDossier.status = 'Removed from a box';
+
+    } else if (this.isBarcodePresent(this.removedDossiers, this.currentDossier.barcode)){
+        this.moveToDestination(this.currentDossier, this.removedDossiers, this.addedDossiers);
+        this.currentDossier.archive_box = this.currentArchiveBox.id;
+        this.currentDossier.status = 'Added to a box';
+        
+    } else {
+        this.currentDossier.archive_box = this.currentArchiveBox.id;
+        this.currentDossier.status = 'Added to a box';
+        axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
           response =>{
               console.log(response.data)
-              this.openArchiveBox()
+
+              // Добавить валидацию re шк досье во вьюху
+                // Добавить валидацию статуса/сектора досье в сериализатор
+
+
+              this.addedDossiers.push(this.currentDossier);
           }
       ).catch(error =>{
           console.log(error)
       })
-  },
+        
+        
+
+
+        
+    } 
+      axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+          response =>{
+              console.log(response.data)
+          }
+      ).catch(error =>{
+          console.log(error)
+      })
+    },
   
 
-  }
+}
 
 }
 </script>
