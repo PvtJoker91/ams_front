@@ -19,7 +19,11 @@
           <div v-if="Object.keys(this.currentArchiveBox).length !==0">
               <form id="dossierBarcodeForm" @submit.prevent="addOrRemoveDossier()">
                   <label class="form-label float-left ml-2">Enter barcode to add/remove dossier:</label>
-                  <input type="text" class="form-control" v-model="dossier.barcode">                             
+                  <input type="text" class="form-control" v-model="dossier.barcode">
+                  <span class="danger">{{errArray['dossier_sector_error']?errArray['dossier_sector_error'].toString():''}}</span>
+                  <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
+                  <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
+                  <span id='err' class="danger"></span>                            
               </form>
           </div>
           <div style="width:100%; height:1px; clear:both;"></div>
@@ -44,22 +48,12 @@
           <div style="width:100%; height:1px; clear:both;"></div>
       </div>
   </div>
-
-              <div>
-                <b>VARS</b><br>
-                <b>ArchiveBox</b> {{archiveBox}}<br>
-                <b>Dossier</b> {{dossier}}<br>
-                <b>currentArchiveBox</b> {{currentArchiveBox}}<br>
-                <b>currentDossier</b> {{currentDossier}}<br>
-                <b>dossiers</b> {{dossiers}}<br>
-
-            </div> 
-
 </template>
 
 
 <script>
 import axios from 'axios'
+import _ from 'lodash';
 
 
 export default{
@@ -142,44 +136,45 @@ export default{
     },
 
   addOrRemoveDossier(){
-      this.currentDossier = this.dossier
-
-      if (this.isBarcodePresent(this.dossiers, this.currentDossier.barcode)){
+      this.currentDossier = _.cloneDeep(this.dossier);
+      if (
+        !this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
+        !this.isBarcodePresent(this.addedDossiers, this.currentDossier.barcode) &&
+        !this.isBarcodePresent(this.removedDossiers, this.currentDossier.barcode)
+        ){
+            this.currentDossier.archive_box = this.currentArchiveBox.id;
+            this.currentDossier.status = 'Added to a box';
+            axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+            response =>{
+                console.log(response.data)
+                this.addedDossiers.push(this.currentDossier);
+                this.errArray = [];
+            }
+        ).catch(error =>{
+            if (error.response) {
+                console.log(error.response.data);
+                this.errArray = error.response.data;
+                }
+            }
+        )
+    }  else if (this.isBarcodePresent(this.dossiers, this.currentDossier.barcode)){
         this.moveToDestination(this.currentDossier, this.dossiers, this.removedDossiers);
         this.currentDossier.archive_box = null;
         this.currentDossier.status = 'Removed from a box';
+        console.log(this.currentDossier)
 
 
     } else if (this.isBarcodePresent(this.addedDossiers, this.currentDossier.barcode)){
         this.moveToDestination(this.currentDossier, this.addedDossiers, this.removedDossiers);
         this.currentDossier.archive_box = null;
         this.currentDossier.status = 'Removed from a box';
+        console.log(this.currentDossier)
 
     } else if (this.isBarcodePresent(this.removedDossiers, this.currentDossier.barcode)){
         this.moveToDestination(this.currentDossier, this.removedDossiers, this.addedDossiers);
         this.currentDossier.archive_box = this.currentArchiveBox.id;
         this.currentDossier.status = 'Added to a box';
-        
-    } else {
-        this.currentDossier.archive_box = this.currentArchiveBox.id;
-        this.currentDossier.status = 'Added to a box';
-        axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
-          response =>{
-              console.log(response.data)
-
-              // Добавить валидацию re шк досье во вьюху
-                // Добавить валидацию статуса/сектора досье в сериализатор
-
-
-              this.addedDossiers.push(this.currentDossier);
-          }
-      ).catch(error =>{
-          console.log(error)
-      })
-        
-        
-
-
+        console.log(this.currentDossier)
         
     } 
       axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(

@@ -20,8 +20,9 @@
                 <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
                     <label class="form-label float-left ml-2">Enter barcode to register:</label>
                     <input type="text" class="form-control" v-model="dossier.barcode">
-                    <span class="danger">{{errArray['sector_error']?errArray['sector_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
+                    <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['dossier_sector_error']?errArray['dossier_sector_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['dossier_box_error']?errArray['dossier_box_error'].toString():''}}</span>
                     <span id='err' class="danger"></span>                               
                 </form>
             </div>
