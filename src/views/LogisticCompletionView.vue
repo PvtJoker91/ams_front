@@ -6,7 +6,7 @@
               <form @submit.prevent="openArchiveBox()">
                   <label class="form-label float-left ml-2">Open archive box</label>
                   <input type="text" class="form-control" v-model="archiveBox.barcode">
-                  <span class="danger">{{errArray['sector_error']?errArray['sector_error'].toString():''}}</span>
+                  <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
                   <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
                   <span id='err' class="danger"></span>                        
               </form>
@@ -20,7 +20,7 @@
               <form id="dossierBarcodeForm" @submit.prevent="addOrRemoveDossier()">
                   <label class="form-label float-left ml-2">Enter barcode to add/remove dossier:</label>
                   <input type="text" class="form-control" v-model="dossier.barcode">
-                  <span class="danger">{{errArray['dossier_sector_error']?errArray['dossier_sector_error'].toString():''}}</span>
+                  <span class="danger">{{errArray['dossier_status_error']?errArray['dossier_status_error'].toString():''}}</span>
                   <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
                   <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
                   <span id='err' class="danger"></span>                            
@@ -108,8 +108,21 @@ export default{
   },
 
   closeArchiveBox(){
+    if (this.dossiers.length == 0 && this.addedDossiers.length == 0){
+        axios.delete(this.api + 'logistic/completion/' + this.currentArchiveBox.barcode + '/').then(
+            response =>{
+                console.log(response.data)
+                this.removedDossiers = []
+                this.currentArchiveBox = {}
+                this.currentDossier = {}
+            }
+        ).catch(error =>{
+            console.log(error)
+        })
+  
+      } else {
       this.currentArchiveBox.status = 'Is completed'
-      axios.patch(this.api + 'logistic/completion/' +  this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
+      axios.post(this.api + 'logistic/completion/', this.currentArchiveBox).then(
           response =>{
               console.log(response.data)
               this.dossiers = []
@@ -121,7 +134,7 @@ export default{
       ).catch(error =>{
           console.log(error)
       })
-
+    }
     },
 
   isBarcodePresent(jsonData, barcodeToCheck) {

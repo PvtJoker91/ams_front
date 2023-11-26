@@ -18,6 +18,7 @@ import Menu from './components/Menu.vue'
         <ul>
           <RouterLink to="/logistic/placement">Placement</RouterLink><br>
           <RouterLink to="/logistic/completion">Completion</RouterLink><br>
+          <RouterLink to="/logistic/checking">Checking</RouterLink><br>
         </ul>
         <RouterLink to="/requests">Requests</RouterLink><br>
 

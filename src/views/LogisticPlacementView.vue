@@ -43,7 +43,7 @@ export default{
       "archiveBox": {
           "barcode":"",
           "current_sector":"2",
-          "status":"Storage",
+          "status":"Under storage",
           "storage_address":{
                 "shelf_code": ""
               }

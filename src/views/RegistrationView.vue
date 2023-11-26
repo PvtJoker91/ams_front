@@ -6,7 +6,7 @@
                 <form @submit.prevent="openArchiveBox()">
                     <label class="form-label float-left ml-2">Open archive box</label>
                     <input type="text" class="form-control" v-model="archiveBox.barcode">
-                    <span class="danger">{{errArray['sector_error']?errArray['sector_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
                     <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
                     <span id='err' class="danger"></span>                           
                 </form>
@@ -21,7 +21,7 @@
                     <label class="form-label float-left ml-2">Enter barcode to register:</label>
                     <input type="text" class="form-control" v-model="dossier.barcode">
                     <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['dossier_sector_error']?errArray['dossier_sector_error'].toString():''}}</span>
+                    <span class="danger">{{errArray['dossier_status_error']?errArray['dossier_status_error'].toString():''}}</span>
                     <span class="danger">{{errArray['dossier_box_error']?errArray['dossier_box_error'].toString():''}}</span>
                     <span id='err' class="danger"></span>                               
                 </form>
@@ -147,7 +147,7 @@ export default{
         'api': 'http://127.0.0.1:8000/api/',
         'archiveBox': {
             'barcode':'',
-            'status':'On registration',
+            'status':'Under registration',
             'current_sector':'1',
             "storage_address":"",
         },
@@ -156,7 +156,7 @@ export default{
             'archive_box':'',
             'contract':'',
             'current_sector':'1',
-            'status':'On registration',
+            'status':'',
         },
         'contract':{
             'id':'',
@@ -198,7 +198,21 @@ export default{
     },
 
     closeArchiveBox(){
-        this.currentArchiveBox.status = 'Is registred'
+        if (this.dossiers.length == 0){
+        axios.delete(this.api + 'registration/ab/' + this.currentArchiveBox.barcode + '/').then(
+            response =>{
+                console.log(response.data)
+                this.currentArchiveBox = {}
+                this.contracts = []
+                this.currentDossier = {}
+                this.currentContract = {}
+            }
+        ).catch(error =>{
+            console.log(error)
+        })
+  
+      } else {
+        this.currentArchiveBox.status = 'Is registered'
         axios.post(this.api + 'registration/ab/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
@@ -211,7 +225,7 @@ export default{
         ).catch(error =>{
             console.log(error)
         })
-
+    }
     },
 
 
