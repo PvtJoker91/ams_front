@@ -30,7 +30,7 @@
 
             <div v-if="Object.keys(this.currentDossier).length !==0 && Object.keys(this.currentContract).length == 0">
             <h2 class="alert alert-info">Contract search</h2>
-                <form @submit.prevent="searchContract(saveContract)">
+                <form @submit.prevent="searchContract()">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -64,9 +64,8 @@
                                 <input type="text" class="form-control" v-model="contract.contract_number">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary float-left ml-2">Search</button>
                     </div>
-                    
+                    <button type="submit" class="btn btn-primary float-left ml-2">Search</button>
                 </form>
                 <div v-if="Object(this.contracts).length !==0" >
                     <div class="row">
@@ -234,9 +233,10 @@ export default{
             response =>{
                 console.log(response.data)
                 if (response.data.length == 0){
-                this.currentDossier = this.dossier
-                this.contracts = []
-                this.currentContract = {}
+                this.currentDossier = this.dossier;
+                this.contracts = [];
+                this.currentContract = {};
+                this.errArray = [];
             } else {this.currentDossier = {}} 
             }
         ).catch(error =>{
@@ -249,7 +249,7 @@ export default{
     },
 
     searchContract(){
-        axios.get(this.api + 'search/' + 
+        axios.get(this.api + 'registration/search/' + 
                     '?contract_number='+this.contract.contract_number +
                     '&client__last_name='+this.contract.client__last_name +
                     '&client__name='+this.contract.client__name +
@@ -284,6 +284,12 @@ export default{
                     this.contracts = [];
                     this.currentDossier = {};
                     this.currentContract = {};
+                    this.dossier.barcode = '';
+                    this.contract.contract_number = '';
+                    this.contract.client__last_name = '';
+                    this.contract.client__name = '';
+                    this.contract.client__middle_name = '';
+                    this.contract.client__passport = '';
                 }
                 
             }

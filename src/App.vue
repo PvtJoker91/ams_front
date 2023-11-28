@@ -12,9 +12,15 @@ import Menu from './components/Menu.vue'
 
       <nav>
         <RouterLink to="/">Home</RouterLink><br>
-        <RouterLink to="/search">Search</RouterLink><br>
+        <RouterLink to="/orders">Search and order</RouterLink><br>
+        <ul>
+          <RouterLink to="/orders/create">Create order</RouterLink><br>
+          <RouterLink to="/orders/search">Search dossiers</RouterLink><br>
+          <RouterLink to="/orders/myorders">My orders</RouterLink><br>
+        </ul>
+
         <RouterLink to="/registration">Registration</RouterLink><br>
-        Logistic<br>
+        <RouterLink to="/logistic">Logistic</RouterLink><br>
         <ul>
           <RouterLink to="/logistic/placement">Placement</RouterLink><br>
           <RouterLink to="/logistic/completion">Completion</RouterLink><br>

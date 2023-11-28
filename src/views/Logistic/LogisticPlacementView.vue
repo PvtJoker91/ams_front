@@ -89,8 +89,10 @@ placeArchiveBox(dict){
           console.log(error)
       })
     }
+    this.insertForm = ''
   },
   }
+  
 
 }
 </script>

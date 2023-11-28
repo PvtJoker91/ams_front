@@ -49,3 +49,31 @@
         text-align:left;
         padding: 10px;
         }
+
+#line_block_2 { 
+        width:45%; 
+        height:100%; 
+        float:left; 
+        margin: 0 15px 15px 0; 
+        text-align:left;
+        padding: 10px;
+        }
+
+#big_button { 
+          width:100%; 
+          height:100px; 
+          float:left; 
+          margin: 0 15px 15px 0; 
+          text-align:center;
+          padding: 10px;
+          border-radius: 1em;
+          }
+#add_dossier_button { 
+          width: 20px; 
+          height: 5px;; 
+          float:right; 
+          margin: 0 15px 15px 0; 
+          text-align:center;
+          padding: 10px;
+          border-radius: 1em;
+          }        
