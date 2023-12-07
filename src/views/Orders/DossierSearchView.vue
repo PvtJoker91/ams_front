@@ -61,14 +61,25 @@
                   <button type="submit" class="btn btn-primary float-left ml-2">Search</button>
               </form>
       </div>
-      <div class="container-fluid" v-if="Object(this.dossiers).length !== 0">
+      <div class="container-fluid" v-if="Object(this.dossiers).length !== 0 && Object.keys(this.currentDossier).length == 0">
           <h2 class="alert alert-info">Search result</h2>
           <div>
-                <div v-for="d in dossiers">
-                   <a>{{ d.contract.product.name }} {{ d.contract.contract_number }} {{ d.contract.client.last_name }} {{ d.contract.client.name }} {{ d.contract.client.middle_name }}</a>
-                   <button id="add_dossier_button" @click="addDossierToOrder()">Add</button>
-                </div>
-          </div>
+                <ul class="tree" v-for="client in clients">
+                    <li>
+                        <details open>
+                            <summary><b>{{ client.last_name }} {{ client.name }} {{ client.middle_name }} |  {{ client.dossiers.length }} dossier</b></summary>
+                                <ul>
+                                    <li v-for="dossier in client.dossiers">
+                                        <a>
+                                            Product: {{ dossier.contract.product.name }}, Contract number: {{ dossier.contract.contract_number }}, Contract date: {{ dossier.contract.time_create }}, Barcode: {{ dossier.barcode }}, Status: {{ dossier.status }}
+                                        </a>
+                                        <button id="add_dossier_button" @click="addDossierToOrder(dossier)">Add</button>
+                                    </li>
+                                </ul>
+                        </details>
+                    </li>
+                </ul>
+          </div>  
       </div>
       <div v-if="Object(this.emptyResult) == true">
         <h3>Nothing found</h3>
@@ -89,7 +100,9 @@ export default{
   data(){
       return{
       emptyResult: false,
+      currentDossier:{},
       dossiers:[],
+      clients:[],
       products:[
                 {name:'BSA', id:1},
                 {name:'Credit', id:2},
@@ -98,24 +111,31 @@ export default{
                 {name:'Debet Card', id:5}
             ],
       selectedProduct:'',
-      'api': 'http://127.0.0.1:8000/api/orders/',
+      'api': 'http://127.0.0.1:8000/api/',
       'dossier':{
-            'barcode':'',
-            'contract':{
-                'contract_number':'',
-                'client':{
-                    'last_name':'',
-                    'name':'',
-                    'middle_name':'',
-                    'passport':'',
-                    'birthday':'',
-                },
-                'product':{
-                    'id':''
-                }
+        'id':'',
+        'barcode':'',
+        'status':'',
+        'contract':{
+            'id':'',
+            'contract_number':'',
+            'time_create':'',
+            'client':{
+                'id':'',
+                'last_name':'',
+                'name':'',
+                'middle_name':'',
+                'passport':'',
+                'birthday':'',
+            },
+            'product':{
+                'id':'',
+                'name':''
+            }
 
         },
     },
+
       'errArray': [],
       }
   },
@@ -132,7 +152,7 @@ export default{
 
   searchDossiers(){
       this.emptyResult = false
-      axios.get(this.api + 'search/' + 
+      axios.get(this.api + 'units/dossier/' + 
                   '?barcode='+ this.dossier.barcode +
                   '&contract__contract_number='+this.dossier.contract.contract_number +
                   '&contract__client__last_name='+this.dossier.contract.client.last_name +
@@ -143,9 +163,11 @@ export default{
                   '&contract__product__id='+this.dossier.contract.product.id,
                   ).then(response =>{
                           console.log(response.data)
-                          this.dossiers = response.data
                           if(response.data.length==0){
                             this.emptyResult = true
+                          } else {
+                            this.dossiers = response.data
+                            this.convertDossiersToClients()
                           }                      
                           }          
               ).catch(error =>{
@@ -154,11 +176,52 @@ export default{
               )
   },
 
+  convertDossiersToClients(){
+    const clientsObj = {};
 
+    this.dossiers.forEach((dossier) => {
+    const client = dossier.contract.client;
+    const clientKey = client.id;
 
-  addDossierToOrder(){
+    if (!clientsObj[clientKey]) {
+        clientsObj[clientKey] = {
+        id: client.id,
+        last_name: client.last_name,
+        name: client.name,
+        middle_name: client.middle_name,
+        passport: client.passport,
+        birthday: client.birthday,
+        dossiers: [],
+        };
+    }
+    clientsObj[clientKey].dossiers.push({
+        id: dossier.id,
+        barcode: dossier.barcode,  
+        status: dossier.status,  
+        contract: {
+        id: dossier.contract.id,
+        contract_number: dossier.contract.contract_number,
+        time_create: dossier.contract.time_create,
+        product: {
+            id: dossier.contract.product.id,
+            name: dossier.contract.product.name,
+        },
+        },
+    });
+    });
+    this.clients = Object.values(clientsObj);
+  },
+  showDossierDetail(chosenDossier){
+    this.currentDossier = chosenDossier
 
-      axios.post(this.api + 'registration/dossier/', this.currentDossier).then(
+  },
+  backToSearchResult(){
+    this.currentDossier = {}
+  },
+
+  addDossierToOrder(dossier){
+
+      axios.post(this.api + 'orders/', dossier).then(
           response =>{
               console.log(response.data)
               if(response.data){

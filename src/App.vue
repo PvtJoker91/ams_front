@@ -1,100 +1,82 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import Menu from './components/Menu.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="AMS logo" class="logo" src="@/assets/logo.svg" width="60" height="60" />
+  <nav class="py-10 px-8 border-b border-gray-200">
+      <div class="max-w-7xl mx-auto">
+          <div class="flex items-center justify-between">
+            <div class="menu-left">
+                    <RouterLink to="/" class="text-xl">Archive Management System</RouterLink>
+                </div>
 
-    <div class="wrapper">
-      <Menu msg="AMS" />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink><br>
-        <RouterLink to="/orders">Search and order</RouterLink><br>
-        <ul>
-          <RouterLink to="/orders/create">Create order</RouterLink><br>
-          <RouterLink to="/orders/search">Search dossiers</RouterLink><br>
-          <RouterLink to="/orders/myorders">My orders</RouterLink><br>
-        </ul>
+              <div class="menu-center flex space-x-12">
+               
 
-        <RouterLink to="/registration">Registration</RouterLink><br>
-        <RouterLink to="/logistic">Logistic</RouterLink><br>
-        <ul>
-          <RouterLink to="/logistic/placement">Placement</RouterLink><br>
-          <RouterLink to="/logistic/completion">Completion</RouterLink><br>
-          <RouterLink to="/logistic/checking">Checking</RouterLink><br>
-        </ul>
-        <RouterLink to="/requests">Requests</RouterLink><br>
+                  <RouterLink to="/orders">
+                    Search and order
+                  </RouterLink>
 
-      
-      </nav>
-    </div>
-  </header>
+                  <RouterLink to="/registration">
+                    Registration
+                  </RouterLink>
 
-  <RouterView />
+                  <RouterLink to="/logistics">
+                    Logistics
+                  </RouterLink>
+
+                  <RouterLink to="/requests">
+                    Requests
+                  </RouterLink><br>
+              </div>
+
+              <div class="menu-right">
+                  <template v-if="userStore.user.isAuthenticated && userStore.user.id">
+                      <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
+                          <img :src="userStore.user.avatar" class="w-12 rounded-full">
+                      </RouterLink>
+                  </template>
+
+                  <template v-else>
+                      <RouterLink to="/login" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
+                  </template>
+              </div>
+          </div>
+      </div>
+  </nav>
+
+  <main class="px-8 py-6">
+      <RouterView />
+  </main>
+
+  <Toast />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script>
+  import axios from 'axios'
+  import Toast from '@/components/Toast.vue'
+  import { useUserStore } from '@/stores/user'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+  export default {
+      setup() {
+          const userStore = useUserStore()
 
-nav {
-  width: 100%;
-  font-size: 20px;
-  text-align: left;
-  margin-top: 2rem;
-}
+          return {
+              userStore
+          }
+      },
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+      components: {
+          Toast
+      },
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
+      beforeCreate() {
+          this.userStore.initStore()
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
+          const token = this.userStore.user.access
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 512px) {
-  header {
-    display: list-item;
-    place-items: right;
+          if (token) {
+              axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          } else {
+              axios.defaults.headers.common["Authorization"] = "";
+          }
+      }
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: 1rem;
-    font-size: 2rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+</script>

@@ -1,7 +1,7 @@
 <template>
-    <div class="container-fluid"> 
+    <div class="space-y-12"> 
         <h2 class="alert alert-danger mt-2">Archive box check</h2>
-        <div class="container-fluid">
+        <div class="space-y-12">
             <div>
                 <form @submit.prevent="openArchiveBox()">
                     <label class="form-label float-left ml-2">Open archive box</label>
@@ -16,7 +16,7 @@
                 <button @click="closeArchiveBox()">Close archive box</button>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="space-y-12">
             <div v-if="Object.keys(this.currentArchiveBox).length !==0">
                 <form id="dossierBarcodeForm" @submit.prevent="checkDossier()">
                     <label class="form-label float-left ml-2">Enter barcode to check dossier presence:</label>
@@ -86,7 +86,7 @@
     methods: {
   
     openArchiveBox(){
-        axios.patch(this.api + 'logistic/checking/' + this.archiveBox.barcode + '/', this.archiveBox).then(
+        axios.patch(this.api + 'logistics/checking/' + this.archiveBox.barcode + '/', this.archiveBox).then(
             response =>{
                 console.log(response.data)
                 this.currentArchiveBox = response.data
@@ -111,12 +111,13 @@
     closeArchiveBox(){
         if (this.dossiers.length == 0){
         this.currentArchiveBox.status = 'Is checked'
-        axios.patch(this.api + 'logistic/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
+        axios.patch(this.api + 'logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
                 this.currentArchiveBox = {}
                 this.currentDossier = {}
+                this.archiveBox.barcode = ""
             }
         ).catch(error =>{
             console.log(error)
@@ -129,12 +130,13 @@
 
     closeArchiveBoxWithAError(){
         this.currentArchiveBox.status = 'Checked with a error'
-        axios.patch(this.api + 'logistic/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
+        axios.patch(this.api + 'logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
                 this.currentArchiveBox = {}
                 this.currentDossier = {}
+                this.archiveBox.barcode = ""
             }
         ).catch(error =>{
             console.log(error)
@@ -147,7 +149,7 @@
             let dossier = this.dossiers[i];
             dossier.archive_box = null;
             dossier.status = 'Not found while checking';
-            axios.patch(this.api + 'logistic/checking/dossier/' + dossier.barcode + '/', dossier).then(
+            axios.patch(this.api + 'logistics/checking/dossier/' + dossier.barcode + '/', dossier).then(
             response =>{
                 console.log(response.data)
             }
@@ -184,13 +186,13 @@
           !this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
           !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)
             ){
-                axios.get(this.api + 'logistic/checking/dossier/'+  this.dossier.barcode + '/').then(
+                axios.get(this.api + 'logistics/checking/dossier/'+  this.dossier.barcode + '/').then(
                     response =>{
                         console.log(response.data)
                         this.currentDossier = response.data;
                         this.currentDossier.archive_box = this.currentArchiveBox.id;
                         this.currentDossier.status = 'Checked in a box';
-                        axios.patch(this.api + 'logistic/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                        axios.patch(this.api + 'logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
                         response =>{
                             console.log(response.data)
                             this.addedDossiers.push(this.currentDossier);
@@ -218,7 +220,7 @@
             ){
                 this.currentDossier.archive_box = this.currentArchiveBox.id;
                 this.currentDossier.status = 'Checked in a box';
-                axios.patch(this.api + 'logistic/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                axios.patch(this.api + 'logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
                 response =>{
                     console.log(response.data);
                     this.moveToDestination(this.currentDossier, this.dossiers, this.checkedDossiers)

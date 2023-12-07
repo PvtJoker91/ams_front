@@ -85,7 +85,7 @@ export default{
   methods: {
 
   openArchiveBox(){
-      axios.post(this.api + 'logistic/completion/', this.archiveBox).then(
+      axios.post(this.api + 'logistics/completion/', this.archiveBox).then(
           response =>{
               console.log(response.data)
               this.currentArchiveBox = response.data
@@ -109,7 +109,7 @@ export default{
 
   closeArchiveBox(){
     if (this.dossiers.length == 0 && this.addedDossiers.length == 0){
-        axios.delete(this.api + 'logistic/completion/' + this.currentArchiveBox.barcode + '/').then(
+        axios.delete(this.api + 'logistics/completion/' + this.currentArchiveBox.barcode + '/').then(
             response =>{
                 console.log(response.data)
                 this.removedDossiers = []
@@ -122,7 +122,7 @@ export default{
   
       } else {
       this.currentArchiveBox.status = 'Is completed'
-      axios.post(this.api + 'logistic/completion/', this.currentArchiveBox).then(
+      axios.post(this.api + 'logistics/completion/', this.currentArchiveBox).then(
           response =>{
               console.log(response.data)
               this.dossiers = []
@@ -157,7 +157,7 @@ export default{
         ){
             this.currentDossier.archive_box = this.currentArchiveBox.id;
             this.currentDossier.status = 'Added to a box';
-            axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+            axios.patch(this.api + 'logistics/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
             response =>{
                 console.log(response.data)
                 this.addedDossiers.push(this.currentDossier);
@@ -190,7 +190,7 @@ export default{
         console.log(this.currentDossier)
         
     } 
-      axios.patch(this.api + 'logistic/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+      axios.patch(this.api + 'logistics/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
           response =>{
               console.log(response.data)
           }

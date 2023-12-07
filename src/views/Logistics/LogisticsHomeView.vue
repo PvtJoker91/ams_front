@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid"> 
-      <h2 class="alert alert-danger mt-2">Logistic</h2>
+      <h2 class="alert alert-danger mt-2">Logistics</h2>
       <div class="container-fluid">
         <div style="width:100%; height:1px; clear:both;"></div>
                     <div id="line_block_2">

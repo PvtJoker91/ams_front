@@ -1,11 +1,11 @@
 <template>
-    <div class="container-fluid"> 
-        <h2 class="alert alert-danger mt-2">Registration</h2>
-        <div class="container-fluid">
+    <div>
+        <h2>Registration</h2>
+        <div>
             <div>
                 <form @submit.prevent="openArchiveBox()">
-                    <label class="form-label float-left ml-2">Open archive box</label>
-                    <input type="text" class="form-control" v-model="archiveBox.barcode">
+                    <label>Open archive box</label>
+                    <input type="text" v-model="archiveBox.barcode">
                     <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
                     <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
                     <span id='err' class="danger"></span>                           
@@ -15,7 +15,7 @@
                 <button @click="closeArchiveBox()">Close archive box</button>
             </div>
         </div>
-        <div class="container-fluid">
+        <div>
             <div v-if="Object.keys(this.currentArchiveBox).length !==0">
                 <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
                     <label class="form-label float-left ml-2">Enter barcode to register:</label>
@@ -67,7 +67,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary float-left ml-2">Search</button>
                 </form>
-                <div v-if="Object(this.contracts).length !==0" >
+                <div class="list-group" v-if="Object(this.contracts).length !==0" >
                     <div class="row">
                         <div class="col"><b>Product:</b></div>
                         <div class="col"><b>Contract number: </b></div>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="container-fluid" v-if="Object.keys(this.currentContract).length !== 0">
-                <div class="container-flui">
+                <div class="container-fluid">
                         <b>Client: </b> {{ currentContract.client.last_name }} {{ currentContract.client.name }} {{ currentContract.client.middle_name }}<br>
                         <b>Client birthday: </b> {{ currentContract.client.birthday }}<br>
                         <b>Client passport number: </b> {{ currentContract.client.passport }}<br>
@@ -104,22 +104,8 @@
                 <button @click="registerDossier()">Register</button>
             </div>
 
-            <!-- <div>
-                <b>VARS</b><br>
-                <b>ArchiveBox</b> {{archiveBox}}<br>
-                <b>Dossier</b> {{dossier}}<br>
-                <b>Contract</b>  {{contract}}<br>
-                <b>currentArchiveBox</b> {{currentArchiveBox}}<br>
-                <b>currentDossier</b> {{currentDossier}}<br>
-                <b>currentContract</b>  {{currentContract}}<br>
-                <b>dossiers</b> {{dossiers}}<br>
-                <b>contracts</b> {{contracts}}
-
-            </div>  -->
-            
-
-            <div v-if="Object(this.dossiers).length !==0">
-                <p>Registred in this AB: ({{dossiers.length}})</p>
+            <div class="list-group" v-if="Object(this.dossiers).length !==0">
+                <h5>Registered in this AB: ({{dossiers.length}})</h5>
                
                 <li v-for="dossier in dossiers">
                     {{ dossier.barcode }}
@@ -127,7 +113,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 
