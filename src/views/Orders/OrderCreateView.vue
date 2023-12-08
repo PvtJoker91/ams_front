@@ -132,7 +132,7 @@
                             <div class="form-group">
                                 <label class="form-label float-left ml-2">Product name (choose)</label>
                                 <select class="form-control" v-model="dossier.contract.product.id">
-                                    <option v-for="product in products" v-bind:value="product.id">{{product.name}}</option>
+                                    <option v-for="product in products" v-bind:value="product.name">{{product.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -210,11 +210,11 @@
                   {type:'High - 8 w.h.', hours:8},
               ],             
         products:[
-                  {name:'BSA', id:1},
-                  {name:'Credit', id:2},
-                  {name:'Credit Card', id:3},
-                  {name:'Deposit', id:4},
-                  {name:'Debet Card', id:5}
+                  {name:'BSA'},
+                  {name:'Credit'},
+                  {name:'Credit Card'},
+                  {name:'Deposit'},
+                  {name:'Debet Card'}
               ],
         'api': 'http://127.0.0.1:8000/api/',
         'order':{

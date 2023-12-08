@@ -80,7 +80,7 @@ export default {
 
             if (this.errors.length === 0) {
                 await axios
-                    .post('/api/login/', this.form)
+                    .post('/api/auth/jwt/create/', this.form)
                     .then(response => {
                         this.userStore.setToken(response.data)
 
@@ -99,7 +99,7 @@ export default {
                     .then(response => {
                         this.userStore.setUserInfo(response.data)
 
-                        this.$router.push('/feed')
+                        this.$router.push('/')
                     })
                     .catch(error => {
                         console.log('error', error)

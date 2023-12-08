@@ -7,7 +7,7 @@
                 </div>
 
 
-              <div class="menu-center flex space-x-12">
+              <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
                
 
                   <RouterLink to="/orders">
@@ -29,12 +29,18 @@
 
               <div class="menu-right">
                   <template v-if="userStore.user.isAuthenticated && userStore.user.id">
-                      <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
-                          <img :src="userStore.user.avatar" class="w-12 rounded-full">
+                    <!-- <h1>ewfwefewfwf</h1> -->
+
+                      <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="py-4 px-6 bg-purple-600 text-white rounded-lg">
+                        {{ userStore.user.email }}
                       </RouterLink>
+                      
                   </template>
 
                   <template v-else>
+                    {{ userStore.user }}
+
+
                       <RouterLink to="/login" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
                   </template>
               </div>
