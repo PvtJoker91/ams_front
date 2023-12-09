@@ -5,6 +5,7 @@
           <li v-for="o in orders">
               {{ o.client_department }} {{ o.service }} {{ o.service }} {{ o.service }}
           </li>
+
       </div>
 
 </template>
@@ -12,13 +13,19 @@
 
 <script>
 import axios from 'axios'
+import { useUserStore } from '@/stores/user'
 
 export default{
+  setup() {
+        const userStore = useUserStore()
 
+        return {
+            userStore
+        }
+    },
   data(){
       return{
       orders: [],
-      api: 'http://127.0.0.1:8000/api/',
       }
   },
   mounted() {
@@ -27,7 +34,7 @@ export default{
 
   methods: {
     getOrders(){
-      axios.get(this.api + 'orders/').then(response =>{
+      axios.get('orders/').then(response =>{
                           console.log(response.data)
                           this.orders = response.data
                           }

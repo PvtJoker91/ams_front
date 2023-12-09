@@ -1,35 +1,36 @@
 <template>
-    <div class="container-fluid"> 
-      <h2 class="alert alert-danger mt-2">Logistics</h2>
-      <div class="container-fluid">
-        <div style="width:100%; height:1px; clear:both;"></div>
-                    <div id="line_block_2">
-                      <button id="big_button" @click="redirect(this.checking)">Checking</button>
-   
-                      </div> 
-                    <div id="line_block_2" >
-                      <button id="big_button" @click="redirect(this.completion)">Completion</button>       
-                    </div>
-                    <div id="line_block_2" >
-                      <button id="big_button" @click="redirect(this.placement)">Placement</button>       
-                    </div>
-          <div style="width:100%; height:1px; clear:both;"></div>
-      </div>
-    </div>
-</template>
 
-<script>
-export default{
-data(){return{
-    completion: 'completion',
-    placement: 'placement',
-    checking: 'checking'
-}
-},
-methods: {
-    redirect(name){
-        this.$router.push({ name: name });
-    }
-}
-}
-</script>
+    
+    <div class="space-y-3">
+            <h2 class="text-3xl font-bold mb-4">Logistics</h2>
+
+        <div class="max-w-7xl mx-auto grid grid-cols-3 gap-4">
+            <RouterLink to="/logistics/checking">
+            <div class="main-left">
+                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
+                    <h1 class="mb-6 text-2xl">Checking</h1>
+                </div>
+            </div>
+            </RouterLink>
+
+            <RouterLink to="/logistics/completion">
+            <div class="main-center">
+                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
+                    <h1 class="mb-6 text-2xl">Completion</h1>
+                </div>
+            </div>
+            </RouterLink>
+
+            <RouterLink to="/logistics/placement">
+            <div class="main-right">
+                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
+                    <h1 class="mb-6 text-2xl">Placement</h1>
+                </div>
+            </div>
+            </RouterLink>
+        </div>
+    </div>
+
+
+
+</template>

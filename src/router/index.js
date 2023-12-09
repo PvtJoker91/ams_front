@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import ArchiveHomeView from '../views/ArchiveHomeView.vue'
 import OrdersHomeView from '../views/Orders/OrdersHomeView.vue'
 import DossierSearchView from '../views/Orders/DossierSearchView.vue'
 import OrderCreateView from '../views/Orders/OrderCreateView.vue'
@@ -53,6 +54,11 @@ const router = createRouter({
       name: 'myorders',
       component: MyOrdersView
     },
+    {
+      path: '/archive',
+      name: 'archive',
+      component: ArchiveHomeView
+    },    
     {
       path: '/registration',
       name: 'registration',

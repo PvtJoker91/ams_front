@@ -11,6 +11,9 @@ export const useUserStore = defineStore({
             first_name: null,
             last_name: null,
             email: null,
+            groups: [{
+                name:null
+            }],
             access: null,
             refresh: null,
         }
@@ -29,6 +32,7 @@ export const useUserStore = defineStore({
                 this.user.first_name = localStorage.getItem('user.first_name')
                 this.user.last_name = localStorage.getItem('user.last_name')
                 this.user.email = localStorage.getItem('user.email')
+                this.user.groups = localStorage.getItem('user.groups')
                 this.user.isAuthenticated = true
 
                 this.refreshToken()
@@ -43,7 +47,7 @@ export const useUserStore = defineStore({
             this.user.access = data.access
             this.user.refresh = data.refresh
             this.user.isAuthenticated = true
-            // this.user.id = data.user_id
+            this.user.id = data.user_id
 
             localStorage.setItem('user.access', data.access)
             localStorage.setItem('user.refresh', data.refresh)
@@ -61,6 +65,7 @@ export const useUserStore = defineStore({
             this.user.first_name = null
             this.user.last_name = null
             this.user.email = null
+            this.user.groups = []
 
             localStorage.setItem('user.access', '')
             localStorage.setItem('user.refresh', '')
@@ -68,6 +73,7 @@ export const useUserStore = defineStore({
             localStorage.setItem('user.first_name', '')
             localStorage.setItem('user.last_name', '')
             localStorage.setItem('user.email', '')
+            localStorage.setItem('user.groups', '')
 
         },
 
@@ -78,11 +84,13 @@ export const useUserStore = defineStore({
             this.user.first_name = user.first_name
             this.user.last_name = user.last_name
             this.user.email = user.email
+            this.user.groups = user.groups
 
             localStorage.setItem('user.id', this.user.id)
             localStorage.setItem('user.first_name', this.user.first_name)
             localStorage.setItem('user.last_name', this.user.last_name)
             localStorage.setItem('user.email', this.user.email)
+            localStorage.setItem('user.groups', this.user.groups)
 
             console.log('User', this.user)
         },

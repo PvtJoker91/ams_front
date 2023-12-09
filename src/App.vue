@@ -1,58 +1,60 @@
 <template>
-  <nav class="py-10 px-8 border-b border-gray-200">
-      <div class="max-w-7xl mx-auto">
-          <div class="flex items-center justify-between">
-            <div class="menu-left">
-                    <RouterLink to="/" class="text-xl">Archive Management System</RouterLink>
-                </div>
-
-
-              <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
-               
-
-                  <RouterLink to="/orders">
-                    Search and order
-                  </RouterLink>
-
-                  <RouterLink to="/registration">
-                    Registration
-                  </RouterLink>
-
-                  <RouterLink to="/logistics">
-                    Logistics
-                  </RouterLink>
-
-                  <RouterLink to="/requests">
-                    Requests
-                  </RouterLink><br>
-              </div>
-
-              <div class="menu-right">
-                  <template v-if="userStore.user.isAuthenticated && userStore.user.id">
-                    <!-- <h1>ewfwefewfwf</h1> -->
-
-                      <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="py-4 px-6 bg-purple-600 text-white rounded-lg">
-                        {{ userStore.user.email }}
-                      </RouterLink>
-                      
-                  </template>
-
-                  <template v-else>
-                    {{ userStore.user }}
-
-
-                      <RouterLink to="/login" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
-                  </template>
-              </div>
-          </div>
+  <div class="flex h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white">
+      <div class="py-5 px-8 border-b border-gray-700">
+        <RouterLink to="/" class="text-xl block">AMS</RouterLink>
       </div>
-  </nav>
 
-  <main class="px-8 py-6">
+      <div class="py-5 px-8">
+        <template v-if="userStore.user.isAuthenticated">
+
+
+          <div class="block py-2">
+            <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
+            <ul v-show="ordersMenuOpen" class="pl-4">
+              <li><RouterLink to="/orders/create">Create order</RouterLink></li>
+              <li><RouterLink to="/orders/search">Search dossiers</RouterLink></li>
+              <li><RouterLink to="/orders/myorders">My orders</RouterLink></li>
+            </ul>
+          </div>
+
+          <RouterLink to="/registration" class="block py-2">Registration</RouterLink>
+          
+          <div class="block py-2">
+            <span class="cursor-pointer" @click="toggleLogisticsMenu">Logistics</span>
+            <ul v-show="logisticsMenuOpen" class="pl-4">
+              <li><RouterLink to="/logistics/Checking">Checking</RouterLink></li>
+              <li><RouterLink to="/logistics/Completion">Completion</RouterLink></li>
+              <li><RouterLink to="/logistics/Placement">Placement</RouterLink></li>
+            </ul>
+          </div>
+          
+          <RouterLink to="/requests" class="block py-2">Requests</RouterLink>
+        </template>
+
+        <template v-else>
+          <RouterLink to="/login" class="block py-2">Log in</RouterLink>
+        </template>
+      </div>
+
+      <div class="py-5 px-8 mt-auto">
+        <template v-if="userStore.user.isAuthenticated && userStore.user.id">
+          <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="block py-2 px-2 bg-purple-600 text-white rounded-lg">
+            {{ userStore.user.email }}
+          </RouterLink>
+        </template>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 px-8 py-6">
       <RouterView />
-  </main>
+    </main>
 
-  <Toast />
+    <!-- Toast component or other global components -->
+    <Toast />
+  </div>
 </template>
 
 <script>
@@ -83,6 +85,20 @@
           } else {
               axios.defaults.headers.common["Authorization"] = "";
           }
-      }
+      },
+      data() {
+        return {
+          logisticsMenuOpen: false,
+          ordersMenuOpen: false,
+        };
+      },
+      methods: {
+        toggleLogisticsMenu() {
+          this.logisticsMenuOpen = !this.logisticsMenuOpen;
+        },
+        toggleOrdersMenu() {
+          this.ordersMenuOpen = !this.ordersMenuOpen;
+        },
+      },
   }
 </script>

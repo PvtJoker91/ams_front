@@ -1,116 +1,133 @@
 <template>
-    <div>
-        <h2>Registration</h2>
-        <div>
-            <div>
-                <form @submit.prevent="openArchiveBox()">
-                    <label>Open archive box</label>
-                    <input type="text" v-model="archiveBox.barcode">
-                    <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
-                    <span id='err' class="danger"></span>                           
-                </form>
-            </div>
-            <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-                <button @click="closeArchiveBox()">Close archive box</button>
-            </div>
-        </div>
-        <div>
-            <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-                <form id="dossierBarcodeForm" @submit.prevent="saveDossier()">
-                    <label class="form-label float-left ml-2">Enter barcode to register:</label>
-                    <input type="text" class="form-control" v-model="dossier.barcode">
-                    <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['dossier_status_error']?errArray['dossier_status_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['dossier_box_error']?errArray['dossier_box_error'].toString():''}}</span>
-                    <span id='err' class="danger"></span>                               
-                </form>
-            </div>
+    <div class="space-y-3">
+        <h2 class="text-3xl font-bold mb-4">Registration</h2>
+        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+            <div class="p-1 bg-white  rounded-lg">
+                <div>
+                    <form @submit.prevent="openArchiveBox()" class="flex items-center">
+                        <label class="mr-2">Open archive box</label>
+                        <input type="text" v-model="archiveBox.barcode" class="border border-gray-300 rounded-lg px-2 py-1">
+                        <span class="danger">{{errArray['status_error'] ? errArray['status_error'].toString() : ''}}</span>
+                        <span class="danger">{{errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : ''}}</span>
+                        <span id="err" class="danger"></span>
+                    </form>
+                </div>
 
-
-            <div v-if="Object.keys(this.currentDossier).length !==0 && Object.keys(this.currentContract).length == 0">
-            <h2 class="alert alert-info">Contract search</h2>
-                <form @submit.prevent="searchContract()">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client last name</label>
-                                <input type="text" class="form-control" v-model="contract.client__last_name">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client name</label>
-                                <input type="text" class="form-control" v-model="contract.client__name">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client mid name</label>
-                                <input type="text" class="form-control" v-model="contract.client__middle_name">
-                            </div>
-                        </div>
-                    
-                    
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client passport</label>
-                                <input type="text" class="form-control" v-model="contract.client__passport">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Contract number</label>
-                                <input type="text" class="form-control" v-model="contract.contract_number">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary float-left ml-2">Search</button>
-                </form>
-                <div class="list-group" v-if="Object(this.contracts).length !==0" >
-                    <div class="row">
-                        <div class="col"><b>Product:</b></div>
-                        <div class="col"><b>Contract number: </b></div>
-                        <div class="col"><b>Client last name: </b></div>
-                        <div class="col"><b>Client name: </b></div>
-                        <div class="col"><b>Client middle name: </b></div>
-                        <div class="col"><b>Client birthday: </b></div>
-                        <div class="col"><b>Client passport: </b></div>
-                    </div>
-                    <div class='highlighted' @click="saveContract(contract)" v-for="contract in contracts">            
-                    <div class="row">
-                        <div class="col">{{ contract.product.name }}</div>
-                        <div class="col">{{ contract.contract_number}}</div>
-                        <div class="col">{{ contract.client.last_name }}</div>
-                        <div class="col">{{ contract.client.name }}</div>
-                        <div class="col"> {{ contract.client.middle_name }}</div>
-                        <div class="col">{{ contract.client.birthday }}</div>
-                        <div class="col">{{ contract.client.passport }}</div>
-                    </div>
-                            
-                    </div>
+                <div v-if="Object.keys(this.currentArchiveBox).length !== 0" class="mt-2">
+                    <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="closeArchiveBox()">Close AB</button>
                 </div>
             </div>
-            <div class="container-fluid" v-if="Object.keys(this.currentContract).length !== 0">
-                <div class="container-fluid">
-                        <b>Client: </b> {{ currentContract.client.last_name }} {{ currentContract.client.name }} {{ currentContract.client.middle_name }}<br>
-                        <b>Client birthday: </b> {{ currentContract.client.birthday }}<br>
-                        <b>Client passport number: </b> {{ currentContract.client.passport }}<br>
-                        <b>Product: </b> {{ currentContract.product.name }}<br>
-                        <b>Contract number: </b> {{ currentContract.contract_number}}<br>
-                        <b>Contract date: </b> {{ currentContract.time_create}}<br>
-                        
-                    </div>                 
-                <button @click="registerDossier()">Register</button>
+
+            <div class="p-1 bg-white  rounded-lg" v-if="Object.keys(this.currentArchiveBox).length !== 0">
+                <form id="dossierBarcodeForm" @submit.prevent="saveDossier" class="flex items-center">
+                    <label class="form-label mr-2">Enter barcode to register:</label>
+                    <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="dossier.barcode">
+                    <span class="danger">{{errArray['validation_error'] ? errArray['validation_error'].toString() : ''}}</span>
+                    <span class="danger">{{errArray['dossier_status_error'] ? errArray['dossier_status_error'].toString() : ''}}</span>
+                    <span class="danger">{{errArray['dossier_box_error'] ? errArray['dossier_box_error'].toString() : ''}}</span>
+                    <span id="err" class="danger"></span>
+                </form>
+            </div>
+        </div>
+        <div class="p-6 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(this.currentDossier).length !== 0 && Object.keys(this.currentContract).length === 0 && Object.keys(this.contracts).length === 0">
+            <h2 class="text-2xl font-bold mb-4">Contract search</h2>
+            <form @submit.prevent="searchContract" class="mb-4">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="mr-2">Client last name</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__last_name">
+                    </div>
+
+                    <div>
+                        <label class="mr-2">Client name</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__name">
+                    </div>
+
+                    <div>
+                        <label class="mr-2">Client mid name</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__middle_name">
+                    </div>
+
+                    <div>
+                        <label class="mr-2">Client passport</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__passport">
+                    </div>
+
+                    <div>
+                        <label class="mr-2">Contract number</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.contract_number">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="p-12 bg-white border border-gray-200 rounded-lg" v-if="Object(this.contracts).length !==0" >
+            <div class="grid grid-cols-7 gap-4">
+                <div class="col"><b>Product:</b></div>
+                <div class="col"><b>Contract number:</b></div>
+                <div class="col"><b>Client last name:</b></div>
+                <div class="col"><b>Client name:</b></div>
+                <div class="col"><b>Client middle name:</b></div>
+                <div class="col"><b>Client birthday:</b></div>
+                <div class="col"><b>Client passport:</b></div>
             </div>
 
-            <div class="list-group" v-if="Object(this.dossiers).length !==0">
-                <h5>Registered in this AB: ({{dossiers.length}})</h5>
-               
-                <li v-for="dossier in dossiers">
+            <div v-for="contract in contracts" :key="contract.id" class="highlighted cursor-pointer hover:bg-gray-100" @click="saveContract(contract)">
+                <div class="grid grid-cols-7 gap-4">
+                    <div class="col">{{ contract.product.name }}</div>
+                    <div class="col">{{ contract.contract_number }}</div>
+                    <div class="col">{{ contract.client.last_name }}</div>
+                    <div class="col">{{ contract.client.name }}</div>
+                    <div class="col">{{ contract.client.middle_name }}</div>
+                    <div class="col">{{ contract.client.birthday }}</div>
+                    <div class="col">{{ contract.client.passport }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-12 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(this.currentContract).length !== 0">
+            <div class="container mx-auto grid grid-cols-3 gap-4">
+                <div>
+                    <b class="block">Client: </b>
+                    <span class="block">{{ currentContract.client.last_name }} {{ currentContract.client.name }} {{ currentContract.client.middle_name }}</span>
+                </div>
+                <div>
+                    <b class="block">Client birthday: </b>
+                    <span class="block">{{ currentContract.client.birthday }}</span>
+                </div>
+                <div>
+                    <b class="block">Client passport number: </b>
+                    <span class="block">{{ currentContract.client.passport }}</span>
+                </div>
+                <div>
+                    <b class="block">Product: </b>
+                    <span class="block">{{ currentContract.product.name }}</span>
+                </div>
+                <div>
+                    <b class="block">Contract number: </b>
+                    <span class="block">{{ currentContract.contract_number }}</span>
+                </div>
+                <div>
+                    <b class="block">Contract date: </b>
+                    <span class="block">{{ currentContract.time_create }}</span>
+                </div>
+            </div>         
+            <div class="mt-4">
+                <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="registerDossier()">Register</button>
+            </div>
+        </div>
+
+        <div class="p-2 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(dossiers).length !== 0">
+            <h5 class="text-xl font-bold mb-4">Registered in this AB: ({{dossiers.length}})</h5>
+            <ul>
+                <li v-for="dossier in dossiers" class="mb-1">
                     {{ dossier.barcode }}
                 </li>
-            </div>
+            </ul>
         </div>
     </div>
 </template>
@@ -255,7 +272,8 @@ export default{
 
     saveContract(contract){
         this.currentContract = contract
-        this.currentDossier.contract = this.currentContract.id     
+        this.currentDossier.contract = this.currentContract.id
+        this.contracts = []    
         },
   
     registerDossier(){

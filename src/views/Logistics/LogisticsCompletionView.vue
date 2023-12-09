@@ -1,54 +1,71 @@
 <template>
-  <div class="container-fluid"> 
-      <h2 class="alert alert-danger mt-2">Completion</h2>
-      <div class="container-fluid">
-          <div>
-              <form @submit.prevent="openArchiveBox()">
-                  <label class="form-label float-left ml-2">Open archive box</label>
-                  <input type="text" class="form-control" v-model="archiveBox.barcode">
-                  <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
-                  <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
-                  <span id='err' class="danger"></span>                        
-              </form>
+    <div class="space-y-3">
+      <h2 class="text-3xl font-bold mb-4">Completion</h2>
+  
+        <!-- Open Archive Box Form -->
+        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+            <div class="p-1 bg-white  rounded-lg">
+                <form @submit.prevent="openArchiveBox" class="flex items-center">
+                    <label class="form-label mr-2">Open archive box</label>
+                    <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1" v-model="archiveBox.barcode">
+                    <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
+                    <span id='err' class="danger"></span>
+                </form>
+            </div>
+    
+            <!-- Close Archive Box Button -->
+            <div v-if="Object.keys(this.currentArchiveBox).length !== 0" class="mt-2">
+                <button @click="closeArchiveBox" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Close archive box</button>
+            </div>
+        
+    
+        <!-- Add/Remove Dossier Form -->
+            <div class="p-1 bg-white  rounded-lg" v-if="Object.keys(this.currentArchiveBox).length !== 0">
+                <form @submit.prevent="addOrRemoveDossier" class="flex items-center">
+                    <label class="form-label mr-2">Enter barcode to add or remove dossier:</label>
+                    <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1" v-model="dossier.barcode">
+                    <span class="danger">{{ errArray['dossier_status_error'] ? errArray['dossier_status_error'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['validation_error'] ? errArray['validation_error'].toString() : '' }}</span>
+                    <span id='err' class="danger"></span>
+                </form>
+            </div>
+        </div>
+  
+        <!-- Dossiers Lists -->
+
+        <div class="container mx-auto grid grid-cols-3 gap-4">
+          <div v-if="Object(this.dossiers).length !== 0">
+            <p class="text-l font-bold">Dossiers in this AB: ({{ dossiers.length }})</p>
+            <ul>
+              <li v-for="d in dossiers" class="mb-1">
+                {{ d.barcode }}
+              </li>
+            </ul>
           </div>
-          <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-              <button @click="closeArchiveBox()">Close archive box</button>
+  
+          <div v-if="Object(this.addedDossiers).length !== 0">
+            <p class="text-l font-bold">Added dossiers: ({{ addedDossiers.length }})</p>
+            <ul>
+              <li v-for="d in addedDossiers" class="mb-1">
+                {{ d.barcode }}
+              </li>
+            </ul>
           </div>
-      </div>
-      <div class="container-fluid">
-          <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-              <form id="dossierBarcodeForm" @submit.prevent="addOrRemoveDossier()">
-                  <label class="form-label float-left ml-2">Enter barcode to add/remove dossier:</label>
-                  <input type="text" class="form-control" v-model="dossier.barcode">
-                  <span class="danger">{{errArray['dossier_status_error']?errArray['dossier_status_error'].toString():''}}</span>
-                  <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
-                  <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
-                  <span id='err' class="danger"></span>                            
-              </form>
+  
+          <div v-if="Object(this.removedDossiers).length !== 0">
+            <p class="text-l font-bold">Removed dossiers: ({{ removedDossiers.length }})</p>
+            <ul>
+              <li v-for="d in removedDossiers" class="mb-1">
+                {{ d.barcode }}
+              </li>
+            </ul>
           </div>
-          <div style="width:100%; height:1px; clear:both;"></div>
-                    <div id="line_block" v-if="Object(this.dossiers).length !==0">
-                      <p>Dossiers in this AB: ({{dossiers.length}})</p>
-                        <li v-for="d in dossiers">
-                            {{ d.barcode }}
-                        </li>
-                      </div> 
-                    <div id="line_block" v-if="Object(this.addedDossiers).length !==0 || Object(this.removedDossiers).length !==0">
-                      <p>Added dossiers: ({{addedDossiers.length}})</p>
-                        <li v-for="d in addedDossiers">
-                            {{ d.barcode }}
-                        </li>                        
-                    </div> 
-                    <div id="line_block" v-if="Object(this.addedDossiers).length !==0 || Object(this.removedDossiers).length !==0">
-                      <p>Removed dossiers: ({{removedDossiers.length}})</p>
-                        <li v-for="d in removedDossiers">
-                            {{ d.barcode }}
-                        </li>
-                    </div>  
-          <div style="width:100%; height:1px; clear:both;"></div>
-      </div>
-  </div>
-</template>
+        </div>
+    </div>
+  </template>
+  
 
 
 <script>

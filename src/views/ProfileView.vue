@@ -5,17 +5,17 @@
                 
                 <p><strong>{{ userStore.user.email }}</strong></p>
 
-
                     <button 
                         class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg" 
-                        @click="logout"
-                        v-if="userStore.user.id === user.id"
+                        @click="logout()"
+                        v-if="userStore.user.id"
                     >
                         Log out
                     </button>
                 </div>
             </div>
         </div>
+
 
         <div class="main-center col-span-2 space-y-4">
             <div 
@@ -84,6 +84,26 @@ export default {
     },
 
     methods: {
+
+
+        getFeed() {
+            axios
+                .get(`/api/posts/profile/${this.$route.params.id}/`)
+                .then(response => {
+                    console.log('data', response.data)
+
+                    this.posts = response.data.posts
+                    this.user = response.data.user
+                    this.can_send_friendship_request = response.data.can_send_friendship_request
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        },
+
+
+
+
         logout() {
             console.log('Log out')
 

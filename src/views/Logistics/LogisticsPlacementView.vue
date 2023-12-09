@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid"> 
-      <h2 class="alert alert-danger mt-2">Placement</h2>
-      <div class="container-fluid">
-          <div> 
-              <form id="ab" @submit.prevent="barcodeAddressDictMaker(insertForm)">
-                  <textarea autofocus rows="20" cols="30" v-model="insertForm"
+  <div class="space-y-3"> 
+      <h2 class="text-3xl font-bold mb-4">Placement</h2>
+      <div class="p-6 bg-white border border-gray-200 rounded-lg">
+          <div div class="p-1 bg-white  rounded-lg"> 
+              <form @submit.prevent="barcodeAddressDictMaker(insertForm)" class="mb-8">
+                  <textarea autofocus rows="20" cols="30" class="border border-gray-300 rounded-lg" v-model="insertForm"
                   placeholder=
 "Insert shelf barcode then 
 archive boxes barcodes 
@@ -21,7 +21,7 @@ AB-00-000004
 AB-00-000005
 AB-00-000006
 10.00.00.-A.00.02"></textarea>
-                  <p><button type="submit" class="btn btn-primary float-left ml-2">Place for storage</button></p>                                     
+                  <p><button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-lg mt-2">Place for storage</button></p>                                     
               </form>
           </div>
       </div>

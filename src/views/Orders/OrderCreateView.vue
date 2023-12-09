@@ -1,186 +1,179 @@
-<template>
-        
-<div class="space-y-12" v-if="Object.keys(this.currentOrder).length == 0">
+<template>    
 
-    <form @submit.prevent="saveOrder()">
-
-
+    <div class="space-y-12" v-if="Object.keys(this.currentOrder).length == 0">
+        <form @submit.prevent="saveOrder()">
             <div class="border-b border-gray-900/10 pb-12">
-            <h1 class="text-base font-semibold leading-7 text-gray-900">Fill  your order details</h1>
-            
+                <h1 class="text-base font-semibold leading-7 text-gray-900">Fill  your order details</h1>
+                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
+                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Client</label>
+                    <div class="mt-2">
+                        <input type="text"  v-model="order.client" required 
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                    </div>
 
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Client department</label>
+                    <div class="mt-2">
+                        <input type="text" v-model="order.client_department" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                    <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Service (choose)</label>
+                    <div class="mt-2">
+                        <select id="service" v-model="order.service" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <option v-for="service in services" v-bind:value="service.id">{{service.type}}</option>
+                        </select>
+                    </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                    <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Urgency (choose)</label>
+                    <div class="mt-2">
+                        <select id="urgency" v-model="order.urgency" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <option v-for="urgency in urgencys" v-bind:value="urgency.hours">{{urgency.type}}</option>
+                        </select>
+                    </div>
+                    </div>
+
+                    <div class="sm:col-span-5">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+                    <div class="mt-2">
+                        <textarea type="text" v-model="order.description" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </textarea>
+                    </div>
+                    </div>
+
+                </div>
+                <div class="mt-6 flex items-center gap-x-6">
+                    <button type="submit"
+                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="space-y-12" v-if="Object.keys(this.currentOrder).length !== 0 && !showSearch">
+        <h2>Add dossiers to your order</h2>
+        <div style="width:100%; height:1px; clear:both;"></div>
+                <div id="line_block">
+                    <p><b>Search dossier to add </b></p>
+                    <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Search</button>
+                    <li v-for="d in addedDossiers">
+                        {{ d.contract.product.name }} {{ d }} 
+                    </li>
+                </div> 
                 
-                <div class="sm:col-span-3">
-                <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Client</label>
-                <div class="mt-2">
-                    <input type="text"  v-model="order.client" required 
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                </div>
-                </div>
+                <div id="line_block">
+                    <p><b>Current order</b></p>
+                    <li>{{ this.currentOrder.client }}</li>
+                    <li>{{ this.currentOrder.client_department }}</li>
+                    <li>{{ this.currentOrder.service }}</li>
+                    <li>{{ this.currentOrder.urgency }}</li>
+                    <li>{{ this.currentOrder.description }}</li>
 
-                <div class="sm:col-span-3">
-                <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Client department</label>
-                <div class="mt-2">
-                    <input type="text" v-model="order.client_department" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                </div>
-                </div>
-
-                <div class="sm:col-span-3">
-                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Service (choose)</label>
-                <div class="mt-2">
-                    <select id="service" v-model="order.service" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                        <option v-for="service in services" v-bind:value="service.id">{{service.type}}</option>
-                    </select>
-                </div>
-                </div>
-
-                <div class="sm:col-span-3">
-                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Urgency (choose)</label>
-                <div class="mt-2">
-                    <select id="urgency" v-model="order.urgency" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                        <option v-for="urgency in urgencys" v-bind:value="urgency.hours">{{urgency.type}}</option>
-                    </select>
-                </div>
-                </div>
-
-                <div class="sm:col-span-6">
-                <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
-                <div class="mt-2">
-                    <textarea type="text" v-model="order.description" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                    </textarea>
-                </div>
-                </div>
-
-            </div>
-            <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
-        </div>
-            </div>
-
-    </form>
-</div>
-
-
-        <div class="space-y-12" v-if="Object.keys(this.currentOrder).length !== 0 && !showSearch">
-            <h2>Add dossiers to your order</h2>
-            <div style="width:100%; height:1px; clear:both;"></div>
-                    <div id="line_block">
-                      <p><b>Search dossier to add </b></p>
-                      <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Search</button>
-                      <li v-for="d in addedDossiers">
-                            {{ d.contract.product.name }} {{ d }} 
-                      </li>
-                    </div> 
                     
-                    <div id="line_block">
-                      <p><b>Current order</b></p>
-                      <li>{{ this.currentOrder.client }}</li>
-                      <li>{{ this.currentOrder.client_department }}</li>
-                      <li>{{ this.currentOrder.service }}</li>
-                      <li>{{ this.currentOrder.urgency }}</li>
-                      <li>{{ this.currentOrder.description }}</li>
-
-                      
-                    </div>  
-          <div style="width:100%; height:1px; clear:both;"></div>
-        </div>
+                </div>  
+        <div style="width:100%; height:1px; clear:both;"></div>
+    </div>
 
 
 
-        <div class="space-y-12" v-if="Object(this.foundDossiers).length == 0 && showSearch">
-            <h2 class="alert alert-info">Fill in your search details</h2>
-                <form @submit.prevent="searchDossiers()">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client last name</label>
-                                <input type="text" class="form-control" v-model="dossier.contract.client.last_name">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client name</label>
-                                <input type="text" class="form-control" v-model="dossier.contract.client.name">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client mid name</label>
-                                <input type="text" class="form-control" v-model="dossier.contract.client.middle_name">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client passport</label>
-                                <input type="text" class="form-control" v-model="dossier.contract.client.passport">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Client birthday</label>
-                                <input type="date" class="form-control" v-model="dossier.contract.client.birthday">
-                            </div>
+    <div class="space-y-12" v-if="Object(this.foundDossiers).length == 0 && showSearch">
+        <h2 class="alert alert-info">Fill in your search details</h2>
+            <form @submit.prevent="searchDossiers()">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Client last name</label>
+                            <input type="text" class="form-control" v-model="dossier.contract.client.last_name">
                         </div>
                     </div>
-                    <div class="row">
-                      <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Product name (choose)</label>
-                                <select class="form-control" v-model="dossier.contract.product.id">
-                                    <option v-for="product in products" v-bind:value="product.name">{{product.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Contract number</label>
-                                <input type="text" class="form-control" v-model="dossier.contract.contract_number">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label float-left ml-2">Dossier barcode</label>
-                                <input type="text" class="form-control" v-model="dossier.barcode">
-                            </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Client name</label>
+                            <input type="text" class="form-control" v-model="dossier.contract.client.name">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right ml-2">Search</button>
-                </form>
-                <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Back</button>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Client mid name</label>
+                            <input type="text" class="form-control" v-model="dossier.contract.client.middle_name">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Client passport</label>
+                            <input type="text" class="form-control" v-model="dossier.contract.client.passport">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Client birthday</label>
+                            <input type="date" class="form-control" v-model="dossier.contract.client.birthday">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Product name (choose)</label>
+                            <select class="form-control" v-model="dossier.contract.product.id">
+                                <option v-for="product in products" v-bind:value="product.name">{{product.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Contract number</label>
+                            <input type="text" class="form-control" v-model="dossier.contract.contract_number">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label float-left ml-2">Dossier barcode</label>
+                            <input type="text" class="form-control" v-model="dossier.barcode">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary float-right ml-2">Search</button>
+            </form>
+            <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Back</button>
+    </div>
+    
+    
+    
+    <div class="space-y-12" v-if="Object(this.foundDossiers).length !== 0 && Object.keys(this.currentDossier).length == 0">
+        <h2 class="alert alert-info">Search result</h2>
+        <div>
+                <ul class="tree" v-for="client in clients">
+                    <li>
+                        <details open>
+                            <summary><b>{{ client.last_name }} {{ client.name }} {{ client.middle_name }} |  {{ client.dossiers.length }} dossier</b></summary>
+                                <ul>
+                                    <li v-for="dossier in client.dossiers">
+                                        <a>
+                                            Product: {{ dossier.contract.product.name }}, Contract number: {{ dossier.contract.contract_number }}, Contract date: {{ dossier.contract.time_create }}, Barcode: {{ dossier.barcode }}, Status: {{ dossier.status }}
+                                        </a>
+                                        <button id="add_dossier_button" @click="addDossierToOrder(dossier)">Add</button>
+                                    </li>
+                                </ul>
+                        </details>
+                    </li>
+                </ul>
         </div>
-        
-        
-        
-        <div class="space-y-12" v-if="Object(this.foundDossiers).length !== 0 && Object.keys(this.currentDossier).length == 0">
-            <h2 class="alert alert-info">Search result</h2>
-            <div>
-                  <ul class="tree" v-for="client in clients">
-                      <li>
-                          <details open>
-                              <summary><b>{{ client.last_name }} {{ client.name }} {{ client.middle_name }} |  {{ client.dossiers.length }} dossier</b></summary>
-                                  <ul>
-                                      <li v-for="dossier in client.dossiers">
-                                          <a>
-                                              Product: {{ dossier.contract.product.name }}, Contract number: {{ dossier.contract.contract_number }}, Contract date: {{ dossier.contract.time_create }}, Barcode: {{ dossier.barcode }}, Status: {{ dossier.status }}
-                                          </a>
-                                          <button id="add_dossier_button" @click="addDossierToOrder(dossier)">Add</button>
-                                      </li>
-                                  </ul>
-                          </details>
-                      </li>
-                  </ul>
-            </div>
-            {{ this.addedDossiers.length }}
-            <button @click="foundDossiers=[]" class="btn btn-primary float-left ml-2">Back</button>
-        </div>
-        <div v-if="Object(this.emptyResult) == true">
-          <h3>Nothing found</h3>
-        </div>
+        {{ this.addedDossiers.length }}
+        <button @click="foundDossiers=[]" class="btn btn-primary float-left ml-2">Back</button>
+    </div>
+    <div v-if="Object(this.emptyResult) == true">
+        <h3>Nothing found</h3>
+    </div>
   
   </template>
   

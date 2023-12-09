@@ -2,16 +2,13 @@
     <div class="max-w-7xl mx-auto grid grid-cols-2 gap-4">
         <div class="main-left">
             <div class="p-12 bg-white border border-gray-200 rounded-lg">
-                <h1 class="mb-6 text-2xl">Log in</h1>
+                <h1 class="mb-6 text-2xl">Welcome to archive management system</h1>
 
                 <p class="mb-6 text-gray-500">
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
-                    Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate. Lorem ipsum dolor sit mate.
+                    Please log in to get access to archive services
                 </p>
 
-                <p class="font-bold">
-                    Don't have an account? <a class="underline">Click here</a> to create one!
-                </p>
+
             </div>
         </div>
 
@@ -95,7 +92,7 @@ export default {
             
             if (this.errors.length === 0) {
                 await axios
-                    .get('/api/me/')
+                    .get('/api/users/me/')
                     .then(response => {
                         this.userStore.setUserInfo(response.data)
 

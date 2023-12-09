@@ -1,51 +1,62 @@
 <template>
-    <div class="space-y-12"> 
-        <h2 class="alert alert-danger mt-2">Archive box check</h2>
-        <div class="space-y-12">
-            <div>
-                <form @submit.prevent="openArchiveBox()">
-                    <label class="form-label float-left ml-2">Open archive box</label>
-                    <input type="text" class="form-control" v-model="archiveBox.barcode">
-                    <span class="danger">{{errArray['status_error']?errArray['status_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
-                    <span class="danger">{{errArray['detail']?errArray['detail'].toString():''}}</span>
-                    <span id='err' class="danger"></span>                        
+    <div class="space-y-3">
+      <h2 class="text-3xl font-bold mb-4">Archive box check</h2>
+        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+            <div class="p-1 bg-white  rounded-lg">
+                <form @submit.prevent="openArchiveBox" class="flex items-center">
+                    <label class="form-label mr-2">Open archive box</label>
+                    <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="archiveBox.barcode">
+                    <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
+                    <span id="err" class="danger"></span>
                 </form>
             </div>
-            <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-                <button @click="closeArchiveBox()">Close archive box</button>
+
+
+            <div v-if="Object.keys(this.currentArchiveBox).length !== 0" class="mt-2">
+                <button @click="closeArchiveBox" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Close AB</button>
+            </div>
+
+
+            <div class="p-1 bg-white rounded-lg" v-if="Object.keys(this.currentArchiveBox).length !== 0">
+                <form id="dossierBarcodeForm" @submit.prevent="checkDossier" class="flex items-center">
+                    <label class="form-label mr-2">Enter barcode to check dossier presence:</label>
+                    <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="dossier.barcode">
+                    <span class="danger">{{ errArray['dossier_status_error'] ? errArray['dossier_status_error'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['validation_error'] ? errArray['validation_error'].toString() : '' }}</span>
+                    <span id="err" class="danger"></span>
+                </form>
             </div>
         </div>
-        <div class="space-y-12">
-            <div v-if="Object.keys(this.currentArchiveBox).length !==0">
-                <form id="dossierBarcodeForm" @submit.prevent="checkDossier()">
-                    <label class="form-label float-left ml-2">Enter barcode to check dossier presence:</label>
-                    <input type="text" class="form-control" v-model="dossier.barcode">
-                    <span class="danger">{{errArray['dossier_status_error']?errArray['dossier_status_error'].toString():''}}</span>
-                    <span class="danger">{{errArray['non_field_errors']?errArray['non_field_errors'].toString():''}}</span>
-                    <span class="danger">{{errArray['validation_error']?errArray['validation_error'].toString():''}}</span>
-                    <span id='err' class="danger"></span>                            
-                </form>
-            </div>
-            <div v-if="Object(this.messege).length !==0">
+
+        <div v-if="Object(this.messege).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
                 {{ this.messege }}
-                <button @click="breakChecking()">Break checking</button>
-                <button @click="continueChecking()">Continue checking</button>
+                <button @click="breakChecking" class="py-1 px-2 bg-red-600 text-white rounded-lg">Break checking</button>
+                <button @click="continueChecking" class="py-1 px-2 bg-green-600 text-white rounded-lg">Continue checking</button>
+        </div>
+    
+        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+            <div class="container mx-auto grid grid-cols-2 gap-4">
+                <div v-if="Object(this.dossiers).length !== 0">
+                <p class="text-l font-bold">Dossiers was not checked: ({{dossiers.length}})</p>
+                <ul>
+                    <li v-for="d in dossiers" class="mb-1">
+                    {{ d.barcode }}
+                    </li>
+                </ul>
+                </div>
+        
+                <div v-if="Object(this.checkedDossiers).length !== 0">
+                    <p class="text-l font-bold">Checked dossiers: ({{checkedDossiers.length}})</p>
+                    <ul>
+                        <li v-for="d in checkedDossiers" class="mb-1">
+                        {{ d.barcode }}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div style="width:100%; height:1px; clear:both;"></div>
-                      <div id="line_block" v-if="Object(this.dossiers).length !==0">
-                        <p>Dossiers was not checked: ({{dossiers.length}})</p>
-                          <li v-for="d in dossiers">
-                              {{ d.barcode }}
-                          </li>
-                        </div> 
-                      <div id="line_block" v-if="Object(this.checkedDossiers).length !==0">
-                        <p>Checked dossiers: ({{checkedDossiers.length}})</p>
-                          <li v-for="d in checkedDossiers">
-                              {{ d.barcode }}
-                          </li>                        
-                      </div> 
-            <div style="width:100%; height:1px; clear:both;"></div>
         </div>
     </div>
   </template>
