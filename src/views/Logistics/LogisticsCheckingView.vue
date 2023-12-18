@@ -77,7 +77,6 @@
         checkedDossiers: [],
         addedDossiers: [],
         messege: '',
-        'api': 'http://127.0.0.1:8000/api/',
         'archiveBox': {
             'barcode':'',
             'status':'Under checking',
@@ -89,6 +88,7 @@
             'current_sector':'2',
             'status':'',
             'archive_box':'',
+            'contract':''
         },
         'errArray': [],
         }
@@ -97,7 +97,7 @@
     methods: {
   
     openArchiveBox(){
-        axios.patch(this.api + 'logistics/checking/' + this.archiveBox.barcode + '/', this.archiveBox).then(
+        axios.patch('/api/logistics/checking/' + this.archiveBox.barcode + '/', this.archiveBox).then(
             response =>{
                 console.log(response.data)
                 this.currentArchiveBox = response.data
@@ -122,7 +122,7 @@
     closeArchiveBox(){
         if (this.dossiers.length == 0){
         this.currentArchiveBox.status = 'Is checked'
-        axios.patch(this.api + 'logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
+        axios.patch('/api/logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
@@ -141,7 +141,7 @@
 
     closeArchiveBoxWithAError(){
         this.currentArchiveBox.status = 'Checked with a error'
-        axios.patch(this.api + 'logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
+        axios.patch('/api/logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
@@ -160,7 +160,7 @@
             let dossier = this.dossiers[i];
             dossier.archive_box = null;
             dossier.status = 'Not found while checking';
-            axios.patch(this.api + 'logistics/checking/dossier/' + dossier.barcode + '/', dossier).then(
+            axios.patch('/api/logistics/checking/dossier/' + dossier.barcode + '/', dossier).then(
             response =>{
                 console.log(response.data)
             }
@@ -197,13 +197,13 @@
           !this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
           !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)
             ){
-                axios.get(this.api + 'logistics/checking/dossier/'+  this.dossier.barcode + '/').then(
+                axios.get('/api/logistics/checking/dossier/'+  this.dossier.barcode + '/').then(
                     response =>{
                         console.log(response.data)
                         this.currentDossier = response.data;
                         this.currentDossier.archive_box = this.currentArchiveBox.id;
                         this.currentDossier.status = 'Checked in a box';
-                        axios.patch(this.api + 'logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                        axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
                         response =>{
                             console.log(response.data)
                             this.addedDossiers.push(this.currentDossier);
@@ -231,7 +231,7 @@
             ){
                 this.currentDossier.archive_box = this.currentArchiveBox.id;
                 this.currentDossier.status = 'Checked in a box';
-                axios.patch(this.api + 'logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
                 response =>{
                     console.log(response.data);
                     this.moveToDestination(this.currentDossier, this.dossiers, this.checkedDossiers)

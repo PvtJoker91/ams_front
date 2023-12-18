@@ -39,7 +39,6 @@ export default{
       return{
       insertForm: '',
       barcodeAddressDict: {},
-      'api': 'http://127.0.0.1:8000/api/',
       "archiveBox": {
           "barcode":"",
           "current_sector":"2",
@@ -81,7 +80,7 @@ placeArchiveBox(dict){
     for (const [box, shelf] of Object.entries(dict)) {
       this.archiveBox.barcode = box;
       this.archiveBox.storage_address.shelf_code = shelf;
-      axios.patch(this.api + 'logistics/placement/' + this.archiveBox.barcode + '/', this.archiveBox).then(
+      axios.patch('/api/logistics/placement/' + this.archiveBox.barcode + '/', this.archiveBox).then(
           response =>{
               console.log(response.data)
           }

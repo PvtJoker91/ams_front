@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import ArchiveHomeView from '../views/ArchiveHomeView.vue'
 import OrdersHomeView from '../views/Orders/OrdersHomeView.vue'
-import DossierSearchView from '../views/Orders/DossierSearchView.vue'
 import OrderCreateView from '../views/Orders/OrderCreateView.vue'
 import MyOrdersView from '../views/Orders/MyOrdersView.vue'
+import OrderDetailView from '../views/Orders/OrderDetailView.vue'
 import LogisticsHomeView from '../views/Logistics/LogisticsHomeView.vue'
 import LogisticsCompletionView from '../views/Logistics/LogisticsCompletionView.vue'
 import LogisticsPlacementView from '../views/Logistics/LogisticsPlacementView.vue'
@@ -25,11 +24,6 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView
-    },
-    {
       path: '/profile/:id',
       name: 'profile',
       component: ProfileView
@@ -45,14 +39,14 @@ const router = createRouter({
       component: OrderCreateView
     },
     {
-      path: '/orders/search',
-      name: 'dossierSearch',
-      component: DossierSearchView
-    },
-    {
       path: '/orders/myorders',
       name: 'myorders',
       component: MyOrdersView
+    },
+    {
+      path: '/orders/:id',
+      name: 'orderDetail',
+      component: OrderDetailView
     },
     {
       path: '/archive',

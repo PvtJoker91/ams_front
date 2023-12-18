@@ -145,7 +145,6 @@ export default{
         currentContract: {},
         dossiers:[],
         contracts:[],
-        'api': 'http://127.0.0.1:8000/api/',
         'archiveBox': {
             'barcode':'',
             'status':'Under registration',
@@ -175,7 +174,7 @@ export default{
 
     openArchiveBox(){
         if (this.archiveBox.barcode) {
-        axios.post(this.api + 'registration/ab/', this.archiveBox).then(
+            axios.post('/api/registration/ab/', this.archiveBox).then(
             response =>{
                 console.log(response.data)
                 this.currentArchiveBox = response.data
@@ -200,7 +199,7 @@ export default{
 
     closeArchiveBox(){
         if (this.dossiers.length == 0){
-        axios.delete(this.api + 'registration/ab/' + this.currentArchiveBox.barcode + '/').then(
+        axios.delete('/api/registration/ab/' + this.currentArchiveBox.barcode + '/').then(
             response =>{
                 console.log(response.data)
                 this.currentArchiveBox = {}
@@ -214,7 +213,7 @@ export default{
   
       } else {
         this.currentArchiveBox.status = 'Is registered'
-        axios.post(this.api + 'registration/ab/', this.currentArchiveBox).then(
+        axios.post('/api/registration/ab/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
                 this.dossiers = []
@@ -231,7 +230,7 @@ export default{
 
 
     saveDossier(){
-        axios.get(this.api + 'registration/dossier/'+ '?barcode=' + this.dossier.barcode).then(
+        axios.get('/api/registration/dossier/'+ '?barcode=' + this.dossier.barcode).then(
             response =>{
                 console.log(response.data)
                 if (response.data.length == 0){
@@ -251,7 +250,7 @@ export default{
     },
 
     searchContract(){
-        axios.get(this.api + 'registration/search/' + 
+        axios.get('/api/contracts/' + 
                     '?contract_number='+this.contract.contract_number +
                     '&client__last_name='+this.contract.client__last_name +
                     '&client__name='+this.contract.client__name +
@@ -279,7 +278,7 @@ export default{
     registerDossier(){
         this.currentDossier.status = 'Is registred'
         this.currentDossier.archive_box = this.currentArchiveBox.id
-        axios.post(this.api + 'registration/dossier/', this.currentDossier).then(
+        axios.post('/api/registration/dossier/', this.currentDossier).then(
             response =>{
                 console.log(response.data)
                 if(response.data){

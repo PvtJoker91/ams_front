@@ -14,27 +14,27 @@
             <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
             <ul v-show="ordersMenuOpen" class="pl-4">
               <li><RouterLink to="/orders/create">Create order</RouterLink></li>
-              <li><RouterLink to="/orders/search">Search dossiers</RouterLink></li>
               <li><RouterLink to="/orders/myorders">My orders</RouterLink></li>
             </ul>
           </div>
 
+          <div v-if="hasGroup('Registration')">
           <RouterLink to="/registration" class="block py-2">Registration</RouterLink>
+          </div>
           
-          <div class="block py-2">
+          <div v-if="hasGroup('Logistics')" class="block py-2">
             <span class="cursor-pointer" @click="toggleLogisticsMenu">Logistics</span>
             <ul v-show="logisticsMenuOpen" class="pl-4">
-              <li><RouterLink to="/logistics/Checking">Checking</RouterLink></li>
-              <li><RouterLink to="/logistics/Completion">Completion</RouterLink></li>
-              <li><RouterLink to="/logistics/Placement">Placement</RouterLink></li>
+              <li><RouterLink to="/logistics/checking">Checking</RouterLink></li>
+              <li><RouterLink to="/logistics/completion">Completion</RouterLink></li>
+              <li><RouterLink to="/logistics/placement">Placement</RouterLink></li>
             </ul>
           </div>
           
-          <RouterLink to="/requests" class="block py-2">Requests</RouterLink>
-        </template>
+          <div v-if="hasGroup('Requests')">
+            <RouterLink to="/requests" class="block py-2">Requests</RouterLink>
+          </div>
 
-        <template v-else>
-          <RouterLink to="/login" class="block py-2">Log in</RouterLink>
         </template>
       </div>
 
@@ -47,32 +47,26 @@
       </div>
     </aside>
 
-    <!-- Main content -->
     <main class="flex-1 px-8 py-6">
       <RouterView />
     </main>
 
-    <!-- Toast component or other global components -->
-    <Toast />
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import Toast from '@/components/Toast.vue'
   import { useUserStore } from '@/stores/user'
 
   export default {
       setup() {
           const userStore = useUserStore()
-
           return {
               userStore
           }
       },
 
       components: {
-          Toast
       },
 
       beforeCreate() {
@@ -82,10 +76,11 @@
 
           if (token) {
               axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-          } else {
+          } else {3
               axios.defaults.headers.common["Authorization"] = "";
           }
       },
+
       data() {
         return {
           logisticsMenuOpen: false,
@@ -98,6 +93,9 @@
         },
         toggleOrdersMenu() {
           this.ordersMenuOpen = !this.ordersMenuOpen;
+        },
+        hasGroup(groupName) {
+            return this.userStore.user && this.userStore.user.groups.some(group => group.name === groupName);
         },
       },
   }

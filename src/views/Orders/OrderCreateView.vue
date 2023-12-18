@@ -1,6 +1,6 @@
 <template>    
 
-    <div class="space-y-12" v-if="Object.keys(this.currentOrder).length == 0">
+    <div class="space-y-12">
         <form @submit.prevent="saveOrder()">
             <div class="border-b border-gray-900/10 pb-12">
                 <h1 class="text-base font-semibold leading-7 text-gray-900">Fill  your order details</h1>
@@ -59,138 +59,26 @@
         </form>
     </div>
 
-    <div class="space-y-12" v-if="Object.keys(this.currentOrder).length !== 0 && !showSearch">
-        <h2>Add dossiers to your order</h2>
-        <div style="width:100%; height:1px; clear:both;"></div>
-                <div id="line_block">
-                    <p><b>Search dossier to add </b></p>
-                    <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Search</button>
-                    <li v-for="d in addedDossiers">
-                        {{ d.contract.product.name }} {{ d }} 
-                    </li>
-                </div> 
-                
-                <div id="line_block">
-                    <p><b>Current order</b></p>
-                    <li>{{ this.currentOrder.client }}</li>
-                    <li>{{ this.currentOrder.client_department }}</li>
-                    <li>{{ this.currentOrder.service }}</li>
-                    <li>{{ this.currentOrder.urgency }}</li>
-                    <li>{{ this.currentOrder.description }}</li>
 
-                    
-                </div>  
-        <div style="width:100%; height:1px; clear:both;"></div>
-    </div>
-
-
-
-    <div class="space-y-12" v-if="Object(this.foundDossiers).length == 0 && showSearch">
-        <h2 class="alert alert-info">Fill in your search details</h2>
-            <form @submit.prevent="searchDossiers()">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Client last name</label>
-                            <input type="text" class="form-control" v-model="dossier.contract.client.last_name">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Client name</label>
-                            <input type="text" class="form-control" v-model="dossier.contract.client.name">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Client mid name</label>
-                            <input type="text" class="form-control" v-model="dossier.contract.client.middle_name">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Client passport</label>
-                            <input type="text" class="form-control" v-model="dossier.contract.client.passport">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Client birthday</label>
-                            <input type="date" class="form-control" v-model="dossier.contract.client.birthday">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Product name (choose)</label>
-                            <select class="form-control" v-model="dossier.contract.product.id">
-                                <option v-for="product in products" v-bind:value="product.name">{{product.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Contract number</label>
-                            <input type="text" class="form-control" v-model="dossier.contract.contract_number">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label float-left ml-2">Dossier barcode</label>
-                            <input type="text" class="form-control" v-model="dossier.barcode">
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary float-right ml-2">Search</button>
-            </form>
-            <button @click="showSearch=!showSearch" class="btn btn-primary float-left ml-2">Back</button>
-    </div>
-    
-    
-    
-    <div class="space-y-12" v-if="Object(this.foundDossiers).length !== 0 && Object.keys(this.currentDossier).length == 0">
-        <h2 class="alert alert-info">Search result</h2>
-        <div>
-                <ul class="tree" v-for="client in clients">
-                    <li>
-                        <details open>
-                            <summary><b>{{ client.last_name }} {{ client.name }} {{ client.middle_name }} |  {{ client.dossiers.length }} dossier</b></summary>
-                                <ul>
-                                    <li v-for="dossier in client.dossiers">
-                                        <a>
-                                            Product: {{ dossier.contract.product.name }}, Contract number: {{ dossier.contract.contract_number }}, Contract date: {{ dossier.contract.time_create }}, Barcode: {{ dossier.barcode }}, Status: {{ dossier.status }}
-                                        </a>
-                                        <button id="add_dossier_button" @click="addDossierToOrder(dossier)">Add</button>
-                                    </li>
-                                </ul>
-                        </details>
-                    </li>
-                </ul>
-        </div>
-        {{ this.addedDossiers.length }}
-        <button @click="foundDossiers=[]" class="btn btn-primary float-left ml-2">Back</button>
-    </div>
-    <div v-if="Object(this.emptyResult) == true">
-        <h3>Nothing found</h3>
-    </div>
-  
   </template>
   
   
   <script>
   import axios from 'axios'
+
+  import { useUserStore } from '@/stores/user'
   
   export default{
-  
+    setup() {
+        const userStore = useUserStore()
+
+        return {
+            userStore,
+        }
+    },
+    
     data(){
         return{
-        emptyResult: false,
-        showSearch: false,
-        currentDossier:{},
-        currentOrder:{},
-        foundDossiers:[],
-        addedDossiers:[],
         services:[
                   {type:'Full scanning', id:'full_scanning'},
                   {type:'Scanning by documents', id:'scanning_by_documents'},
@@ -202,16 +90,8 @@
                   {type:'Increased - 16 w.h.', hours:16},
                   {type:'High - 8 w.h.', hours:8},
               ],             
-        products:[
-                  {name:'BSA'},
-                  {name:'Credit'},
-                  {name:'Credit Card'},
-                  {name:'Deposit'},
-                  {name:'Debet Card'}
-              ],
-        'api': 'http://127.0.0.1:8000/api/',
-        'order':{
-            'id':'',
+
+        order:{
             'status':'',
             'creator':'',
             'client':'',
@@ -221,29 +101,6 @@
             'description':'',
             'dossiers':[]
         },
-        'dossier':{
-          'id':'',
-          'barcode':'',
-          'status':'',
-          'contract':{
-              'id':'',
-              'contract_number':'',
-              'time_create':'',
-              'client':{
-                  'id':'',
-                  'last_name':'',
-                  'name':'',
-                  'middle_name':'',
-                  'passport':'',
-                  'birthday':'',
-              },
-              'product':{
-                  'id':'',
-                  'name':''
-              }
-  
-          },
-      },
   
         'errArray': [],
         }
@@ -251,99 +108,23 @@
   
     methods: {
     saveOrder(){
-      this.currentOrder = this.order
-      this.foundDossiers = []
+      this.order.creator = this.userStore.user.id;
+      this.order.status = 'creation';
+      axios.post('/api/orders/', this.order
+                            ).then(response =>{
+                                    console.log(response.data)
+                                    this.$router.push({
+                                        name:'orderDetail',
+                                        params: {id: response.data.id}
+                                    })
+                                    
+                                    }         
+                        ).catch(error =>{
+                            console.log(error)
+                        }
+                        )
+
     },
-    
-    backToOrder(){
-      this.currentOrder = {}
-    },
-
-
-    backToSearchResult(){
-      this.currentDossier = {};
-      this.foundDossiers = [];
-
-    },
-  
-    addDossierToOrder(dossier){
-        const index = this.addedDossiers.indexOf(dossier);
-
-        if (index !== -1) {
-            this.addedDossiers.splice(index, 1);
-        } else {
-            this.addedDossiers.push(dossier);
-}
-    },
-
-
-
-
-
-
-    searchDossiers(){
-        this.emptyResult = false
-        axios.get(this.api + 'units/dossier/' + 
-                    '?barcode='+ this.dossier.barcode +
-                    '&contract__contract_number='+this.dossier.contract.contract_number +
-                    '&contract__client__last_name='+this.dossier.contract.client.last_name +
-                    '&contract__client__name='+this.dossier.contract.client.name +
-                    '&contract__client__middle_name='+this.dossier.contract.client.middle_name +
-                    '&contract__client__passport='+this.dossier.contract.client.passport + 
-                    '&contract__client__birthday='+this.dossier.contract.client.birthday +
-                    '&contract__product__id='+this.dossier.contract.product.id,
-                    ).then(response =>{
-                            console.log(response.data)
-                            if(response.data.length==0){
-                              this.emptyResult = true
-                            } else {
-                              this.foundDossiers = response.data
-                              this.convertDossiersToClients()
-                            }                      
-                            }          
-                ).catch(error =>{
-                    console.log(error)
-                }
-                )
-    },
-  
-    convertDossiersToClients(){
-      const clientsObj = {};
-  
-      this.foundDossiers.forEach((dossier) => {
-      const client = dossier.contract.client;
-      const clientKey = client.id;
-  
-      if (!clientsObj[clientKey]) {
-          clientsObj[clientKey] = {
-          id: client.id,
-          last_name: client.last_name,
-          name: client.name,
-          middle_name: client.middle_name,
-          passport: client.passport,
-          birthday: client.birthday,
-          dossiers: [],
-          };
-      }
-      clientsObj[clientKey].dossiers.push({
-          id: dossier.id,
-          barcode: dossier.barcode,  
-          status: dossier.status,  
-          contract: {
-          id: dossier.contract.id,
-          contract_number: dossier.contract.contract_number,
-          time_create: dossier.contract.time_create,
-          product: {
-              id: dossier.contract.product.id,
-              name: dossier.contract.product.name,
-          },
-          },
-      });
-      });
-      this.clients = Object.values(clientsObj);
-    },
-    
-  
     }
   
   }

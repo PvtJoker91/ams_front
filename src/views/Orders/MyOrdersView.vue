@@ -1,12 +1,15 @@
 <template>
 
-      <div class="container-fluid">
-          <h2 class="alert alert-info">My orders</h2>
+    <div class="space-y-3">
+    <h2 class="text-3xl font-bold mb-4">My orders</h2>
+       <div class="p-6 bg-white border border-gray-200 rounded-lg">
           <li v-for="o in orders">
-              {{ o.client_department }} {{ o.service }} {{ o.service }} {{ o.service }}
+            <RouterLink :to="{name: 'orderDetail', params:{'id': o.id}}" v-bind:currentOrder="o" class="py-2 px-2  rounded-lg">
+              {{ o.client_department }}  {{ o.status }}
+            </RouterLink>
           </li>
-
-      </div>
+        </div>
+    </div>
 
 </template>
 
@@ -34,7 +37,7 @@ export default{
 
   methods: {
     getOrders(){
-      axios.get('orders/').then(response =>{
+      axios.get('api/orders/').then(response =>{
                           console.log(response.data)
                           this.orders = response.data
                           }

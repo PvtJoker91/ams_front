@@ -3,7 +3,7 @@
         <h2 class="text-3xl font-bold mb-4">Search and order documents</h2>
 
 
-    <div class="max-w-7xl mx-auto grid grid-cols-3 gap-4">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 gap-4">
         <RouterLink to="/orders/create">
         <div class="main-left">
             <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
@@ -12,13 +12,7 @@
         </div>
         </RouterLink>
 
-        <RouterLink to="/orders/search">
-        <div class="main-center">
-            <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
-                <h1 class="mb-6 text-2xl">Search dossiers</h1>
-            </div>
-        </div>
-        </RouterLink>
+    
 
         <RouterLink to="/orders/myorders">
         <div class="main-right">

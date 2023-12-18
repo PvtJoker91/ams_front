@@ -11,13 +11,14 @@ export const useUserStore = defineStore({
             first_name: null,
             last_name: null,
             email: null,
-            groups: [{
-                name:null
-            }],
+            groups: [],
             access: null,
             refresh: null,
         }
     }),
+
+    getters: {
+      },
 
     actions: {
         initStore() {
@@ -32,7 +33,7 @@ export const useUserStore = defineStore({
                 this.user.first_name = localStorage.getItem('user.first_name')
                 this.user.last_name = localStorage.getItem('user.last_name')
                 this.user.email = localStorage.getItem('user.email')
-                this.user.groups = localStorage.getItem('user.groups')
+                this.user.groups = JSON.parse(localStorage.getItem('user.groups'))
                 this.user.isAuthenticated = true
 
                 this.refreshToken()
@@ -90,7 +91,7 @@ export const useUserStore = defineStore({
             localStorage.setItem('user.first_name', this.user.first_name)
             localStorage.setItem('user.last_name', this.user.last_name)
             localStorage.setItem('user.email', this.user.email)
-            localStorage.setItem('user.groups', this.user.groups)
+            localStorage.setItem('user.groups', JSON.stringify(this.user.groups))
 
             console.log('User', this.user)
         },
