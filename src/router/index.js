@@ -84,7 +84,7 @@ const router = createRouter({
       component: RequestsView
     },
     {
-      path: '/orders/dossierdetail/:dossierId',
+      path: '/units/dossier/:id',
       name: 'dossierDetail',
       component: DossierDetailView
     },

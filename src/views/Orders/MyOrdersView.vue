@@ -4,7 +4,7 @@
     <h2 class="text-3xl font-bold mb-4">My orders</h2>
        <div class="p-6 bg-white border border-gray-200 rounded-lg">
           <li v-for="o in orders">
-            <RouterLink :to="{name: 'orderDetail', params:{'id': o.id}}" v-bind:currentOrder="o" class="py-2 px-2  rounded-lg">
+            <RouterLink :to="{name: 'orderDetail', params:{'id': o.id}}" class="py-2 px-2  rounded-lg">
               {{ o.client_department }}  {{ o.status }}
             </RouterLink>
           </li>

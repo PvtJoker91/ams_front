@@ -37,7 +37,7 @@
                 <button @click="continueChecking" class="py-1 px-2 bg-green-600 text-white rounded-lg">Continue checking</button>
         </div>
     
-        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+        <div div v-if="Object(this.dossiers).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="container mx-auto grid grid-cols-2 gap-4">
                 <div v-if="Object(this.dossiers).length !== 0">
                 <p class="text-l font-bold">Dossiers was not checked: ({{dossiers.length}})</p>

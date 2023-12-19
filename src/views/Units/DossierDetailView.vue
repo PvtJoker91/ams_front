@@ -14,48 +14,50 @@
   export default {
     data() {
       return {
-        'api': 'http://127.0.0.1:8000/api/',
-        'dossier':{
-        'id':'',
-        'barcode':'',
-        'contract':{
-            'id':'',
-            'contract_number':'',
-            'time_create':'',
-            'client':{
-                'id':'',
-                'last_name':'',
-                'name':'',
-                'middle_name':'',
-                'passport':'',
-                'birthday':'',
-            },
-            'product':{
-                'id':'',
-                'name':''
-            }
-
-        },
-    },
-      };
-    },
-    // Жизненный цикл компонента
-    async beforeRouteEnter(to, from, next) {
-      try {
-        // Выполняем запрос к API с использованием Axios
-        const response = await axios.get(`http://127.0.0.1:8000/api/units/dossier/${to.params.dossierId}/`);
-        const dossier = response.data;
+        dossier:{
+                    'id':'',
+                    'barcode':'',
+                    'status':'',
+                    'contract':{
+                        'id':'',
+                        'contract_number':'',
+                        'time_create':'',
+                        'client':{
+                            'id':'',
+                            'last_name':'',
+                            'name':'',
+                            'middle_name':'',
+                            'passport':'',
+                            'birthday':'',
+                        },
+                        'product':{
+                            'id':'',
+                            'name':''
+                        }
   
-        // Передаем данные в следующий хук
-        next(vm => {
-          vm.dossier = dossier;
-        });
-      } catch (error) {
-        console.log(error);
-        // Можно также редиректнуть на страницу ошибки или обработать иначе
-        next('/');
+                    },
+                },
       }
     },
-    // Другие хуки и определения компонента...
+
+    mounted() {
+        this.getDossier();
+    },
+
+    methods: {
+      getDossier(){
+            axios.get('/api/units/dossier/' + this.$route.params.id + '/',
+                        ).then(response =>{
+                                console.log(response.data)
+                                this.dossier = response.data
+                                }         
+                    ).catch(error =>{
+                        console.log(error)
+                    })
+        }
+      
+    }
+    
   };
+  
   </script>

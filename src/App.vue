@@ -97,6 +97,7 @@
         hasGroup(groupName) {
             return this.userStore.user && this.userStore.user.groups.some(group => group.name === groupName);
         },
+
       },
   }
 </script>
