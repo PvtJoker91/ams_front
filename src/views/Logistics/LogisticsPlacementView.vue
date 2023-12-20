@@ -4,7 +4,7 @@
       <div class="p-6 bg-white border border-gray-200 rounded-lg">
           <div div class="p-1 bg-white  rounded-lg"> 
               <form @submit.prevent="barcodeAddressDictMaker(insertForm)" class="mb-8">
-                  <textarea autofocus rows="20" cols="30" class="border border-gray-300 rounded-lg" v-model="insertForm"
+                  <textarea rows="20" cols="30" class="border border-gray-300 rounded-lg" v-model="insertForm"
                   placeholder=
 "Insert shelf barcode then 
 archive boxes barcodes 

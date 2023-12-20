@@ -3,10 +3,17 @@
     <h2 class="text-3xl font-bold mb-4">Order №{{ currentOrder.id }}  {{ currentOrder.time_create }}</h2>
             <div class="p-8 bg-white rounded-lg">
                 <div v-if="currentOrder.status == 'creation'" class="flex items-center">
-                        <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                        @click="showSearch=false">Order info</button>
-                        <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                        @click="showSearch=true">Add dossiers</button>
+                    <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
+                         @click="showSearch=false">Order info
+                    </button>
+                    <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
+                        @click="showSearch=true">Add dossiers
+                        <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+                            {{ addedDossiers.length }}
+                        </span>
+                    
+                    
+                    </button>
                 </div>
 
                     <div  v-if="!this.showSearch" class="flex mt-3" >
@@ -90,7 +97,7 @@
                                                 {{ dossier.barcode }}
                                             </RouterLink>
                                         <button v-if="currentOrder.status == 'creation'"
-                                        @click="addRemoveDossierToOrder(d)" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                        @click="addRemoveDossierToOrder(dossier)" class="rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
                                             Remove
                                         </button>
                                     </li>
@@ -193,8 +200,12 @@
                                                 <div class="col">{{ dossier.contract.product.name }}</div>
                                                 <div class="col">{{ dossier.contract.contract_number }}</div>
                                                 <div class="col">
-                                                    <button @click="addRemoveDossierToOrder(dossier)" class="rounded-md bg-indigo-600 px-2 py-0.2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                                                        Add
+                                                    <button @click="addRemoveDossierToOrder(dossier)" 
+                                                    class="rounded-md px-2 py-0.2 text-sm font-semibold text-white shadow-sm "
+                                                    :class="{ 
+                                                    'bg-gray-500 hover:bg-gray-600': addedDossiers.includes(dossier), 
+                                                    'bg-green-500 hover:bg-green-600': !addedDossiers.includes(dossier) }">
+                                                        Add/Remove
                                                     </button>
                                                 </div>
                                             </div>

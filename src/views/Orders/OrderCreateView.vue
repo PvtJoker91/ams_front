@@ -1,9 +1,8 @@
 <template>    
-
-    <div class="space-y-12">
-        <form @submit.prevent="saveOrder()">
-            <div class="border-b border-gray-900/10 pb-12">
-                <h1 class="text-base font-semibold leading-7 text-gray-900">Fill  your order details</h1>
+    <div class="space-y-3">
+        <h2 class="text-3xl font-bold mb-4">Fill in your order details</h2>
+        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+            <form @submit.prevent="saveOrder()">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-2">
                     <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Client</label>
@@ -55,8 +54,8 @@
                     <button type="submit"
                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
 
