@@ -11,7 +11,9 @@
 
 
           <div class="block py-2">
-            <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
+            <RouterLink to="/orders">
+              <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
+            </RouterLink>
             <ul v-show="ordersMenuOpen" class="pl-4">
               <li><RouterLink to="/orders/create">Create order</RouterLink></li>
               <li><RouterLink to="/orders/myorders">My orders</RouterLink></li>
@@ -23,7 +25,9 @@
           </div>
           
           <div v-if="hasGroup('Logistics')" class="block py-2">
+          <RouterLink to="/logistics">
             <span class="cursor-pointer" @click="toggleLogisticsMenu">Logistics</span>
+          </RouterLink>
             <ul v-show="logisticsMenuOpen" class="pl-4">
               <li><RouterLink to="/logistics/checking">Checking</RouterLink></li>
               <li><RouterLink to="/logistics/completion">Completion</RouterLink></li>
@@ -31,8 +35,15 @@
             </ul>
           </div>
           
-          <div v-if="hasGroup('Requests')">
-            <RouterLink to="/requests" class="block py-2">Requests</RouterLink>
+          <div v-if="hasGroup('Orders')" class="block py-2">
+            <RouterLink to="/orders/fulfillment">
+            <span class="cursor-pointer" @click="toggleOrdersFulfillmentMenu">Orders fulfillment</span>
+          </RouterLink>
+            <ul v-show="ordersFulfillmentMenuOpen" class="pl-4">
+              <li><RouterLink to="/orders/list">Orders</RouterLink></li>
+              <li><RouterLink to="/orders/tasks">Tasks</RouterLink></li>
+              <li><RouterLink to="/orders/tasks/execution">Tasks execution</RouterLink></li>
+            </ul>
           </div>
 
         </template>
@@ -85,6 +96,7 @@
         return {
           logisticsMenuOpen: false,
           ordersMenuOpen: false,
+          ordersFulfillmentMenuOpen: false,
         };
       },
       methods: {
@@ -93,6 +105,9 @@
         },
         toggleOrdersMenu() {
           this.ordersMenuOpen = !this.ordersMenuOpen;
+        },
+        toggleOrdersFulfillmentMenu() {
+          this.ordersFulfillmentMenuOpen = !this.ordersFulfillmentMenuOpen;
         },
         hasGroup(groupName) {
             return this.userStore.user && this.userStore.user.groups.some(group => group.name === groupName);

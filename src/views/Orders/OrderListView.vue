@@ -84,6 +84,8 @@
             <li v-if="paginationInfo.currentPage>3">
                 <button  @click="loadRequestedPage(1)" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</button>
             </li>
+            
+            
         
             <li v-if="paginationInfo.totalPages>1" v-for="index in generatePagesRange(paginationInfo.currentPage, paginationInfo.totalPages, 2)">
                 <button  @click="loadRequestedPage(index + 1)" 
@@ -121,7 +123,7 @@ export default{
   data(){
       return{
       orders: [],
-      pageUrl: '/api/orders/myorders/',
+      pageUrl: '/api/orders/orders/',
       paginationInfo: {
         currentPage:null,
         totatOrders:null,
@@ -139,7 +141,7 @@ export default{
    loadOrders(ordering=null){
     if(ordering){
       this.ordering = ordering
-      this.pageUrl = '/api/orders/myorders/' + ordering
+      this.pageUrl = '/api/orders/orders/' + ordering
     }
     axios.get(this.pageUrl).then(
       response =>{
@@ -160,25 +162,25 @@ export default{
     },
     loadNextPage() {
       const nextPage = parseInt(this.paginationInfo.currentPage) + 1;
-      this.pageUrl = "/api/orders/myorders/?page=" + nextPage;
+      this.pageUrl = "/api/orders/orders/?page=" + nextPage;
       if(this.ordering){
-        this.pageUrl = "/api/orders/myorders/" + this.ordering + "&page=" + nextPage;
+        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + nextPage;
       }
       this.loadOrders();
     },
     loadPreviousPage() {
       const previousPage = parseInt(this.paginationInfo.currentPage) - 1;
-      this.pageUrl = "/api/orders/myorders/?page=" + previousPage;
+      this.pageUrl = "/api/orders/orders/?page=" + previousPage;
       if(this.ordering){
-        this.pageUrl = "/api/orders/myorders/" + this.ordering + "&page=" + previousPage;
+        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + previousPage;
       }
       this.loadOrders();
     },
 
     loadRequestedPage(page) {
-      this.pageUrl = "/api/orders/myorders/?page=" + page;
+      this.pageUrl = "/api/orders/orders/?page=" + page;
       if(this.ordering){
-        this.pageUrl = "/api/orders/myorders/" + this.ordering + "&page=" + page;
+        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + page;
       }
       this.loadOrders();
   

@@ -4,14 +4,17 @@ import ProfileView from '../views/ProfileView.vue'
 import ArchiveHomeView from '../views/ArchiveHomeView.vue'
 import OrdersHomeView from '../views/Orders/OrdersHomeView.vue'
 import OrderCreateView from '../views/Orders/OrderCreateView.vue'
+import OrderListView from '../views/Orders/OrderListView.vue'
 import MyOrdersView from '../views/Orders/MyOrdersView.vue'
 import OrderDetailView from '../views/Orders/OrderDetailView.vue'
+import OrdersFulfillmentView from '../views/Orders/OrdersFulfillmentView.vue'
+import TasksView from '../views/Orders/TasksView.vue'
+import TaskExecutionView from '../views/Orders/TaskExecutionView.vue'
 import LogisticsHomeView from '../views/Logistics/LogisticsHomeView.vue'
 import LogisticsCompletionView from '../views/Logistics/LogisticsCompletionView.vue'
 import LogisticsPlacementView from '../views/Logistics/LogisticsPlacementView.vue'
 import LogisticsCheckingView from '../views/Logistics/LogisticsCheckingView.vue'
 import RegistrationView from '../views/Registration/RegistrationView.vue'
-import RequestsView from '../views/Requests/RequestsView.vue'
 import DossierDetailView from '../views/Units/DossierDetailView.vue'
 
 
@@ -39,14 +42,34 @@ const router = createRouter({
       component: OrderCreateView
     },
     {
+      path: '/orders/list',
+      name: 'orderList',
+      component: OrderListView
+    },
+    {
       path: '/orders/myorders',
-      name: 'myorders',
+      name: 'myOrders',
       component: MyOrdersView
     },
     {
       path: '/orders/:id',
       name: 'orderDetail',
       component: OrderDetailView
+    },
+    {
+      path: '/orders/fulfillment',
+      name: 'ordersFulfillment',
+      component: OrdersFulfillmentView
+    },
+    {
+      path: '/orders/tasks',
+      name: 'orderTasks',
+      component: TasksView
+    },
+    {
+      path: '/orders/tasks/execution',
+      name: 'taskExecution',
+      component: TaskExecutionView
     },
     {
       path: '/archive',
@@ -78,11 +101,7 @@ const router = createRouter({
       name: 'checking',
       component: LogisticsCheckingView
     },
-    {
-      path: '/requests',
-      name: 'requests',
-      component: RequestsView
-    },
+
     {
       path: '/units/dossier/:id',
       name: 'dossierDetail',

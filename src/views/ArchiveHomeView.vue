@@ -20,10 +20,10 @@
         </div>
         </RouterLink>
 
-        <RouterLink to="/requests">
+        <RouterLink to="/orders/fulfillment">
         <div class="main-right">
             <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
-                <h1 class="mb-6 text-2xl">Requests</h1>
+                <h1 class="mb-6 text-2xl">Orders fulfillment</h1>
             </div>
         </div>
         </RouterLink>
