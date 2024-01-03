@@ -38,11 +38,11 @@
                                 <b class="block">Urgency: </b>
                                 <span class="block">{{ currentOrder.urgency }}</span>
                             </div>
-                            <div>
+                            <div v-if="currentOrder.time_create!==null">
                                 <b class="block">Creation date: </b>
                                 <span class="block">{{ currentOrder.time_create }}</span>
                             </div>
-                            <div>
+                            <div v-if="currentOrder.time_close!==null">
                                 <b class="block">Close date: </b>
                                 <span class="block">{{ currentOrder.time_close }}</span>
                             </div>
@@ -365,17 +365,27 @@
                 }         
             },
             createTasks() {
+                let tasks = []
                 for (let i = 0; i < this.addedDossiers.length; i++ ){
                     let dossier = this.addedDossiers[i];
-                    let task = {dossier:dossier.id, order:this.currentOrder.id}
-                    axios.post('/api/orders/tasks/', task
+                    let task = {
+                                dossier:dossier.barcode,
+                                order:this.currentOrder.id,
+                                task_status:"accepted"
+                                }
+                    tasks.push(task)
+                }
+                axios.post('/api/orders/tasks/', tasks
                     ).then(response =>{
                         console.log(response.data)
+                        this.$router.push({
+                                        name:'orderList'
+                                    });
                     }
                 ).catch(error =>{
                     console.log(error)
                 });
-            }
+            
             },
 
             orderAccept(){
@@ -384,9 +394,6 @@
                             ).then(response =>{
                                     console.log(response.data);
                                     this.createTasks();
-                                    this.$router.push({
-                                        name:'orderList'
-                                    });
                                     }         
                         ).catch(error =>{
                             console.log(error)
@@ -397,11 +404,12 @@
             },
             orderCancel(){
                 if(this.currentOrder.status !== 'creation'){
-                axios.patch('/api/orders/orders/'+ this.currentOrder.id + '/', {
-                                                                        status:'cancelled',
-                                                                        close_reason:this.currentOrder.close_reason,
-                                                                        closer:this.userStore.user.id
-                                                                        }
+                axios.patch('/api/orders/orders/'+ this.currentOrder.id + '/',
+                        {
+                        status:'cancelled',
+                        close_reason:this.currentOrder.close_reason,
+                        closer:this.userStore.user.id
+                        }
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
@@ -435,7 +443,7 @@
             getID(objectsArray){
                 let idArray = []
                 for (let i = 0; i < objectsArray.length; i++) {
-                    idArray.push(objectsArray[i].id);
+                    idArray.push(objectsArray[i].barcode);
                     }
                 return idArray
             },

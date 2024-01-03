@@ -7,7 +7,7 @@
                     <form @submit.prevent="openArchiveBox()" class="flex items-center">
                         <label class="mr-2">Open archive box</label>
                         <input type="text" v-model="archiveBox.barcode" class="border border-gray-300 rounded-lg px-2 py-1">
-                        <span class="danger">{{errArray['status_error'] ? errArray['status_error'].toString() : ''}}</span>
+                        <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
                         <span class="danger">{{errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : ''}}</span>
                         <span id="err" class="danger"></span>
                     </form>

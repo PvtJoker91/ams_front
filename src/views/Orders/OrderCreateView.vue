@@ -109,7 +109,7 @@
     saveOrder(){
       this.order.creator = this.userStore.user.id;
       this.order.status = 'creation';
-      axios.post('/api/orders/', this.order
+      axios.post('/api/orders/orders/', this.order
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({

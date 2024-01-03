@@ -8,7 +8,10 @@
                     Order number
                 </th>
                 <th scope="col" class="px-6 py-3">
-                        Service
+                    Service
+                </th>
+                <th scope="col" class="px-6 py-3">
+                   Сompleted 
                 </th>
                 <th scope="col" class="px-6 py-3">
                     <div class="flex items-center">
@@ -48,12 +51,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="order in orders" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr v-for="order in orders" :key="order.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ order.id }}
                 </th>
                 <td class="px-6 py-3">
                   {{ order.service }}
+                </td>
+                <td class="px-6 py-3">
+                  {{ order.tasks.filter(task => ['completed', 'rejected'].includes(task.task_status)).length }}  of {{ order.tasks.length }}
                 </td>
                 <td class="px-6 py-3">
                   {{ order.urgency }}

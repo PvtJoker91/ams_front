@@ -14,6 +14,11 @@ import LogisticsHomeView from '../views/Logistics/LogisticsHomeView.vue'
 import LogisticsCompletionView from '../views/Logistics/LogisticsCompletionView.vue'
 import LogisticsPlacementView from '../views/Logistics/LogisticsPlacementView.vue'
 import LogisticsCheckingView from '../views/Logistics/LogisticsCheckingView.vue'
+import SelectionHomeView from '../views/Selection/SelectionHomeView.vue'
+import SelectionOrderListView from '../views/Selection/SelectionOrderListView.vue'
+import SelectionOrderCreateView from '../views/Selection/SelectionOrderCreateView.vue'
+import SelectionOrderExecuteView from '../views/Selection/SelectionOrderExecuteView.vue'
+import SelectionOrderPrintView from '../views/Selection/SelectionOrderPrintView.vue'
 import RegistrationView from '../views/Registration/RegistrationView.vue'
 import DossierDetailView from '../views/Units/DossierDetailView.vue'
 
@@ -101,7 +106,31 @@ const router = createRouter({
       name: 'checking',
       component: LogisticsCheckingView
     },
-
+    {
+      path: '/selection',
+      name: 'selection',
+      component: SelectionHomeView
+    },
+    {
+      path: '/selection/create',
+      name: 'selectionOrderCreate',
+      component: SelectionOrderCreateView
+    },
+    {
+      path: '/selection/execute',
+      name: 'selectionOrderExecute',
+      component: SelectionOrderExecuteView
+    },
+    {
+      path: '/selection/orders',
+      name: 'selectionOrderList',
+      component: SelectionOrderListView
+    },
+    {
+      path: '/selection/orders/:id',
+      name: 'selectionOrderPrint',
+      component: SelectionOrderPrintView
+    },
     {
       path: '/units/dossier/:id',
       name: 'dossierDetail',

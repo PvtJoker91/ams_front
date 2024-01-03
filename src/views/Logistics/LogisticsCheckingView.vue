@@ -6,7 +6,6 @@
                 <form @submit.prevent="openArchiveBox" class="flex items-center">
                     <label class="form-label mr-2">Open archive box</label>
                     <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="archiveBox.barcode">
-                    <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
                     <span id="err" class="danger"></span>
@@ -31,13 +30,13 @@
             </div>
         </div>
 
-        <div v-if="Object(this.messege).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
-                {{ this.messege }}
+        <div v-if="Object(this.message).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
+                {{ this.message }}
                 <button @click="breakChecking" class="py-1 px-2 bg-red-600 text-white rounded-lg">Break checking</button>
                 <button @click="continueChecking" class="py-1 px-2 bg-green-600 text-white rounded-lg">Continue checking</button>
         </div>
     
-        <div div v-if="Object(this.dossiers).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
+        <div v-if="Object(this.dossiers).length !== 0 || Object(this.addedDossiers).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="container mx-auto grid grid-cols-2 gap-4">
                 <div v-if="Object(this.dossiers).length !== 0">
                 <p class="text-l font-bold">Dossiers was not checked: ({{dossiers.length}})</p>
@@ -76,7 +75,7 @@
         dossiers: [],
         checkedDossiers: [],
         addedDossiers: [],
-        messege: '',
+        message: '',
         'archiveBox': {
             'barcode':'',
             'status':'Under checking',
@@ -126,6 +125,7 @@
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
+                this.addedDossiers = []
                 this.currentArchiveBox = {}
                 this.currentDossier = {}
                 this.archiveBox.barcode = ""
@@ -135,7 +135,7 @@
         })
   
       } else {
-        this.messege = 'You have unchecked dossiers in the box. Do you want to break the checking?'
+        this.message = 'You have unchecked dossiers in the box. Do you want to break the checking?'
       }
     },
 
@@ -156,25 +156,29 @@
       
     },
     breakChecking(){
+        let notFoundDossiers = [];
         for (let i = 0; i < this.dossiers.length; i++ ){
             let dossier = this.dossiers[i];
             dossier.archive_box = null;
             dossier.status = 'Not found while checking';
-            axios.patch('/api/logistics/checking/dossier/' + dossier.barcode + '/', dossier).then(
+            notFoundDossiers.push(dossier);
+        }
+        axios.put('/api/units/dossiers_to_update', notFoundDossiers).then(
             response =>{
                 console.log(response.data)
+                this.dossiers = [];
+                this.message = '';
+                this.closeArchiveBoxWithAError()
             }
         ).catch(error =>{
             console.log(error)
         });
-        }
-        this.dossiers = [];
-        this.messege = '';
-        this.closeArchiveBoxWithAError()
+        
+        
     },
 
     continueChecking(){
-        this.messege = '';
+        this.message = '';
     },
 
     isBarcodePresent(jsonData, barcodeToCheck) {
@@ -208,6 +212,7 @@
                             console.log(response.data)
                             this.addedDossiers.push(this.currentDossier);
                             this.checkedDossiers.push(this.currentDossier);
+                            this.dossier.barcode = '';
                             this.errArray = [];
                         }).catch(error =>{
                                 if (error.response) {

@@ -11,9 +11,7 @@
 
 
           <div class="block py-2">
-            <RouterLink to="/orders">
               <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
-            </RouterLink>
             <ul v-show="ordersMenuOpen" class="pl-4">
               <li><RouterLink to="/orders/create">Create order</RouterLink></li>
               <li><RouterLink to="/orders/myorders">My orders</RouterLink></li>
@@ -25,20 +23,25 @@
           </div>
           
           <div v-if="hasGroup('Logistics')" class="block py-2">
-          <RouterLink to="/logistics">
             <span class="cursor-pointer" @click="toggleLogisticsMenu">Logistics</span>
-          </RouterLink>
             <ul v-show="logisticsMenuOpen" class="pl-4">
               <li><RouterLink to="/logistics/checking">Checking</RouterLink></li>
               <li><RouterLink to="/logistics/completion">Completion</RouterLink></li>
               <li><RouterLink to="/logistics/placement">Placement</RouterLink></li>
             </ul>
           </div>
+
+          <div v-if="hasGroup('Logistics')" class="block py-2">
+            <span class="cursor-pointer" @click="toggleSelectionMenu">Selection</span>
+            <ul v-show="selectionMenuOpen" class="pl-4">
+              <li><RouterLink to="/selection/orders">Selection orders</RouterLink></li>
+              <li><RouterLink to="/selection/create">Create selection order</RouterLink></li>
+              <li><RouterLink to="/selection/execute">Execute selection order</RouterLink></li>
+            </ul>
+          </div>
           
           <div v-if="hasGroup('Orders')" class="block py-2">
-            <RouterLink to="/orders/fulfillment">
             <span class="cursor-pointer" @click="toggleOrdersFulfillmentMenu">Orders fulfillment</span>
-          </RouterLink>
             <ul v-show="ordersFulfillmentMenuOpen" class="pl-4">
               <li><RouterLink to="/orders/list">Orders</RouterLink></li>
               <li><RouterLink to="/orders/tasks">Tasks</RouterLink></li>
@@ -52,7 +55,7 @@
       <div class="py-5 px-8 mt-auto">
         <template v-if="userStore.user.isAuthenticated && userStore.user.id">
           <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="block py-2 px-2 bg-purple-600 text-white rounded-lg">
-            {{ userStore.user.email }}
+            {{ userStore.user.first_name }} {{ userStore.user.last_name }}
           </RouterLink>
         </template>
       </div>
@@ -95,6 +98,7 @@
       data() {
         return {
           logisticsMenuOpen: false,
+          selectionMenuOpen: false,
           ordersMenuOpen: false,
           ordersFulfillmentMenuOpen: false,
         };
@@ -102,6 +106,9 @@
       methods: {
         toggleLogisticsMenu() {
           this.logisticsMenuOpen = !this.logisticsMenuOpen;
+        },
+        toggleSelectionMenu() {
+          this.selectionMenuOpen = !this.selectionMenuOpen;
         },
         toggleOrdersMenu() {
           this.ordersMenuOpen = !this.ordersMenuOpen;

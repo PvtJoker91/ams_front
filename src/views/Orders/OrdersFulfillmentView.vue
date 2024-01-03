@@ -12,9 +12,6 @@
         </div>
         </RouterLink>
         
-        
-        
-        
         <RouterLink to="/orders/tasks">
         <div class="main-middle">
             <div class="p-8 bg-white border border-gray-200 rounded-lg text-center">
