@@ -1,13 +1,13 @@
 <template>    
     <div class="space-y-3">
-        <h2 class="text-3xl font-bold mb-4">Fill in your order details</h2>
+        <h2 class="text-3xl font-bold mb-4">Fill in your request details</h2>
         <div class="p-6 bg-white border border-gray-200 rounded-lg">
-            <form @submit.prevent="saveOrder()">
+            <form @submit.prevent="saveRequest()">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-2">
                     <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Client</label>
                     <div class="mt-2">
-                        <input type="text"  v-model="order.client" required 
+                        <input type="text"  v-model="request.client" required 
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                     </div>
@@ -15,7 +15,7 @@
                     <div class="sm:col-span-3">
                     <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Client department</label>
                     <div class="mt-2">
-                        <input type="text" v-model="order.client_department" required
+                        <input type="text" v-model="request.client_department" required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                     </div>
@@ -23,7 +23,7 @@
                     <div class="sm:col-span-3">
                     <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Service (choose)</label>
                     <div class="mt-2">
-                        <select id="service" v-model="order.service" required
+                        <select id="service" v-model="request.service" required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                             <option v-for="service in services" v-bind:value="service.id">{{service.type}}</option>
                         </select>
@@ -33,7 +33,7 @@
                     <div class="sm:col-span-3">
                     <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Urgency (choose)</label>
                     <div class="mt-2">
-                        <select id="urgency" v-model="order.urgency" required
+                        <select id="urgency" v-model="request.urgency" required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                             <option v-for="urgency in urgencys" v-bind:value="urgency.hours">{{urgency.type}}</option>
                         </select>
@@ -43,7 +43,7 @@
                     <div class="sm:col-span-5">
                     <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
                     <div class="mt-2">
-                        <textarea type="text" v-model="order.description" required
+                        <textarea type="text" v-model="request.description" required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         </textarea>
                     </div>
@@ -90,7 +90,7 @@
                   {type:'High - 8 w.h.', hours:8},
               ],             
 
-        order:{
+        request:{
             'status':'',
             'creator':'',
             'client':'',
@@ -106,14 +106,14 @@
     },
   
     methods: {
-    saveOrder(){
-      this.order.creator = this.userStore.user.id;
-      this.order.status = 'creation';
-      axios.post('/api/orders/orders/', this.order
+    saveRequest(){
+      this.request.creator = this.userStore.user.id;
+      this.request.status = 'creation';
+      axios.post('/api/requests/requests/', this.request
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'orderDetail',
+                                        name:'requestDetail',
                                         params: {id: response.data.id}
                                     })
                                     

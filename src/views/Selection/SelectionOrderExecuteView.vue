@@ -10,6 +10,7 @@
                     <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
+                    <span class="danger">{{ errArray['validation_error'] ? errArray['validation_error'].toString() : '' }}</span>
                     <span id='err' class="danger"></span>
                 </form>
             </div>     
@@ -115,6 +116,9 @@
                 for (let j = 0; j < this.registries.length; j++) {
                     if (this.registries[j].id === registry.id) {
                         isElementPresent = true;
+                        if(this.registries[j].dossiers.length!==registry.dossiers.length){
+                            this.registries[j].dossiers=registry.dossiers
+                        }
                         break;
                     }
                 }

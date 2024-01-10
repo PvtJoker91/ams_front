@@ -244,7 +244,7 @@ export default{
     changeTasksStatuses(){
         let tasksToUpdate = this.tasks.filter(obj =>this.tasksToSelect.includes(obj.id))
         tasksToUpdate.forEach(obj => {obj.task_status = "on_selection"});
-        axios.put('/api/orders/tasks/list_update', tasksToUpdate).then(
+        axios.put('/api/requests/tasks/list_update', tasksToUpdate).then(
             response =>{
                 console.log(response.data);
                 this.tasks = this.tasks.filter(obj =>!this.tasksToSelect.includes(obj.id));

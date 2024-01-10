@@ -11,10 +11,10 @@
 
 
           <div class="block py-2">
-              <span class="cursor-pointer" @click="toggleOrdersMenu">Search and order</span>
-            <ul v-show="ordersMenuOpen" class="pl-4">
-              <li><RouterLink to="/orders/create">Create order</RouterLink></li>
-              <li><RouterLink to="/orders/myorders">My orders</RouterLink></li>
+              <span class="cursor-pointer" @click="toggleRequestsMenu">Search and request</span>
+            <ul v-show="requestsMenuOpen" class="pl-4">
+              <li><RouterLink to="/requests/create">Create request</RouterLink></li>
+              <li><RouterLink to="/requests/myrequests">My requests</RouterLink></li>
             </ul>
           </div>
 
@@ -40,12 +40,12 @@
             </ul>
           </div>
           
-          <div v-if="hasGroup('Orders')" class="block py-2">
-            <span class="cursor-pointer" @click="toggleOrdersFulfillmentMenu">Orders fulfillment</span>
-            <ul v-show="ordersFulfillmentMenuOpen" class="pl-4">
-              <li><RouterLink to="/orders/list">Orders</RouterLink></li>
-              <li><RouterLink to="/orders/tasks">Tasks</RouterLink></li>
-              <li><RouterLink to="/orders/tasks/execution">Tasks execution</RouterLink></li>
+          <div v-if="hasGroup('Requests')" class="block py-2">
+            <span class="cursor-pointer" @click="toggleRequestsFulfillmentMenu">Requests fulfillment</span>
+            <ul v-show="requestsFulfillmentMenuOpen" class="pl-4">
+              <li><RouterLink to="/requests/list">Requests</RouterLink></li>
+              <li><RouterLink to="/requests/tasks">Tasks</RouterLink></li>
+              <li><RouterLink to="/requests/tasks/execution">Tasks execution</RouterLink></li>
             </ul>
           </div>
 
@@ -99,8 +99,8 @@
         return {
           logisticsMenuOpen: false,
           selectionMenuOpen: false,
-          ordersMenuOpen: false,
-          ordersFulfillmentMenuOpen: false,
+          requestsMenuOpen: false,
+          requestsFulfillmentMenuOpen: false,
         };
       },
       methods: {
@@ -110,11 +110,11 @@
         toggleSelectionMenu() {
           this.selectionMenuOpen = !this.selectionMenuOpen;
         },
-        toggleOrdersMenu() {
-          this.ordersMenuOpen = !this.ordersMenuOpen;
+        toggleRequestsMenu() {
+          this.requestsMenuOpen = !this.requestsMenuOpen;
         },
-        toggleOrdersFulfillmentMenu() {
-          this.ordersFulfillmentMenuOpen = !this.ordersFulfillmentMenuOpen;
+        toggleRequestsFulfillmentMenu() {
+          this.requestsFulfillmentMenuOpen = !this.requestsFulfillmentMenuOpen;
         },
         hasGroup(groupName) {
             return this.userStore.user && this.userStore.user.groups.some(group => group.name === groupName);

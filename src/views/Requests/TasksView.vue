@@ -5,7 +5,7 @@
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                   <th scope="col" class="px-6 py-3">
-                      Order
+                    Request
                   </th>
                   <th scope="col" class="px-6 py-3">
                           Service
@@ -37,10 +37,10 @@
           <tbody>
               <tr v-for="task in tasks" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ task.order.id }}
+                    {{ task.request.id }}
                   </th>
                   <td class="px-6 py-3">
-                    {{ task.order.service }}
+                    {{ task.request.service }}
                   </td>
                   <td class="px-6 py-3">
                     {{ task.dossier }}
@@ -52,7 +52,7 @@
                     {{ task.task_status }}
                   </td>
                   <td class="px-6 py-3 text-right">
-                  <RouterLink :to="{name: 'orderDetail', params:{'id': task.order.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                  <RouterLink :to="{name: 'requestDetail', params:{'id': task.request.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                      Details
                   </RouterLink>
                 </td>
@@ -107,12 +107,11 @@
     data(){
         return{
         tasks: [],
-        pageUrl: '/api/orders/tasks/',
+        pageUrl: '/api/requests/tasks/',
         paginationInfo: {
           currentPage:null,
-          totatOrders:null,
-          totalPages:null,
           totatTasks:null,
+          totalPages:null,
         },
         ordering:null
         }
@@ -125,7 +124,7 @@
      loadTasks(ordering=null){
       if(ordering){
         this.ordering = ordering
-        this.pageUrl = '/api/orders/tasks/' + ordering
+        this.pageUrl = '/api/requests/tasks/' + ordering
       }
       axios.get(this.pageUrl).then(
         response =>{
@@ -146,27 +145,27 @@
       },
       loadNextPage() {
         const nextPage = parseInt(this.paginationInfo.currentPage) + 1;
-        this.pageUrl = "/api/orders/tasks/?page=" + nextPage;
+        this.pageUrl = "/api/requests/tasks/?page=" + nextPage;
         if(this.ordering){
-          this.pageUrl = "/api/orders/tasks/" + this.ordering + "&page=" + nextPage;
+          this.pageUrl = "/api/requests/tasks/" + this.ordering + "&page=" + nextPage;
         }
-        this.loadOrders();
+        this.loadTasks();
       },
       loadPreviousPage() {
         const previousPage = parseInt(this.paginationInfo.currentPage) - 1;
-        this.pageUrl = "/api/orders/tasks/?page=" + previousPage;
+        this.pageUrl = "/api/requests/tasks/?page=" + previousPage;
         if(this.ordering){
-          this.pageUrl = "/api/orders/tasks/" + this.ordering + "&page=" + previousPage;
+          this.pageUrl = "/api/requests/tasks/" + this.ordering + "&page=" + previousPage;
         }
-        this.loadOrders();
+        this.loadTasks();
       },
   
       loadRequestedPage(page) {
-        this.pageUrl = "/api/orders/tasks/?page=" + page;
+        this.pageUrl = "/api/requests/tasks/?page=" + page;
         if(this.ordering){
-          this.pageUrl = "/api/orders/tasks/" + this.ordering + "&page=" + page;
+          this.pageUrl = "/api/requests/tasks/" + this.ordering + "&page=" + page;
         }
-        this.loadOrders();
+        this.loadTasks();
     
       },
       generatePagesRange(currentPage, totalPages, gap) {

@@ -1,22 +1,22 @@
 <template>
-<h2 class="text-3xl font-bold mb-8">Orders</h2>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Order number
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Service
-                </th>
+  <h2 class="text-3xl font-bold mb-8">Requests</h2>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">
+                      Request number
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                          Service
+                  </th>
                 <th scope="col" class="px-6 py-3">
                    Сompleted 
                 </th>
                 <th scope="col" class="px-6 py-3">
                     <div class="flex items-center">
                         Urgency
-                        <button @click="loadOrders(ordering='?ordering=-urgency')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <button @click="loadRequests(ordering='?ordering=-urgency')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
     <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
   </svg></button>
                     </div>
@@ -24,7 +24,7 @@
                 <th scope="col" class="px-6 py-3">
                     <div class="flex items-center">
                         Time create
-                        <button @click="loadOrders(ordering='?ordering=-time_create')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <button @click="loadRequests(ordering='?ordering=-time_create')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
     <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
   </svg></button>
                     </div>
@@ -32,7 +32,7 @@
                 <th scope="col" class="px-6 py-3">
                     <div class="flex items-center">
                         Deadline
-                        <button @click="loadOrders(ordering='?ordering=-deadline')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <button @click="loadRequests(ordering='?ordering=-deadline')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
     <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
   </svg></button>
                     </div>
@@ -40,7 +40,7 @@
                 <th scope="col" class="px-6 py-3">
                     <div class="flex items-center">
                         Status
-                        <button @click="loadOrders(ordering='?ordering=-status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <button @click="loadRequests(ordering='?ordering=-status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
     <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
   </svg></button>
                     </div>
@@ -51,30 +51,30 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="order in orders" :key="order.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr v-for="request in requests" :key="requests.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {{ order.id }}
+                  {{ request.id }}
                 </th>
                 <td class="px-6 py-3">
-                  {{ order.service }}
+                  {{ request.service }}
                 </td>
                 <td class="px-6 py-3">
-                  {{ order.tasks.filter(task => ['completed', 'rejected'].includes(task.task_status)).length }}  of {{ order.tasks.length }}
+                  {{ request.tasks.filter(task => ['completed', 'rejected'].includes(task.task_status)).length }}  of {{ request.tasks.length }}
                 </td>
                 <td class="px-6 py-3">
-                  {{ order.urgency }}
+                  {{ request.urgency }}
                 </td>
                 <td class="px-6 py-3">
-                  {{ order.time_create }}
+                  {{ request.time_create }}
                 </td>
                 <td class="px-6 py-3">
-                  {{ order.deadline }}
+                  {{ request.deadline }}
                 </td>
                 <td class="px-6 py-3">
-                  {{ order.status }}
+                  {{ request.status }}
                 </td>
                 <td class="px-6 py-3 text-right">
-                  <RouterLink :to="{name: 'orderDetail', params:{'id': order.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                  <RouterLink :to="{name: 'requestDetail', params:{'id': request.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                      Details
                   </RouterLink>
                 </td>
@@ -82,7 +82,7 @@
         </tbody>
     </table>
     <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatOrders}}</span></span>
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatRequests}}</span></span>
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 mr-3 mb-3">
             <li v-if="paginationInfo.currentPage>1">
                 <button  @click="loadPreviousPage" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</button>
@@ -90,8 +90,6 @@
             <li v-if="paginationInfo.currentPage>3">
                 <button  @click="loadRequestedPage(1)" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</button>
             </li>
-            
-            
         
             <li v-if="paginationInfo.totalPages>1" v-for="index in generatePagesRange(paginationInfo.currentPage, paginationInfo.totalPages, 2)">
                 <button  @click="loadRequestedPage(index + 1)" 
@@ -128,35 +126,34 @@ export default{
     },
   data(){
       return{
-      orders: [],
-      pageUrl: '/api/orders/orders/',
+      requests: [],
+      pageUrl: '/api/requests/my-requests/',
       paginationInfo: {
         currentPage:null,
-        totatOrders:null,
+        totatRequests:null,
         totalPages:null,
-        totatOrders:null,
       },
       ordering:null
       }
   },
   mounted() {
-    this.loadOrders();
+    this.loadRequests();
   },
 
   methods: {
-   loadOrders(ordering=null){
+   loadRequests(ordering=null){
     if(ordering){
       this.ordering = ordering
-      this.pageUrl = '/api/orders/orders/' + ordering
+      this.pageUrl = '/api/requests/requests/' + ordering
     }
     axios.get(this.pageUrl).then(
       response =>{
         console.log(response.data)
-        this.orders = response.data.results;
+        this.requests = response.data.results;
         this.paginationInfo = {
           currentPage: response.data.current_page,
           totalPages: response.data.pages,
-          totatOrders: response.data.count
+          totatRequests: response.data.count
         };
         this.pageUrl = response.data.next;
         } 
@@ -168,27 +165,27 @@ export default{
     },
     loadNextPage() {
       const nextPage = parseInt(this.paginationInfo.currentPage) + 1;
-      this.pageUrl = "/api/orders/orders/?page=" + nextPage;
+      this.pageUrl = "/api/requests/requests/?page=" + nextPage;
       if(this.ordering){
-        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + nextPage;
+        this.pageUrl = "/api/requests/requests/" + this.ordering + "&page=" + nextPage;
       }
-      this.loadOrders();
+      this.loadRequests();
     },
     loadPreviousPage() {
       const previousPage = parseInt(this.paginationInfo.currentPage) - 1;
-      this.pageUrl = "/api/orders/orders/?page=" + previousPage;
+      this.pageUrl = "/api/requests/requests/?page=" + previousPage;
       if(this.ordering){
-        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + previousPage;
+        this.pageUrl = "/api/requests/requests/" + this.ordering + "&page=" + previousPage;
       }
-      this.loadOrders();
+      this.loadRequests();
     },
 
     loadRequestedPage(page) {
-      this.pageUrl = "/api/orders/orders/?page=" + page;
+      this.pageUrl = "/api/requests/requests/?page=" + page;
       if(this.ordering){
-        this.pageUrl = "/api/orders/orders/" + this.ordering + "&page=" + page;
+        this.pageUrl = "/api/requests/requests/" + this.ordering + "&page=" + page;
       }
-      this.loadOrders();
+      this.loadRequests();
   
     },
     generatePagesRange(currentPage, totalPages, gap) {

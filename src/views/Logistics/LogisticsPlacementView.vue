@@ -43,9 +43,7 @@ export default{
           "barcode":"",
           "current_sector":"2",
           "status":"Under storage",
-          "storage_address":{
-                "shelf_code": ""
-              }
+          "shelf_code": ""
       },
       }
   },
@@ -76,18 +74,21 @@ export default{
 
 
 placeArchiveBox(dict){
-    
+    let archiveBoxList = [];
     for (const [box, shelf] of Object.entries(dict)) {
       this.archiveBox.barcode = box;
-      this.archiveBox.storage_address.shelf_code = shelf;
-      axios.patch('/api/logistics/placement/' + this.archiveBox.barcode + '/', this.archiveBox).then(
-          response =>{
-              console.log(response.data)
-          }
-      ).catch(error =>{
-          console.log(error)
-      })
+      this.archiveBox.shelf_code = shelf;
+      archiveBoxList.push(this.archiveBox)
     }
+    console.log(archiveBoxList)
+    axios.put('/api/logistics/placement', archiveBoxList).then(
+        response =>{
+            console.log(response.data)
+        }
+    ).catch(error =>{
+        console.log(error)
+    })
+
     this.insertForm = ''
   },
   }

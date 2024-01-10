@@ -2,14 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import ArchiveHomeView from '../views/ArchiveHomeView.vue'
-import OrdersHomeView from '../views/Orders/OrdersHomeView.vue'
-import OrderCreateView from '../views/Orders/OrderCreateView.vue'
-import OrderListView from '../views/Orders/OrderListView.vue'
-import MyOrdersView from '../views/Orders/MyOrdersView.vue'
-import OrderDetailView from '../views/Orders/OrderDetailView.vue'
-import OrdersFulfillmentView from '../views/Orders/OrdersFulfillmentView.vue'
-import TasksView from '../views/Orders/TasksView.vue'
-import TaskExecutionView from '../views/Orders/TaskExecutionView.vue'
+import RequestsHomeView from '../views/Requests/RequestsHomeView.vue'
+import RequestCreateView from '../views/Requests/RequestCreateView.vue'
+import RequestListView from '../views/Requests/RequestListView.vue'
+import MyRequestsView from '../views/Requests/MyRequestsView.vue'
+import RequestDetailView from '../views/Requests/RequestDetailView.vue'
+import RequestsFulfillmentView from '../views/Requests/RequestsFulfillmentView.vue'
+import TasksView from '../views/Requests/TasksView.vue'
+import TaskExecutionView from '../views/Requests/TaskExecutionView.vue'
 import LogisticsHomeView from '../views/Logistics/LogisticsHomeView.vue'
 import LogisticsCompletionView from '../views/Logistics/LogisticsCompletionView.vue'
 import LogisticsPlacementView from '../views/Logistics/LogisticsPlacementView.vue'
@@ -37,42 +37,42 @@ const router = createRouter({
       component: ProfileView
     },
     {
-      path: '/orders',
-      name: 'orders',
-      component: OrdersHomeView
+      path: '/requests',
+      name: 'requests',
+      component: RequestsHomeView
     },
     {
-      path: '/orders/create',
-      name: 'orderCreate',
-      component: OrderCreateView
+      path: '/requests/create',
+      name: 'requestCreate',
+      component: RequestCreateView
     },
     {
-      path: '/orders/list',
-      name: 'orderList',
-      component: OrderListView
+      path: '/requests/list',
+      name: 'requestList',
+      component: RequestListView
     },
     {
-      path: '/orders/myorders',
-      name: 'myOrders',
-      component: MyOrdersView
+      path: '/requests/myrequests',
+      name: 'myRequests',
+      component: MyRequestsView
     },
     {
-      path: '/orders/:id',
-      name: 'orderDetail',
-      component: OrderDetailView
+      path: '/requests/:id',
+      name: 'requestDetail',
+      component: RequestDetailView
     },
     {
-      path: '/orders/fulfillment',
-      name: 'ordersFulfillment',
-      component: OrdersFulfillmentView
+      path: '/requests/fulfillment',
+      name: 'requestsFulfillment',
+      component: RequestsFulfillmentView
     },
     {
-      path: '/orders/tasks',
-      name: 'orderTasks',
+      path: '/requests/tasks',
+      name: 'requestTasks',
       component: TasksView
     },
     {
-      path: '/orders/tasks/execution',
+      path: '/requests/tasks/execution',
       name: 'taskExecution',
       component: TaskExecutionView
     },

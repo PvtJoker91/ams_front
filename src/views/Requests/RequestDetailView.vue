@@ -1,10 +1,10 @@
 <template>
     <div class="space-y-3">
-    <h2 class="text-3xl font-bold mb-4">Order №{{ currentOrder.id }}  {{ currentOrder.time_create }}</h2>
+    <h2 class="text-3xl font-bold mb-4">Request №{{ currentRequest.id }}  {{ currentRequest.time_create }}</h2>
             <div class="p-8 bg-white rounded-lg">
-                <div v-if="currentOrder.status == 'creation'" class="flex items-center">
+                <div v-if="currentRequest.status == 'creation'" class="flex items-center">
                     <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                         @click="showSearch=false">Order info
+                         @click="showSearch=false">Request info
                     </button>
                     <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
                         @click="showSearch=true">Add dossiers
@@ -16,87 +16,87 @@
 
                 <div  v-if="!this.showSearch" class="flex mt-3" >
                     <div class="flex-1">
-                        <h2 class="text-xl font-bold mb-4">Order Details</h2>
+                        <h2 class="text-xl font-bold mb-4">Request Details</h2>
                         <div class="container mx-auto grid grid-cols-2 gap-4">
                             <div>
                                 <b class="block">Client: </b>
-                                <span class="block">{{ currentOrder.client }}</span>
+                                <span class="block">{{ currentRequest.client }}</span>
                             </div>
                             <div>
                                 <b class="block">Client department: </b>
-                                <span class="block">{{ currentOrder.client_department }}</span>
+                                <span class="block">{{ currentRequest.client_department }}</span>
                             </div>
                             <div>
                                 <b class="block">Creator: </b>
-                                <span class="block">{{ currentOrder.creator.first_name }} {{ currentOrder.creator.last_name }}</span>
+                                <span class="block">{{ currentRequest.creator.first_name }} {{ currentRequest.creator.last_name }}</span>
                             </div>
                             <div>
                                 <b class="block">Service: </b>
-                                <span class="block">{{ currentOrder.service }}</span>
+                                <span class="block">{{ currentRequest.service }}</span>
                             </div>
                             <div>
                                 <b class="block">Urgency: </b>
-                                <span class="block">{{ currentOrder.urgency }}</span>
+                                <span class="block">{{ currentRequest.urgency }}</span>
                             </div>
-                            <div v-if="currentOrder.time_create!==null">
+                            <div v-if="currentRequest.time_create!==null">
                                 <b class="block">Creation date: </b>
-                                <span class="block">{{ currentOrder.time_create }}</span>
+                                <span class="block">{{ currentRequest.time_create }}</span>
                             </div>
-                            <div v-if="currentOrder.time_close!==null">
+                            <div v-if="currentRequest.time_close!==null">
                                 <b class="block">Close date: </b>
-                                <span class="block">{{ currentOrder.time_close }}</span>
+                                <span class="block">{{ currentRequest.time_close }}</span>
                             </div>
                             <div>
                                 <b class="block">Status: </b>
-                                <span class="block">{{ currentOrder.status }}</span>
+                                <span class="block">{{ currentRequest.status }}</span>
                             </div>
                             <div>
                                 <b class="block">Description: </b>
-                                <span class="block">{{ currentOrder.description}}</span>
+                                <span class="block">{{ currentRequest.description}}</span>
                             </div>
-                            <div v-if="currentOrder.close_reason!==null">
+                            <div v-if="currentRequest.close_reason!==null">
                                 <b class="block">Close reason: </b>
-                                <span class="block">{{ currentOrder.close_reason}}</span>
+                                <span class="block">{{ currentRequest.close_reason}}</span>
                             </div>
-                            <div v-if="currentOrder.closer!==null">
+                            <div v-if="currentRequest.closer!==null">
                                 <b class="block">Closer: </b>
-                                <span class="block">{{ currentOrder.closer.first_name }} {{ currentOrder.closer.last_name }}</span>
+                                <span class="block">{{ currentRequest.closer.first_name }} {{ currentRequest.closer.last_name }}</span>
                             </div>
                         </div>
 
                     
                     <div class="flex items-center">    
-                        <div v-if="currentOrder.status == 'sent_for_processing' && !hasGroup('Archive clients')" class="flex items-center">
-                            <button @click="orderAccept()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500" >
-                                Accept order
+                        <div v-if="currentRequest.status == 'sent_for_processing' && !hasGroup('Archive clients')" class="flex items-center">
+                            <button @click="requestAccept()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500" >
+                                Accept request
                             </button>
                         </div>
 
                     
-                        <div v-if="this.addedDossiers.length !==0 && currentOrder.status == 'creation'">
-                            <button @click="orderSend()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
-                                    Submit order
+                        <div v-if="this.addedDossiers.length !==0 && currentRequest.status == 'creation'">
+                            <button @click="requestSend()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
+                                    Submit request
                             </button>
                         </div>
                             
-                        <div v-if="currentOrder.status == 'creation'">
-                            <button @click="orderDelete()" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                    Delete order
+                        <div v-if="currentRequest.status == 'creation'">
+                            <button @click="requestDelete()" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                                    Delete request
                             </button>
                         </div>
                         
-                        <div v-if="currentOrder.status !== 'creation' && currentOrder.status !== 'cancelled' && currentOrder.status !== 'complete'">
+                        <div v-if="currentRequest.status !== 'creation' && currentRequest.status !== 'cancelled' && currentRequest.status !== 'complete'">
                             <button v-if="!showDialog" @click="showDialog=true" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                    Close order
+                                    Close request
                             </button>
                             <div v-if="showDialog" class="ml-6">
-                                <p>Input the reason of order closing</p>
+                                <p>Input the reason of request closing</p>
                                 <div class="flex items-center">
-                                    <input v-model="currentOrder.close_reason">
-                                    <button @click="orderCancel()" class="float-left ml-2 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                        Close order
+                                    <input v-model="currentRequest.close_reason">
+                                    <button @click="requestCancel()" class="float-left ml-2 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                                        Close request
                                     </button>
-                                    <button @click="showDialog=false, currentOrder.close_reason=null" class="float-left ml-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
+                                    <button @click="showDialog=false, currentRequest.close_reason=null" class="float-left ml-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
                                         Cancel
                                     </button>
                                 </div>
@@ -106,13 +106,13 @@
                 </div>
                 <div class="flex-1">
                         <div v-if="Object(addedDossiers).length!==0">
-                            <h2 class="text-xl font-bold mb-4">Dossiers in the order  ({{ addedDossiers.length }})</h2>
+                            <h2 class="text-xl font-bold mb-4">Dossiers in the request  ({{ addedDossiers.length }})</h2>
                             <li v-for="dossier in addedDossiers">
                                     <RouterLink :to="{name: 'dossierDetail', params:{'id': dossier.id}}" v-bind:currentDossier="dossier" target="_blank" class="py-2 px-2  rounded-lg">
                                         {{ dossier.barcode }}
                                     </RouterLink>
-                                <button v-if="currentOrder.status == 'creation'"
-                                @click="addRemoveDossierToOrder(dossier)" class="rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                <button v-if="currentRequest.status == 'creation'"
+                                @click="addRemoveDossierToRequest(dossier)" class="rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
                                     Remove
                                 </button>
                             </li>
@@ -121,9 +121,7 @@
                 </div>         
             
                 <div v-if="this.showSearch" class="ml-2">
-
-
-                        <div v-if="Object(foundDossiers).length==0">
+                    <div v-if="Object(foundDossiers).length==0"  class="mt-5">
                         <div class="mt-4">
                                 <h2 class="text-xl font-bold mb-4">Fill in your search details</h2>
                         </div>
@@ -187,7 +185,7 @@
                             </div>
 
                         </form>
-                        </div>
+                    </div>
 
                     <!-- Search Result -->
                     <div v-if="Object(foundDossiers).length!==0" class="mt-5">
@@ -215,7 +213,7 @@
                                                 <div class="col">{{ dossier.contract.product.name }}</div>
                                                 <div class="col">{{ dossier.contract.contract_number }}</div>
                                                 <div class="col">
-                                                    <button @click="addRemoveDossierToOrder(dossier)" 
+                                                    <button @click="addRemoveDossierToRequest(dossier)" 
                                                     class="rounded-md px-2 py-0.2 text-sm font-semibold text-white shadow-sm "
                                                     :class="{ 
                                                     'bg-gray-500 hover:bg-gray-600': addedDossiers.includes(dossier), 
@@ -256,7 +254,7 @@
 
         data() {
             return {
-                currentOrder:{
+                currentRequest:{
                     creator:'',
                     closer:''
                 },
@@ -300,15 +298,15 @@
         },
 
         mounted() {
-            this.getOrder();
+            this.getRequest();
         },
     
         methods: {
-            getOrder(){
-                axios.get('/api/orders/orders/' + this.$route.params.id + '/',
+            getRequest(){
+                axios.get('/api/requests/requests/' + this.$route.params.id + '/',
                             ).then(response =>{
                                     console.log(response.data)
-                                    this.currentOrder = response.data
+                                    this.currentRequest = response.data
                                     this.addedDossiers = response.data.dossiers
                                     }         
                         ).catch(error =>{
@@ -335,7 +333,7 @@
                 )
             },
 
-            addRemoveDossierToOrder(dossier){
+            addRemoveDossierToRequest(dossier){
                 const index = this.addedDossiers.indexOf(dossier);
 
                 if (index !== -1) {
@@ -345,21 +343,21 @@
                 }
             },
             
-            orderSend(){
-                if(this.addedDossiers.length !==0 && this.currentOrder.status == 'creation'){
-                this.currentOrder.dossiers = this.getID(this.addedDossiers)
-                this.currentOrder.status = 'sent_for_processing'
-                this.currentOrder.time_create = this.getCurrentDateTime()
-                axios.patch('/api/orders/orders/'+ this.currentOrder.id + '/', this.currentOrder
+            requestSend(){
+                if(this.addedDossiers.length !==0 && this.currentRequest.status == 'creation'){
+                this.currentRequest.dossiers = this.getID(this.addedDossiers)
+                this.currentRequest.status = 'sent_for_processing'
+                this.currentRequest.time_create = this.getCurrentDateTime()
+                axios.patch('/api/requests/requests/'+ this.currentRequest.id + '/', this.currentRequest
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'orderList'
+                                        name:'requestList'
                                     })
                                     }         
                         ).catch(error =>{
                             console.log(error)
-                            this.currentOrder.status = 'creation'
+                            this.currentRequest.status = 'creation'
                         }
                         )
                 }         
@@ -370,16 +368,16 @@
                     let dossier = this.addedDossiers[i];
                     let task = {
                                 dossier:dossier.barcode,
-                                order:this.currentOrder.id,
+                                request:this.currentRequest.id,
                                 task_status:"accepted"
                                 }
                     tasks.push(task)
                 }
-                axios.post('/api/orders/tasks/', tasks
+                axios.post('/api/requests/tasks/', tasks
                     ).then(response =>{
                         console.log(response.data)
                         this.$router.push({
-                                        name:'orderList'
+                                        name:'requestList'
                                     });
                     }
                 ).catch(error =>{
@@ -388,49 +386,48 @@
             
             },
 
-            orderAccept(){
-                if(this.currentOrder.status == 'sent_for_processing'){
-                axios.patch('/api/orders/orders/'+ this.currentOrder.id + '/', {status:'accepted'}
+            requestAccept(){
+                if(this.currentRequest.status == 'sent_for_processing'){
+                axios.patch('/api/requests/requests/'+ this.currentRequest.id + '/', {status:'accepted'}
                             ).then(response =>{
                                     console.log(response.data);
                                     this.createTasks();
                                     }         
                         ).catch(error =>{
                             console.log(error)
-                            this.currentOrder.status = 'sent_for_processing'
+                            this.currentRequest.status = 'sent_for_processing'
                         }
                         )
                 }         
             },
-            orderCancel(){
-                if(this.currentOrder.status !== 'creation'){
-                axios.patch('/api/orders/orders/'+ this.currentOrder.id + '/',
+            requestCancel(){
+                if(this.currentRequest.status !== 'creation'){
+                axios.patch('/api/requests/requests/'+ this.currentRequest.id + '/',
                         {
                         status:'cancelled',
-                        close_reason:this.currentOrder.close_reason,
+                        close_reason:this.currentRequest.close_reason,
                         closer:this.userStore.user.id
                         }
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'orderList'
+                                        name:'requestList'
                                     })
                                     }         
                         ).catch(error =>{
                             console.log(error)
                         }
-                        )
-                     
+                    )
                 }
             },
 
-            orderDelete(){
-                if(this.currentOrder.status == 'creation'){
-                axios.delete('/api/orders/orders/'+ this.currentOrder.id + '/',
+            requestDelete(){
+                if(this.currentRequest.status == 'creation'){
+                axios.delete('/api/requests/requests/'+ this.currentRequest.id + '/',
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'orderCreate'
+                                        name:'requestCreate'
                                     })
                                     }         
                         ).catch(error =>{

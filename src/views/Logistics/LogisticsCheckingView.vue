@@ -140,7 +140,7 @@
     },
 
     closeArchiveBoxWithAError(){
-        this.currentArchiveBox.status = 'Checked with a error'
+        this.currentArchiveBox.status = 'Checked with an error'
         axios.patch('/api/logistics/checking/' + this.currentArchiveBox.barcode + '/', this.currentArchiveBox).then(
             response =>{
                 console.log(response.data)
