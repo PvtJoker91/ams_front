@@ -17,6 +17,7 @@
         </div>
   
         <div v-if="Object(this.registries).length !==0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <h2 class="text-xl font-bold mb-2">Registries to requests:</h2>
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -129,9 +130,9 @@
         },
 
         sendRegistry(registry){
-            registry.status = 'sent';
+            registry.status = 'sent_to_requests';
             registry.sender = this.userStore.user.id
-            axios.patch('/api/selection/registry/' + registry.id + '/', registry).then(
+            axios.patch('/api/units/registry/' + registry.id + '/', registry).then(
                 response =>{
                     console.log(response.data);
                     this.registries = [];

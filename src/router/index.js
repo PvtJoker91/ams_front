@@ -21,6 +21,8 @@ import SelectionOrderExecuteView from '../views/Selection/SelectionOrderExecuteV
 import SelectionOrderPrintView from '../views/Selection/SelectionOrderPrintView.vue'
 import RegistrationView from '../views/Registration/RegistrationView.vue'
 import DossierDetailView from '../views/Units/DossierDetailView.vue'
+import RegistryListView from '../views/Units/RegistryListView.vue'
+import RegistryDetailView from '../views/Units/RegistryDetailView.vue'
 
 
 const router = createRouter({
@@ -135,6 +137,16 @@ const router = createRouter({
       path: '/units/dossier/:id',
       name: 'dossierDetail',
       component: DossierDetailView
+    },
+    {
+      path: '/units/registry',
+      name: 'registryList',
+      component: RegistryListView
+    },
+    {
+      path: '/units/registry/:id',
+      name: 'registryDetail',
+      component: RegistryDetailView
     },
 
   ]

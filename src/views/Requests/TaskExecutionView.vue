@@ -143,7 +143,7 @@
             <h2 class="text-l font-bold">Added scans:</h2>
             <ul>
                 <li v-for="scan in scans" :key="scan.id">
-                    <a :href="scan.file" class="text-blue-500 hover:text-blue-700">{{ scan.name }}</a>
+                    <a :href="scan.file" target="_blank" class="text-blue-500 hover:text-blue-700">{{ scan.name }}</a>
                 </li>
             </ul>
         </div>
@@ -282,7 +282,7 @@ export default{
         'status':'creation',
         'sender':this.userStore.user.id
       }
-      axios.post(`/api/requests/registry/?task_id=${taskToRegistry.id}`, registry
+      axios.post(`/api/units/registry/?task_id=${taskToRegistry.id}`, registry
                   ).then(response =>{
                           console.log(response.data);
                           this.tasks = this.tasks.filter(task =>(task != taskToRegistry));
@@ -306,6 +306,8 @@ export default{
                           console.log(response.data);
                           this.closeTaskForm = false;
                           this.closeTaskForm2 = false;
+                          this.showForm = false;
+                          this.currentTask = {};
                           this.tasks = this.tasks.filter(task =>(task != taskToClose));
                           this.addDossierToRegistry(taskToClose, 'rl')
                           

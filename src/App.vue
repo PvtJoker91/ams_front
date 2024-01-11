@@ -46,6 +46,7 @@
               <li><RouterLink to="/requests/list">Requests</RouterLink></li>
               <li><RouterLink to="/requests/tasks">Tasks</RouterLink></li>
               <li><RouterLink to="/requests/tasks/execution">Tasks execution</RouterLink></li>
+              <li><RouterLink to="/units/registry">Registries</RouterLink></li>
             </ul>
           </div>
 
