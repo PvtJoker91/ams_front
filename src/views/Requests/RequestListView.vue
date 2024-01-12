@@ -127,7 +127,7 @@ export default{
   data(){
       return{
       requests: [],
-      pageUrl: '/api/requests/my-requests/',
+      pageUrl: '/api/requests/requests/',
       paginationInfo: {
         currentPage:null,
         totatRequests:null,

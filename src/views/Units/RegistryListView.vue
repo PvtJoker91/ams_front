@@ -1,7 +1,83 @@
 <template>
     <h2 class="text-3xl font-bold mb-8">Registries</h2>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <div class="flex flex-column ">
+            <div class="mr-3 mb-3">
+                <button id="dropdownRegistryTypeButton" @click="toggleRegistryType = !toggleRegistryType" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                    Type {{ filteredRegistryType }}
+                    <svg class="w-2.5 h-2.5 ms-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <div v-if="toggleRegistryType" id="dropdownRegistryType" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" style="position: absolute;  margin: 0px; ">
+                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRegistryTypeButton">
+                        <li >
+                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input v-model="filteredRegistryType"  id="filter-radio-example-1" type="radio" value="lr" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">LR</label>
+                            </div>
+                        </li>
+                        <li>
+                          <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input v-model="filteredRegistryType"  id="filter-radio-example-2" type="radio" value="rl" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="filter-radio-example-2" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">RL</label>
+                          </div>
+                      </li>
+                      <li>
+                          <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input v-model="filteredRegistryType"  id="filter-radio-example-3" type="radio" value="rc" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="filter-radio-example-3" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">RC</label>
+                          </div>
+                      </li>      
+                    </ul>
+                </div>
+            </div>
+            <div class="mr-3 mb-3">
+                <button id="dropdownRegistryStatusButton" @click="toggleRegistryStatus = !toggleRegistryStatus" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                    Status {{ filteredRegistryStatus }}
+                    <svg class="w-2.5 h-2.5 ms-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <div v-if="toggleRegistryStatus" id="dropdownRegistryStatus" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" style="position: absolute;  margin: 0px; ">
+                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRegistryStatusButton">
+                        <li >
+                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input v-model="filteredRegistryStatus"  id="filter-radio-example-1" type="radio" value="creation" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Creation</label>
+                            </div>
+                        </li>
+                        <li>
+                          <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input v-model="filteredRegistryStatus"  id="filter-radio-example-2" type="radio" value="sent" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="filter-radio-example-2" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Sent</label>
+                          </div>
+                      </li>
+                      <li>
+                          <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input v-model="filteredRegistryStatus"  id="filter-radio-example-3" type="radio" value="on_acceptance" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="filter-radio-example-3" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">On acceptance</label>
+                          </div>
+                      </li>
+                      <li>
+                          <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input v-model="filteredRegistryStatus"  id="filter-radio-example-4" type="radio" value="accepted" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Accepted</label>
+                          </div>
+                      </li>    
+                    </ul>
+                </div>
+            </div>
+            <div class="mr-0">
+                <button @click="clearFilters" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                    Clear filters
+                </button>
+            </div>
+          </div>
+        
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -14,9 +90,9 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="flex items-center">
                             Time create
-                            <button @click="loadRegistries(ordering='?ordering=-time_create')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-      </svg></button>
+                            <button @click="addOrdering('ordering=time_create')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                          </svg></button>
                         </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -25,9 +101,9 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="flex items-center">
                             Status
-                            <button @click="loadRegistries(ordering='?ordering=-status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-      </svg></button>
+                            <button @click="addOrdering('ordering=status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                          </svg></button>
                         </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -66,7 +142,7 @@
         <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">
                 Showing 
-              <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of 
+              <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> of 
               <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatRegistries}}</span>
             </span>
             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 mr-3 mb-3">
@@ -80,10 +156,11 @@
                 <li v-if="paginationInfo.totalPages>1" v-for="index in generatePagesRange(paginationInfo.currentPage, paginationInfo.totalPages, 2)">
                     <button  @click="loadRequestedPage(index + 1)" 
                     :class="{
-                      'flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white':index+1==paginationInfo.currentPage,
-                      'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white':index+1!==paginationInfo.currentPage
-                      
-                    }">{{index + 1}}</button>
+                      'flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                      :index+1==paginationInfo.currentPage,
+                      'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                      :index+1!==paginationInfo.currentPage}">
+                    {{index + 1}}</button>
                 </li>
                 <li v-if="paginationInfo.currentPage<paginationInfo.totalPages-2">
                     <button  @click="loadRequestedPage(paginationInfo.totalPages)" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{paginationInfo.totalPages}}</button>
@@ -113,41 +190,86 @@
       data(){
           return{
           registries: [],
-          pageUrl: '/api/units/registry/',
+          pageUrl: '/api/units/registry/?',
           paginationInfo: {
             currentPage:null,
             totatRegistries:null,
             totalPages:null,
           },
-          ordering:null
+          params:'',
+          ordering:'',
+          toggleRegistryType: false,
+          filteredRegistryType: '',
+          toggleRegistryStatus: false,
+          filteredRegistryStatus: '',
           }
+          
       },
       mounted() {
         this.loadRegistries();
       },
+
+      watch: {
+        filteredRegistryType: {
+          handler() {
+            this.toggleRegistryType = false,
+            this.loadRegistries(`type=${this.filteredRegistryType}&`)
+          },
+        },
+        filteredRegistryStatus: {
+          handler() {
+            this.toggleRegistryStatus = false,
+            this.loadRegistries(`status=${this.filteredRegistryStatus}&`)
+          },
+        },
+      },
     
       methods: {
-        loadRegistries(ordering=null){
-        if(ordering){
-          this.ordering = ordering
-          this.pageUrl = '/api/units/registry/' + ordering
-        }
-        axios.get(this.pageUrl).then(
-          response =>{
-            console.log(response.data)
-            this.registries = response.data.results;
-            this.paginationInfo = {
-              currentPage: response.data.current_page,
-              totalPages: response.data.pages,
-              totatRegistries: response.data.count
-            };
-            this.pageUrl = response.data.next;
-            } 
-            ).catch(error =>{
-                  if (error.response) {
-                    console.log(error.response.data)
-                  }
-                  })
+        addOrdering(ordering){
+          this.ordering = ordering;
+          this.pageUrl = '/api/units/registry/?'+ this.params + ordering ;
+          this.loadRegistries()
+        },
+
+        changeParams(param) {
+          let paramName = param.slice(0, param.indexOf("=") + 1);
+          if (!this.params.includes(paramName)) {
+            this.params = this.params + param;
+          } else {
+            this.params = this.params.replace(new RegExp(paramName + "[^&]*" + "&"), param );
+          };
+          this.pageUrl = '/api/units/registry/?' + this.params;
+        },
+
+        loadRegistries(param=''){
+          if(param){
+            this.changeParams(param);
+          };
+          axios.get(this.pageUrl).then(
+            response =>{
+              console.log(response.data)
+              this.registries = response.data.results;
+              this.paginationInfo = {
+                currentPage: response.data.current_page,
+                totalPages: response.data.pages,
+                totatRegistries: response.data.count
+              };
+              this.pageUrl = response.data.next;
+              } 
+              ).catch(error =>{
+                    if (error.response) {
+                      console.log(error.response.data)
+                    }
+                    })
+        },
+
+        clearFilters(){
+          this.params = '';
+          this.ordering = '';
+          this.filteredRegistryType = '',
+          this.filteredRegistryStatus = '',
+          this.pageUrl = '/api/units/registry/?';
+          this.loadRegistries();
         },
 
         sendRegistry(registry){
@@ -167,30 +289,20 @@
               })
         },
 
-
         loadNextPage() {
           const nextPage = parseInt(this.paginationInfo.currentPage) + 1;
-          this.pageUrl = "/api/units/registry/?page=" + nextPage;
-          if(this.ordering){
-            this.pageUrl = "/api/units/registry/" + this.ordering + "&page=" + nextPage;
-          }
+          this.pageUrl = "/api/units/registry/?page=" + nextPage + "&" + this.params + this.ordering;
           this.loadRegistries();
         },
         loadPreviousPage() {
           const previousPage = parseInt(this.paginationInfo.currentPage) - 1;
-          this.pageUrl = "/api/units/registry/?page=" + previousPage;
-          if(this.ordering){
-            this.pageUrl = "/api/units/registry/" + this.ordering + "&page=" + previousPage;
-          }
-          this.loadRequests();
+          this.pageUrl = "/api/units/registry/?page=" + previousPage + "&" + this.params + this.ordering;
+          this.loadRegistries();
         },
     
         loadRequestedPage(page) {
-          this.pageUrl = "/api/units/registry/?page=" + page;
-          if(this.ordering){
-            this.pageUrl = "/api/units/registry/" + this.ordering + "&page=" + page;
-          }
-          this.loadRequests();
+          this.pageUrl = "/api/units/registry/?page=" + page + "&" + this.params + this.ordering;
+          this.loadRegistries();
       
         },
         generatePagesRange(currentPage, totalPages, gap) {
@@ -202,6 +314,14 @@
             range.push(i);
           }
           return range;
+        },
+
+        showingElems(){
+          if (this.paginationInfo.totatRegistries){ 
+          let start = (this.paginationInfo.currentPage - 1)*10 + 1;
+          let end = Math.min(this.paginationInfo.currentPage*10, this.paginationInfo.totatRegistries);
+          return `${start} - ${end}`}
+          else return 0
         },
       }
     
