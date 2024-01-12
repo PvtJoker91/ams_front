@@ -112,7 +112,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="registry in registries" :key="registry.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr v-for="registry in elements" :key="registry.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <RouterLink :to="{name: 'registryDetail', params:{'id': registry.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         {{ registry.id }}
@@ -143,7 +143,7 @@
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">
                 Showing 
               <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> of 
-              <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatRegistries}}</span>
+              <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatElements}}</span>
             </span>
             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 mr-3 mb-3">
                 <li v-if="paginationInfo.currentPage>1">
@@ -189,11 +189,12 @@
         },
       data(){
           return{
-          registries: [],
+          elements: [],
           pageUrl: '/api/units/registry/?',
+          cleanUrl: '/api/units/registry/?',
           paginationInfo: {
             currentPage:null,
-            totatRegistries:null,
+            totatElements:null,
             totalPages:null,
           },
           params:'',
@@ -206,72 +207,25 @@
           
       },
       mounted() {
-        this.loadRegistries();
+        this.loadElements();
       },
 
       watch: {
         filteredRegistryType: {
           handler() {
             this.toggleRegistryType = false,
-            this.loadRegistries(`type=${this.filteredRegistryType}&`)
+            this.changeParams(`type=${this.filteredRegistryType}&`)
           },
         },
         filteredRegistryStatus: {
           handler() {
             this.toggleRegistryStatus = false,
-            this.loadRegistries(`status=${this.filteredRegistryStatus}&`)
+            this.changeParams(`status=${this.filteredRegistryStatus}&`)
           },
         },
       },
     
       methods: {
-        addOrdering(ordering){
-          this.ordering = ordering;
-          this.pageUrl = '/api/units/registry/?'+ this.params + ordering ;
-          this.loadRegistries()
-        },
-
-        changeParams(param) {
-          let paramName = param.slice(0, param.indexOf("=") + 1);
-          if (!this.params.includes(paramName)) {
-            this.params = this.params + param;
-          } else {
-            this.params = this.params.replace(new RegExp(paramName + "[^&]*" + "&"), param );
-          };
-          this.pageUrl = '/api/units/registry/?' + this.params;
-        },
-
-        loadRegistries(param=''){
-          if(param){
-            this.changeParams(param);
-          };
-          axios.get(this.pageUrl).then(
-            response =>{
-              console.log(response.data)
-              this.registries = response.data.results;
-              this.paginationInfo = {
-                currentPage: response.data.current_page,
-                totalPages: response.data.pages,
-                totatRegistries: response.data.count
-              };
-              this.pageUrl = response.data.next;
-              } 
-              ).catch(error =>{
-                    if (error.response) {
-                      console.log(error.response.data)
-                    }
-                    })
-        },
-
-        clearFilters(){
-          this.params = '';
-          this.ordering = '';
-          this.filteredRegistryType = '',
-          this.filteredRegistryStatus = '',
-          this.pageUrl = '/api/units/registry/?';
-          this.loadRegistries();
-        },
-
         sendRegistry(registry){
           if(registry.type == 'rc'){registry.status = 'sent_to_customer'};
           if(registry.type == 'rl'){registry.status = 'sent_to_logistics'};
@@ -289,20 +243,71 @@
               })
         },
 
+        addOrdering(newOrdering){
+          if (this.ordering == newOrdering){
+            let paramName = newOrdering.slice(newOrdering.indexOf("=") + 1,);
+            this.ordering = this.ordering.slice(0, this.ordering.indexOf("=") + 1) + "-" + paramName;
+          } else {
+            this.ordering = newOrdering
+          };
+          this.pageUrl = this.cleanUrl + this.params + this.ordering ;
+          this.loadElements();
+        },
+
+        changeParams(param) {
+          let paramName = param.slice(0, param.indexOf("=") + 1);
+          if (!this.params.includes(paramName)) {
+            this.params = this.params + param;
+          } else {
+            this.params = this.params.replace(new RegExp(paramName + "[^&]*" + "&"), param );
+          };
+          this.pageUrl = this.cleanUrl + this.params;
+          this.loadElements();
+        },
+
+        loadElements(){
+          axios.get(this.pageUrl).then(
+            response =>{
+              console.log(response.data)
+              this.elements = response.data.results;
+              this.paginationInfo = {
+                currentPage: response.data.current_page,
+                totalPages: response.data.pages,
+                totatElements: response.data.count
+              };
+              this.pageUrl = response.data.next;
+              } 
+              ).catch(error =>{
+                    if (error.response) {
+                      console.log(error.response.data)
+                    }
+                    })
+        },
+
+        clearFilters(){
+          this.params = '';
+          this.ordering = '';
+          this.filteredRegistryType = '',
+          this.filteredRegistryStatus = '',
+          this.pageUrl = this.cleanUrl;
+          this.loadElements();
+        },
+
+
         loadNextPage() {
           const nextPage = parseInt(this.paginationInfo.currentPage) + 1;
-          this.pageUrl = "/api/units/registry/?page=" + nextPage + "&" + this.params + this.ordering;
-          this.loadRegistries();
+          this.pageUrl = this.cleanUrl + "page=" + nextPage + "&" + this.params + this.ordering;
+          this.loadElements();
         },
         loadPreviousPage() {
           const previousPage = parseInt(this.paginationInfo.currentPage) - 1;
-          this.pageUrl = "/api/units/registry/?page=" + previousPage + "&" + this.params + this.ordering;
-          this.loadRegistries();
+          this.pageUrl = this.cleanUrl + "page=" + previousPage + "&" + this.params + this.ordering;
+          this.loadElements();
         },
     
         loadRequestedPage(page) {
-          this.pageUrl = "/api/units/registry/?page=" + page + "&" + this.params + this.ordering;
-          this.loadRegistries();
+          this.pageUrl = this.cleanUrl + "page=" + page + "&" + this.params + this.ordering;
+          this.loadElements();
       
         },
         generatePagesRange(currentPage, totalPages, gap) {
@@ -317,9 +322,9 @@
         },
 
         showingElems(){
-          if (this.paginationInfo.totatRegistries){ 
+          if (this.paginationInfo.totatElements){ 
           let start = (this.paginationInfo.currentPage - 1)*10 + 1;
-          let end = Math.min(this.paginationInfo.currentPage*10, this.paginationInfo.totatRegistries);
+          let end = Math.min(this.paginationInfo.currentPage*10, this.paginationInfo.totatElements);
           return `${start} - ${end}`}
           else return 0
         },

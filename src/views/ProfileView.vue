@@ -47,18 +47,18 @@ input[type="file"] {
 <script>
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
-import { useToastStore } from '@/stores/toast'
+
 
 export default {
     name: 'FeedView',
 
     setup() {
         const userStore = useUserStore()
-        const toastStore = useToastStore()
+
 
         return {
             userStore,
-            toastStore
+
         }
     },
 
@@ -84,24 +84,6 @@ export default {
     },
 
     methods: {
-
-
-        getFeed() {
-            axios
-                .get(`/api/posts/profile/${this.$route.params.id}/`)
-                .then(response => {
-                    console.log('data', response.data)
-
-                    this.posts = response.data.posts
-                    this.user = response.data.user
-                    this.can_send_friendship_request = response.data.can_send_friendship_request
-                })
-                .catch(error => {
-                    console.log('error', error)
-                })
-        },
-
-
 
 
         logout() {
