@@ -1,11 +1,11 @@
 <template>
     <div class="space-y-3">
-      <h2 class="text-3xl font-bold mb-4">Execute order</h2>
+      <h2 class="text-3xl font-bold mb-4">Исполнение нарядов</h2>
   
         <div class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="p-1 bg-white  rounded-lg">
                 <form @submit.prevent="selectDossier()" class="flex items-center">
-                    <label class="form-label mr-2">Enter dossier barcode</label>
+                    <label class="form-label mr-2">Введите ш/к досье</label>
                     <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1 mr-8" v-model="dossier.barcode">
                     <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
@@ -17,7 +17,7 @@
         </div>
   
         <div v-if="Object(this.registries).length !==0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <h2 class="text-xl font-bold mb-2">Registries to requests:</h2>
+            <h2 class="text-xl font-bold mb-2">Реестры в сектор исполнения запросов:</h2>
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -25,16 +25,16 @@
                           N
                       </th>
                       <th scope="col" class="px-6 py-3">
-                          Type
+                          Тип реестра
                       </th>
                       <th scope="col" class="px-6 py-3">
-                          Time create
+                          Дата создания
                       </th>
                       <th scope="col" class="px-6 py-3">
-                          Number of dossier
+                          Количество досье
                       </th>
                       <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Send</span>
+                        <span class="sr-only">Отправить</span>
                     </th>
                   </tr>
               </thead>
@@ -55,7 +55,7 @@
                       <td class="px-6 py-3">
                         <button @click="sendRegistry(registry)"
                         class="rounded-md bg-green-500 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Send  
+                        Отправить  
                     </button>
                       </td>
                   </tr>
@@ -130,7 +130,7 @@
         },
 
         sendRegistry(registry){
-            registry.status = 'sent_to_requests';
+            registry.status = 'sent';
             registry.sender = this.userStore.user.id
             axios.patch('/api/units/registry/' + registry.id + '/', registry).then(
                 response =>{

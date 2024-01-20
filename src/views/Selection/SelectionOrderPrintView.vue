@@ -1,5 +1,5 @@
 <template>    
-    <h2 class="text-3xl font-bold mb-8">Selection order {{ order.id }}</h2>
+    <h2 class="text-3xl font-bold mb-8">Наряд на подбор {{ order.id }}</h2>
     <div>
         <button @click="printData" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Print</button>
         <table ref="printTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -9,16 +9,16 @@
                         N
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Location
+                        Топография
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Archive box
+                        Архивный бокс
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Dossier
+                        Досье
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Dossier Status
+                        Статус досье
                     </th>     
                 </tr>
             </thead>

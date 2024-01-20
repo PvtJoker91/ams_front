@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-gray-800 text-white">
       <div class="py-5 px-8 border-b border-gray-700">
-        <RouterLink to="/" class="text-xl block">AMS</RouterLink>
+        <RouterLink to="/" class="text-xl block">СУАД</RouterLink>
       </div>
 
       <div class="py-5 px-8">
@@ -11,43 +11,47 @@
 
 
           <div class="block py-2">
-              <span class="cursor-pointer" @click="toggleRequestsMenu">Search and request</span>
+              <span class="cursor-pointer" @click="toggleRequestsMenu">Создание заявок</span>
             <ul v-show="requestsMenuOpen" class="pl-4">
-              <li><RouterLink to="/requests/create">Create request</RouterLink></li>
-              <li><RouterLink to="/requests/myrequests">My requests</RouterLink></li>
+              <li><RouterLink to="/requests/create">Создать заявку</RouterLink></li>
+              <li><RouterLink to="/requests/myrequests">Мои заявки</RouterLink></li>
             </ul>
           </div>
 
-          <div v-if="hasGroup('Registration')">
-          <RouterLink to="/registration" class="block py-2">Registration</RouterLink>
+          <div  v-if="hasGroup('Registration')" class="block py-2">
+          <RouterLink to="/registration">Регистрация</RouterLink>
           </div>
           
           <div v-if="hasGroup('Logistics')" class="block py-2">
-            <span class="cursor-pointer" @click="toggleLogisticsMenu">Logistics</span>
+            <span class="cursor-pointer" @click="toggleLogisticsMenu">Логистика</span>
             <ul v-show="logisticsMenuOpen" class="pl-4">
-              <li><RouterLink to="/logistics/checking">Checking</RouterLink></li>
-              <li><RouterLink to="/logistics/completion">Completion</RouterLink></li>
-              <li><RouterLink to="/logistics/placement">Placement</RouterLink></li>
+              <li><RouterLink to="/logistics/checking">Проверка бокса</RouterLink></li>
+              <li><RouterLink to="/logistics/completion">Комплектование</RouterLink></li>
+              <li><RouterLink to="/logistics/placement">Размещение</RouterLink></li>
             </ul>
           </div>
 
           <div v-if="hasGroup('Logistics')" class="block py-2">
-            <span class="cursor-pointer" @click="toggleSelectionMenu">Selection</span>
+            <span class="cursor-pointer" @click="toggleSelectionMenu">Подбор досье</span>
             <ul v-show="selectionMenuOpen" class="pl-4">
-              <li><RouterLink to="/selection/orders">Selection orders</RouterLink></li>
-              <li><RouterLink to="/selection/create">Create selection order</RouterLink></li>
-              <li><RouterLink to="/selection/execute">Execute selection order</RouterLink></li>
+              <li><RouterLink to="/selection/orders">Наряды на подбор</RouterLink></li>
+              <li><RouterLink to="/selection/create">Создание наряда</RouterLink></li>
+              <li><RouterLink to="/selection/execute">Исполнение нарядов</RouterLink></li>
             </ul>
           </div>
           
           <div v-if="hasGroup('Requests')" class="block py-2">
-            <span class="cursor-pointer" @click="toggleRequestsFulfillmentMenu">Requests fulfillment</span>
+            <span class="cursor-pointer" @click="toggleRequestsFulfillmentMenu">Обработка заявок</span>
             <ul v-show="requestsFulfillmentMenuOpen" class="pl-4">
-              <li><RouterLink to="/requests/list">Requests</RouterLink></li>
-              <li><RouterLink to="/requests/tasks">Tasks</RouterLink></li>
-              <li><RouterLink to="/requests/tasks/execution">Tasks execution</RouterLink></li>
-              <li><RouterLink to="/units/registry">Registries</RouterLink></li>
+              <li><RouterLink to="/requests/list">Заявки</RouterLink></li>
+              <li><RouterLink to="/requests/tasks">Задания по заявкам</RouterLink></li>
+              <li><RouterLink to="/requests/tasks/execution">Исполнение заданий</RouterLink></li>
+              <li><RouterLink to="/units/card/">Карточка ЕХ</RouterLink></li>
             </ul>
+          </div>
+
+          <div class="block py-2">
+            <RouterLink to="/units/registry">Реестры</RouterLink>
           </div>
 
         </template>
@@ -62,7 +66,7 @@
       </div>
     </aside>
 
-    <main class="flex-1 px-8 py-6">
+    <main class="flex-1 px-8 py-5">
       <RouterView />
     </main>
 

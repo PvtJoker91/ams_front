@@ -1,11 +1,11 @@
 <template>
     <div class="space-y-3">
-        <h2 class="text-3xl font-bold mb-4">Registration</h2>
+        <h2 class="text-3xl font-bold mb-4">Регистрация</h2>
         <div class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="p-1 bg-white  rounded-lg">
                 <div>
                     <form @submit.prevent="openArchiveBox()" class="flex items-center">
-                        <label class="mr-2">Open archive box</label>
+                        <label class="mr-2">Открыть архивный бокс:</label>
                         <input type="text" v-model="archiveBox.barcode" class="border border-gray-300 rounded-lg px-2 py-1">
                         <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
                         <span class="danger">{{errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : ''}}</span>
@@ -14,13 +14,13 @@
                 </div>
 
                 <div v-if="Object.keys(this.currentArchiveBox).length !== 0" class="mt-2">
-                    <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="closeArchiveBox()">Close AB</button>
+                    <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="closeArchiveBox()">Закрыть бокс:</button>
                 </div>
             </div>
 
             <div class="p-1 bg-white  rounded-lg" v-if="Object.keys(this.currentArchiveBox).length !== 0">
                 <form id="dossierBarcodeForm" @submit.prevent="saveDossier" class="flex items-center">
-                    <label class="form-label mr-2">Enter barcode to register:</label>
+                    <label class="form-label mr-2">Введите ш/к для регистрации досье:</label>
                     <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="dossier.barcode">
                     <span class="danger">{{errArray['validation_error'] ? errArray['validation_error'].toString() : ''}}</span>
                     <span class="danger">{{errArray['dossier_status_error'] ? errArray['dossier_status_error'].toString() : ''}}</span>
@@ -30,50 +30,52 @@
             </div>
         </div>
         <div class="p-6 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(this.currentDossier).length !== 0 && Object.keys(this.currentContract).length === 0 && Object.keys(this.contracts).length === 0">
-            <h2 class="text-2xl font-bold mb-4">Contract search</h2>
+            <h2 class="text-2xl font-bold mb-4">Поиск договоров клиентов</h2>
             <form @submit.prevent="searchContract" class="mb-4">
                 <div class="grid grid-cols-1 gap-4">
                     <div>
-                        <label class="mr-2">Client last name</label>
+                        <label class="mr-2">Фамилия</label>
                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__last_name">
                     </div>
 
                     <div>
-                        <label class="mr-2">Client name</label>
-                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__name">
+                        <label class="mr-2">Имя</label>
+                        <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__first_name">
                     </div>
 
                     <div>
-                        <label class="mr-2">Client mid name</label>
+                        <label class="mr-2">Отчество</label>
                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__middle_name">
                     </div>
 
                     <div>
-                        <label class="mr-2">Client passport</label>
+                        <label class="mr-2">Паспорт</label>
                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.client__passport">
                     </div>
 
                     <div>
-                        <label class="mr-2">Contract number</label>
+                        <label class="mr-2">Номер договора</label>
                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1" v-model="contract.contract_number">
                     </div>
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Search</button>
+                    <button type="submit" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Поиск</button>
                 </div>
+                <span class="danger">{{errArray['to_many'] ? errArray['to_many'].toString() : ''}}</span>
+                <span id="err" class="danger"></span>
             </form>
         </div>
 
         <div class="p-12 bg-white border border-gray-200 rounded-lg" v-if="Object(this.contracts).length !==0" >
             <div class="grid grid-cols-7 gap-4">
-                <div class="col"><b>Product:</b></div>
-                <div class="col"><b>Contract number:</b></div>
-                <div class="col"><b>Client last name:</b></div>
-                <div class="col"><b>Client name:</b></div>
-                <div class="col"><b>Client middle name:</b></div>
-                <div class="col"><b>Client birthday:</b></div>
-                <div class="col"><b>Client passport:</b></div>
+                <div class="col"><b>Продукт:</b></div>
+                <div class="col"><b>Номер договора:</b></div>
+                <div class="col"><b>Фамилия:</b></div>
+                <div class="col"><b>Имя:</b></div>
+                <div class="col"><b>Отчество:</b></div>
+                <div class="col"><b>Дата рождения:</b></div>
+                <div class="col"><b>Паспорт:</b></div>
             </div>
 
             <div v-for="contract in contracts" :key="contract.id" class="highlighted cursor-pointer hover:bg-gray-100" @click="saveContract(contract)">
@@ -92,37 +94,37 @@
         <div class="p-12 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(this.currentContract).length !== 0">
             <div class="container mx-auto grid grid-cols-3 gap-4">
                 <div>
-                    <b class="block">Client: </b>
+                    <b class="block">Клиент: </b>
                     <span class="block">{{ currentContract.client.last_name }} {{ currentContract.client.name }} {{ currentContract.client.middle_name }}</span>
                 </div>
                 <div>
-                    <b class="block">Client birthday: </b>
+                    <b class="block">Дата рождения: </b>
                     <span class="block">{{ currentContract.client.birthday }}</span>
                 </div>
                 <div>
-                    <b class="block">Client passport number: </b>
+                    <b class="block">Номер паспорта: </b>
                     <span class="block">{{ currentContract.client.passport }}</span>
                 </div>
                 <div>
-                    <b class="block">Product: </b>
+                    <b class="block">Продукт: </b>
                     <span class="block">{{ currentContract.product.name }}</span>
                 </div>
                 <div>
-                    <b class="block">Contract number: </b>
+                    <b class="block">Номер договора: </b>
                     <span class="block">{{ currentContract.contract_number }}</span>
                 </div>
                 <div>
-                    <b class="block">Contract date: </b>
+                    <b class="block">Дата заключения: </b>
                     <span class="block">{{ currentContract.time_create }}</span>
                 </div>
             </div>         
             <div class="mt-4">
-                <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="registerDossier()">Register</button>
+                <button class="py-1 px-2 bg-purple-600 text-white rounded-lg" @click="registerDossier()">Зарегистрировать</button>
             </div>
         </div>
 
         <div class="p-2 bg-white border border-gray-200 rounded-lg" v-if="Object.keys(dossiers).length !== 0">
-            <h5 class="text-xl font-bold mb-4">Registered in this AB: ({{dossiers.length}})</h5>
+            <h5 class="text-xl font-bold mb-4">Зарегистрированные досье в AB: ({{dossiers.length}})</h5>
             <ul>
                 <li v-for="dossier in dossiers" class="mb-1">
                     {{ dossier.barcode }}
@@ -162,7 +164,7 @@ export default{
             'id':'',
             'contract_number':'',
             'client__last_name':'',
-            'client__name':'',
+            'client__first_name':'',
             'client__middle_name':'',
             'client__passport':'',
         },
@@ -242,10 +244,10 @@ export default{
             }
         ).catch(error =>{
             if (error.response) {
-      console.log(error.response.data);
-      this.errArray = error.response.data;
+                console.log(error.response.data);
+                this.errArray = error.response.data;
 
-    }
+                }
         })
     },
 
@@ -253,7 +255,7 @@ export default{
         axios.get('/api/contracts/' + 
                     '?contract_number='+this.contract.contract_number +
                     '&client__last_name='+this.contract.client__last_name +
-                    '&client__name='+this.contract.client__name +
+                    '&client__first_name='+this.contract.client__first_name +
                     '&client__middle_name='+this.contract.client__middle_name +
                     '&client__passport='+this.contract.client__passport,
                     ).then(response =>{
@@ -264,7 +266,10 @@ export default{
                             }                         
                             }          
                 ).catch(error =>{
-                    console.log(error)
+                    if (error.response) {
+                        console.log(error.response.data);
+                        this.errArray = error.response.data;
+                }
                 }
                 )
     },
@@ -289,7 +294,7 @@ export default{
                     this.dossier.barcode = '';
                     this.contract.contract_number = '';
                     this.contract.client__last_name = '';
-                    this.contract.client__name = '';
+                    this.contract.client__first_name = '';
                     this.contract.client__middle_name = '';
                     this.contract.client__passport = '';
                 }

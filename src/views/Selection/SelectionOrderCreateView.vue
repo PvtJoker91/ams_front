@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-3xl font-bold mb-8">Create selection order</h2>
+    <h2 class="text-3xl font-bold mb-8">Создать наряд на подбор</h2>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table v-if="!showForm" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -7,28 +7,28 @@
                     <th scope="col" class="px-6 py-3">
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Floor
+                        Этаж
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Outdated
+                        Просроченные
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        T+2h 
+                        T+2ч 
                     </th>
                     <th scope="col" class="px-6 py-3">      
-                        Today 
+                        Сегодня 
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        T+1d
+                        T+1д
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        T+3d
+                        T+3д
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        T+7d
+                        T+7д
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Rest
+                        Остальные
                     </th>
                 </tr>
             </thead>
@@ -72,17 +72,17 @@
             </tbody>
             <button v-if="tasksToSelect.length!=0" @click="showForm=!showForm" 
             class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                     Create
+                     Создать наряд
             </button>
         </table>
         <div v-if="showForm" class="p-6 bg-white border border-gray-200 rounded-lg">
             <form @submit.prevent="saveOrder()">
                 
-                <h2 class="block text-xl font-medium leading-6 text-gray-900">Chosen dossiers to select:  {{ tasksToSelect.length }}</h2>
+                <h2 class="block text-xl font-medium leading-6 text-gray-900">Выбрано досье к выемке:  {{ tasksToSelect.length }}</h2>
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                     <div class="sm:col-span-3">
-                    <label class="block text-sm font-medium leading-6 text-gray-900">Executor (choose):</label>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Исполнитель (выбрать):</label>
                     <div class="mt-2">
                         <select id="executor" v-model="selectionOrder.executor" required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
@@ -95,11 +95,11 @@
                 <div class="mt-6 flex items-center gap-x-6">
                     <button @click="showForm=false"
                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Back  
+                        Назад  
                     </button>
                     <button type="submit"
                     class="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Create  
+                        Создать  
                     </button>
                 </div>
             </form>

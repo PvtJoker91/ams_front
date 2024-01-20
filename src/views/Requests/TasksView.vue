@@ -1,36 +1,36 @@
 <template>
-  <h2 class="text-3xl font-bold mb-8">Tasks</h2>
+  <h2 class="text-3xl font-bold mb-8">Задания по заявкам</h2>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                   <th scope="col" class="px-6 py-3">
-                    Request
+                    Заявка
                   </th>
                   <th scope="col" class="px-6 py-3">
                         <div class="flex items-center">
-                            Service
+                          Услуга
                           <button @click="addOrdering('ordering=request__service')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                       </svg></button>
                       </div>
                   </th>
                   <th scope="col" class="px-6 py-3">
-                          Barcode
+                          Досье
                   </th>
                   <th scope="col" class="px-6 py-3">
-                          Deadline
+                    Дата исполнения
                   </th>
                   <th scope="col" class="px-6 py-3">
                       <div class="flex items-center">
-                          Status
+                        Статус
                           <button @click="addOrdering('ordering=task_status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                       </svg></button>
                       </div>
                   </th>
                   <th scope="col" class="px-6 py-3">
-                      <span class="sr-only">Details</span>
+                      <span class="sr-only">Детали</span>
                   </th>
               </tr>
           </thead>
@@ -53,7 +53,7 @@
                   </td>
                   <td class="px-6 py-3 text-right">
                   <RouterLink :to="{name: 'requestDetail', params:{'id': task.request.id}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                     Details
+                    Детали
                   </RouterLink>
                 </td>
               </tr>
@@ -61,8 +61,8 @@
       </table>
       <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">
-                Showing 
-              <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> of 
+              Показано 
+              <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> из 
               <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatElements}}</span>
             </span>
             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 mr-3 mb-3">
@@ -118,10 +118,6 @@
           },
           params:'',
           ordering:'',
-          toggleRegistryType: false,
-          filteredRegistryType: '',
-          toggleRegistryStatus: false,
-          filteredRegistryStatus: '',
           }
           
       },
@@ -129,20 +125,6 @@
         this.loadElements();
       },
 
-      watch: {
-        filteredRegistryType: {
-          handler() {
-            this.toggleRegistryType = false,
-            this.changeParams(`type=${this.filteredRegistryType}&`)
-          },
-        },
-        filteredRegistryStatus: {
-          handler() {
-            this.toggleRegistryStatus = false,
-            this.changeParams(`status=${this.filteredRegistryStatus}&`)
-          },
-        },
-      },
   
     methods: {
       addOrdering(newOrdering){

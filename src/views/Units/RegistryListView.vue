@@ -1,10 +1,10 @@
 <template>
-    <h2 class="text-3xl font-bold mb-8">Registries</h2>
+    <h2 class="text-3xl font-bold mb-8">Реестры</h2>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <div class="flex flex-column ">
             <div class="mr-3 mb-3">
                 <button id="dropdownRegistryTypeButton" @click="toggleRegistryType = !toggleRegistryType" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-                    Type {{ filteredRegistryType }}
+                    Тип {{ filteredRegistryType }}
                     <svg class="w-2.5 h-2.5 ms-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
@@ -35,7 +35,7 @@
             </div>
             <div class="mr-3 mb-3">
                 <button id="dropdownRegistryStatusButton" @click="toggleRegistryStatus = !toggleRegistryStatus" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-                    Status {{ filteredRegistryStatus }}
+                    Статус {{ filteredRegistryStatus }}
                     <svg class="w-2.5 h-2.5 ms-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
@@ -72,7 +72,7 @@
             </div>
             <div class="mr-0">
                 <button @click="clearFilters" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-                    Clear filters
+                    Очистить фильтры
                 </button>
             </div>
           </div>
@@ -81,33 +81,33 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                      ID
+                      Номер
                     </th>
                     <th scope="col" class="px-6 py-3">
-                            Type
+                      Тип
                     </th>
  
                     <th scope="col" class="px-6 py-3">
                         <div class="flex items-center">
-                            Time create
+                            Дата создания
                             <button @click="addOrdering('ordering=time_create')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                           </svg></button>
                         </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
-                            Dossiers number
+                            Количество досье
                     </th>
                     <th scope="col" class="px-6 py-3">
                         <div class="flex items-center">
-                            Status
+                            Статус
                             <button @click="addOrdering('ordering=status')"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                           </svg></button>
                         </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Details</span>
+                        <span class="sr-only">Детали</span>
                     </th>
                 </tr>
             </thead>
@@ -133,7 +133,7 @@
                     <td>
                     <button v-if="registry.status=='creation'"
                       @click="sendRegistry(registry)" class="rounded-md bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
-                        Send
+                        Отправить
                       </button>
                     </td>
                 </tr>
@@ -141,8 +141,8 @@
         </table>
         <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-3 mb-3 md:mb-0 block w-full md:inline md:w-auto">
-                Showing 
-              <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> of 
+                Показано 
+              <span class="font-semibold text-gray-900 dark:text-white">{{showingElems()}}</span> из 
               <span class="font-semibold text-gray-900 dark:text-white">{{paginationInfo.totatElements}}</span>
             </span>
             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 mr-3 mb-3">
@@ -227,9 +227,7 @@
     
       methods: {
         sendRegistry(registry){
-          if(registry.type == 'rc'){registry.status = 'sent_to_customer'};
-          if(registry.type == 'rl'){registry.status = 'sent_to_logistics'};
-          if(registry.type == 'lr'){registry.status = 'sent_to_requests'};
+          registry.status = 'sent';
           registry.sender = this.userStore.user.id
           axios.patch('/api/units/registry/' + registry.id + '/', registry).then(
               response =>{

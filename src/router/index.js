@@ -134,7 +134,7 @@ const router = createRouter({
       component: SelectionOrderPrintView
     },
     {
-      path: '/units/dossier/:id',
+      path: '/units/card',
       name: 'dossierDetail',
       component: DossierDetailView
     },

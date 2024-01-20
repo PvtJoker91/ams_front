@@ -1,12 +1,12 @@
 <template>
     <div class="space-y-3">
-      <h2 class="text-3xl font-bold mb-4">Completion</h2>
+      <h2 class="text-3xl font-bold mb-4">Комплектование архивного бокса</h2>
   
         <!-- Open Archive Box Form -->
         <div class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="p-1 bg-white  rounded-lg">
                 <form @submit.prevent="openArchiveBox" class="flex items-center">
-                    <label class="form-label mr-2">Open archive box</label>
+                    <label class="form-label mr-2">Открыть архивный бокс</label>
                     <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1" v-model="archiveBox.barcode">
                     <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
@@ -23,7 +23,7 @@
         <!-- Add/Remove Dossier Form -->
             <div class="p-1 bg-white  rounded-lg" v-if="Object.keys(this.currentArchiveBox).length !== 0">
                 <form @submit.prevent="addOrRemoveDossier" class="flex items-center">
-                    <label class="form-label mr-2">Enter barcode to add or remove dossier:</label>
+                    <label class="form-label mr-2">Введите ш/к для добавления/изъятия досье:</label>
                     <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1" v-model="dossier.barcode">
                     <span class="danger">{{ errArray['dossier_status_error'] ? errArray['dossier_status_error'].toString() : '' }}</span>
                     <span class="danger">{{ errArray['non_field_errors'] ? errArray['non_field_errors'].toString() : '' }}</span>
@@ -37,7 +37,7 @@
 
         <div class="container mx-auto grid grid-cols-3 gap-4">
           <div v-if="Object(this.dossiers).length !== 0">
-            <p class="text-l font-bold">Dossiers in this AB: ({{ dossiers.length }})</p>
+            <p class="text-l font-bold">Досье в боксе: ({{ dossiers.length }})</p>
             <ul>
               <li v-for="d in dossiers" class="mb-1">
                 {{ d.barcode }}
@@ -46,7 +46,7 @@
           </div>
   
           <div v-if="Object(this.addedDossiers).length !== 0">
-            <p class="text-l font-bold">Added dossiers: ({{ addedDossiers.length }})</p>
+            <p class="text-l font-bold">Добавленные досье: ({{ addedDossiers.length }})</p>
             <ul>
               <li v-for="d in addedDossiers" class="mb-1">
                 {{ d.barcode }}
@@ -55,7 +55,7 @@
           </div>
   
           <div v-if="Object(this.removedDossiers).length !== 0">
-            <p class="text-l font-bold">Removed dossiers: ({{ removedDossiers.length }})</p>
+            <p class="text-l font-bold">Изъятые досье: ({{ removedDossiers.length }})</p>
             <ul>
               <li v-for="d in removedDossiers" class="mb-1">
                 {{ d.barcode }}

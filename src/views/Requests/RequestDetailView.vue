@@ -1,65 +1,65 @@
 <template>
     <div class="space-y-3">
-    <h2 class="text-3xl font-bold mb-4">Request №{{ currentRequest.id }}  {{ currentRequest.time_create }}</h2>
+    <h2 class="text-3xl font-bold mb-4">Заявка №{{ currentRequest.id }}  {{ currentRequest.time_create }}</h2>
             <div class="p-8 bg-white rounded-lg">
                 <div v-if="currentRequest.status == 'creation'" class="flex items-center">
                     <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                         @click="showSearch=false">Request info
+                         @click="showSearch=false">Детали заявки
                     </button>
                     <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                        @click="showSearch=true">Add dossiers
+                        @click="showSearch=true">Добавить досье
                         <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
                             {{ addedDossiers.length }}
                         </span>
                     </button>
                 </div>
 
-                <div  v-if="!this.showSearch" class="flex mt-3" >
+                <div v-if="!this.showSearch" class="flex mt-3" >
                     <div class="flex-1">
-                        <h2 class="text-xl font-bold mb-4">Request Details</h2>
+                        <h2 class="text-xl font-bold mb-4">Реквизиты заявки:</h2>
                         <div class="container mx-auto grid grid-cols-2 gap-4">
                             <div>
-                                <b class="block">Client: </b>
+                                <b class="block">Заказчик: </b>
                                 <span class="block">{{ currentRequest.client }}</span>
                             </div>
                             <div>
-                                <b class="block">Client department: </b>
+                                <b class="block">Подразделение заказчика: </b>
                                 <span class="block">{{ currentRequest.client_department }}</span>
                             </div>
                             <div>
-                                <b class="block">Creator: </b>
+                                <b class="block">Создатель заявки: </b>
                                 <span class="block">{{ currentRequest.creator.first_name }} {{ currentRequest.creator.last_name }}</span>
                             </div>
                             <div>
-                                <b class="block">Service: </b>
+                                <b class="block">Услуга: </b>
                                 <span class="block">{{ currentRequest.service }}</span>
                             </div>
                             <div>
-                                <b class="block">Urgency: </b>
+                                <b class="block">Срочность: </b>
                                 <span class="block">{{ currentRequest.urgency }}</span>
                             </div>
                             <div v-if="currentRequest.time_create!==null">
-                                <b class="block">Creation date: </b>
+                                <b class="block">Дата создания: </b>
                                 <span class="block">{{ currentRequest.time_create }}</span>
                             </div>
                             <div v-if="currentRequest.time_close!==null">
-                                <b class="block">Close date: </b>
+                                <b class="block">Дата закрытия: </b>
                                 <span class="block">{{ currentRequest.time_close }}</span>
                             </div>
                             <div>
-                                <b class="block">Status: </b>
+                                <b class="block">Статус: </b>
                                 <span class="block">{{ currentRequest.status }}</span>
                             </div>
                             <div>
-                                <b class="block">Description: </b>
+                                <b class="block">Описание: </b>
                                 <span class="block">{{ currentRequest.description}}</span>
                             </div>
                             <div v-if="currentRequest.close_reason!==null">
-                                <b class="block">Close reason: </b>
+                                <b class="block">Причина закрытия: </b>
                                 <span class="block">{{ currentRequest.close_reason}}</span>
                             </div>
                             <div v-if="currentRequest.closer!==null">
-                                <b class="block">Closer: </b>
+                                <b class="block">Исполнитель: </b>
                                 <span class="block">{{ currentRequest.closer.first_name }} {{ currentRequest.closer.last_name }}</span>
                             </div>
                         </div>
@@ -68,36 +68,36 @@
                     <div class="flex items-center">    
                         <div v-if="currentRequest.status == 'sent_for_processing' && !hasGroup('Archive clients')" class="flex items-center">
                             <button @click="requestAccept()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500" >
-                                Accept request
+                                Подтвердить заявку
                             </button>
                         </div>
 
                     
                         <div v-if="this.addedDossiers.length !==0 && currentRequest.status == 'creation'">
                             <button @click="requestSend()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
-                                    Submit request
+                                    Отправить заявку
                             </button>
                         </div>
                             
                         <div v-if="currentRequest.status == 'creation'">
                             <button @click="requestDelete()" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                    Delete request
+                                Удалить заявку
                             </button>
                         </div>
                         
                         <div v-if="currentRequest.status !== 'creation' && currentRequest.status !== 'cancelled' && currentRequest.status !== 'complete'">
                             <button v-if="!showDialog" @click="showDialog=true" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                    Close request
+                                Закрыть заявку
                             </button>
                             <div v-if="showDialog" class="ml-6">
-                                <p>Input the reason of request closing</p>
+                                <p>Введите причину закрытия</p>
                                 <div class="flex items-center">
                                     <input v-model="currentRequest.close_reason">
                                     <button @click="requestCancel()" class="float-left ml-2 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                                        Close request
+                                        Закрыть
                                     </button>
                                     <button @click="showDialog=false, currentRequest.close_reason=null" class="float-left ml-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                                        Cancel
+                                        Отмена
                                     </button>
                                 </div>
                             </div>
@@ -106,11 +106,9 @@
                 </div>
                 <div class="flex-1">
                         <div v-if="Object(addedDossiers).length!==0">
-                            <h2 class="text-xl font-bold mb-4">Dossiers in the request  ({{ addedDossiers.length }})</h2>
+                            <h2 class="text-xl font-bold mb-4">Досье в заявке:  ({{ addedDossiers.length }})</h2>
                             <li v-for="dossier in addedDossiers">
-                                    <RouterLink :to="{name: 'dossierDetail', params:{'id': dossier.id}}" v-bind:currentDossier="dossier" target="_blank" class="py-2 px-2  rounded-lg">
-                                        {{ dossier.barcode }}
-                                    </RouterLink>
+                                 {{ dossier.barcode }}
                                 <button v-if="currentRequest.status == 'creation'"
                                 @click="addRemoveDossierToRequest(dossier)" class="rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
                                     Remove
@@ -123,45 +121,45 @@
                 <div v-if="this.showSearch" class="ml-2">
                     <div v-if="Object(foundDossiers).length==0"  class="mt-5">
                         <div class="mt-4">
-                                <h2 class="text-xl font-bold mb-4">Fill in your search details</h2>
+                                <h2 class="text-xl font-bold mb-4">Заполните детали поиска</h2>
                         </div>
 
                         <form @submit.prevent="searchDossiers()">
                             <div class="grid grid-cols-3 gap-4">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Client last name</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Фамилия клиента</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.client.last_name">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Client name</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Имя клиента</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.client.name">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Client mid name</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Отчество клиента</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.client.middle_name">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Client passport</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Паспорт клиента</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.client.passport">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Client birthday</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Дата рождения</label>
                                         <input type="date" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.client.birthday">
                                     </div>
                                 </div>
 
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Product name (choose)</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Продукт (выбрать)</label>
                                         <select class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.product.name">
                                             <option v-for="product in products" v-bind:value="product.name">{{product.name}}</option>
                                         </select>
@@ -169,19 +167,19 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Contract number</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Номер договора</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.contract.contract_number">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Dossier barcode</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Штрих-код досье</label>
                                         <input type="text" class="border border-gray-300 rounded-lg px-2 py-1.5" v-model="dossier.barcode">
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Search</button>
+                                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Поиск</button>
                             </div>
 
                         </form>
@@ -191,16 +189,16 @@
                     <div v-if="Object(foundDossiers).length!==0" class="mt-5">
                         <div class="flex items-center">
                             <button @click="foundDossiers=[]" class="rounded-md bg-purple-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-purple-500">
-                                Back
+                                Назад
                             </button>
-                            <h1 class="text-2xl font-bold ml-4">Search result</h1>
+                            <h1 class="text-2xl font-bold ml-4">Результаты поиска</h1>
                         </div>
                         <div class="p-1 bg-white rounded-lg mt-5">
 
                             <div class="grid grid-cols-4 mb-3">
-                                <div class="col"><b>Client</b></div>
-                                <div class="col"><b>Product:</b></div>
-                                <div class="col"><b>Contract number:</b></div>
+                                <div class="col"><b>Клиент</b></div>
+                                <div class="col"><b>Продукт:</b></div>
+                                <div class="col"><b>Номер договора:</b></div>
                                 <div class="col"><b></b></div>
                             </div>
 
@@ -209,7 +207,7 @@
                                     <details>
                                         <summary>
                                             <div class="grid grid-cols-4">
-                                                <div class="col">{{ dossier.contract.client.last_name }} {{ dossier.contract.client.name }} {{ dossier.contract.client.middle_name }}</div>
+                                                <div class="col">{{ dossier.contract.client.last_name }} {{ dossier.contract.client.first_name }} {{ dossier.contract.client.middle_name }}</div>
                                                 <div class="col">{{ dossier.contract.product.name }}</div>
                                                 <div class="col">{{ dossier.contract.contract_number }}</div>
                                                 <div class="col">
@@ -218,15 +216,15 @@
                                                     :class="{ 
                                                     'bg-gray-500 hover:bg-gray-600': addedDossiers.includes(dossier), 
                                                     'bg-green-500 hover:bg-green-600': !addedDossiers.includes(dossier) }">
-                                                        Add/Remove
+                                                        Добавить/убрать
                                                     </button>
                                                 </div>
                                             </div>
                                         </summary>
                                         <div class="mt-3 text-sm">
-                                            <li><b>Birthday:</b>     {{ dossier.contract.client.birthday }}</li>
-                                            <li><b>Passport:</b>     {{ dossier.contract.client.passport}}</li>
-                                            <li><b>Barcode:</b>     {{ dossier.barcode }}</li>
+                                            <li><b>Дата рождения:</b>     {{ dossier.contract.client.birthday }}</li>
+                                            <li><b>Паспорт:</b>     {{ dossier.contract.client.passport}}</li>
+                                            <li><b>Штрих-код досье:</b>     {{ dossier.barcode }}</li>
                                         </div>
                                     </details>
                                 </ul>

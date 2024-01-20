@@ -1,24 +1,24 @@
 <template>
 
     <div class="max-w-7xl bg-white text-center">
-        <h1 class="mb-6 text-2xl">Welcome to Archive Management System!</h1>
-    </div>
+        <h1 class="mb-6 text-2xl">Добро пожаловать в Систему Управления Архивными Документами!</h1>
+    
 
     <div v-if="userStore.user.isAuthenticated && userStore.user.id" class="max-w-7xl bg-white text-center">
-        <h3 class="mb-6 text-xl text-gray-500">Choose an operation you want to do:</h3>
+        <h3 class="mb-6 text-xl text-gray-500">Выберите раздел:</h3>
         <div class="max-w-7xl mx-auto grid grid-cols-2 gap-4">
             <RouterLink to="/requests">
             <div class="main-left">
-                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
-                    <h1 class="mb-6 text-2xl">Search and request documents</h1>
+                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center ml-5 mb-5">
+                    <h1 class="mb-6 text-2xl">Создание заявок в архив</h1>
                 </div>
             </div>
             </RouterLink>
 
             <RouterLink to="/archive">
             <div class="main-right">
-                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center">
-                    <h1 class="mb-6 text-2xl">Archive tasks</h1>
+                <div class="p-12 bg-white border border-gray-200 rounded-lg text-center mr-5 mb-5">
+                    <h1 class="mb-6 text-2xl">Выполнение задач архива</h1>
                 </div>
             </div>
             </RouterLink>
@@ -28,10 +28,9 @@
     <div v-else class="max-w-7xl mx-auto grid grid-cols-2 gap-4">
         <div class="main-left">
             <div class="p-12 bg-white border border-gray-200 rounded-lg">
-                <h1 class="mb-6 text-2xl">Welcome to archive management system</h1>
 
                 <p class="mb-6 text-gray-500">
-                    Please log in to get access to archive services
+                    Для получения доступа, пожалуйста, войдите в систему!
                 </p>
 
 
@@ -43,12 +42,12 @@
                 <form class="space-y-6" v-on:submit.prevent="submitForm">
                     <div>
                         <label>E-mail</label><br>
-                        <input type="email" v-model="form.email" placeholder="Your e-mail address" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+                        <input type="email" v-model="form.email" placeholder="Ваш адрес электронной почты" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
                     </div>
 
                     <div>
-                        <label>Password</label><br>
-                        <input type="password" v-model="form.password" placeholder="Your password" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+                        <label>Пароль</label><br>
+                        <input type="password" v-model="form.password" placeholder="Ваш пароль" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
                     </div>
 
                     <template v-if="errors.length > 0">
@@ -58,12 +57,13 @@
                     </template>
 
                     <div>
-                        <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Log in</button>
+                        <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Войти</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>

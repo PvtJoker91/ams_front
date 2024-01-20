@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-3">
-    <h2 class="text-3xl font-bold mb-4">Execute task</h2>
+    <h2 class="text-3xl font-bold mb-4">Исполнить задание</h2>
 
       <div class="p-6 bg-white border border-gray-200 rounded-lg">
           <div class="p-1 bg-white  rounded-lg">
               <form @submit.prevent="findDossierTasks()" class="flex items-center">
-                  <label class="form-label mr-2">Enter dossier barcode</label>
+                  <label class="form-label mr-2">Введите ш/к досье:</label>
                   <input type="text" class="form-control border border-gray-300 rounded-lg px-2 py-1" v-model="dossierBarcode" required>
                   <span class="danger">{{ errArray['status_error'] ? errArray['status_error'].toString() : '' }}</span>
                   <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
@@ -22,22 +22,22 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Request
+                        Заявка
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Service
+                        Услуга
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Barcode
+                        Досье
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Deadline
+                        Срок исполнения
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
+                        Статус
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Details</span>
+                        <span class="sr-only">Детали</span>
                     </th>
                 </tr>
             </thead>
@@ -61,14 +61,14 @@
                     <td class="px-6 py-3 text-right">
                       <button v-if="task.request.service=='full_scanning' || task.request.service=='scanning_by_documents'"
                       @click="getScans(task)" class="rounded-md bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
-                        Execute
+                        Исполнить
                       </button>
                       <button v-if="task.request.service=='temporary_issuance' || task.request.service=='unrecoverable_issuance'"
                       @click="addDossierToRegistry(task, 'rc')" class="rounded-md bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
-                        Add to registry
+                        Добавить в реестр
                       </button>
                       <button v-if="!closeTaskForm" @click="closeTaskForm=true, currentTask=task" class="rounded-md bg-red-600 px-3 py-2 ml-2 text-xs font-semibold text-white shadow-sm hover:bg-red-500">
-                              Close
+                        Закрыть
                       </button>
                     </td>
                 </tr>
@@ -78,16 +78,16 @@
         <div v-if="closeTaskForm" class="mt-3 ml-3 flex flex-col">
           <form @submit.prevent="closeTask(currentTask, 'rejected')" class="w-full">
             <div>
-              <label for="commentary" class="text-s">Input closing reason dossier {{ currentTask.dossier }} from request {{ currentTask.request.id }}:</label>
+              <label for="commentary" class="text-s">Введите причину закрытия задания по досье {{ currentTask.dossier }} из заявки {{ currentTask.request.id }}:</label>
               <input id="commentary" v-model="commentary" class="ml-5" required>
             </div>
               
             <div class="mt-5">  
               <button type="submit" class="float-left ml-2 mb-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                  Close task
+                  Закрыть задание
               </button>
               <button @click="closeTaskForm=false, commentary=''" class="float-left ml-2 mb-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                  Cancel
+                  Отмена
               </button>
             </div>
           </form>
@@ -98,22 +98,22 @@
     <div class="flex flex-col">
       <div class="mt-1 ml-1">
         <button @click="showForm=false" class="float-left ml-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-            Back
+            Назад
         </button>
         <button @click="uploadForm=true" v-if="!uploadForm" class="float-left ml-2 rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400">
-            Add scan
+            Прикрепить скан
         </button>
       </div>
       <div class="flex">
         <div class=" mt-3 ml-3 mb-8 mr-12">
-            <h2 class="text-xl font-bold mb-4">Request description</h2>
+            <h2 class="text-xl font-bold mb-4">Описание задания</h2>
             <p>{{ currentTask.request.description }}</p>
         </div>
 
         
         <div v-if="!closeTaskForm2" class="mt-3 ml-3">
           <button @click="closeTaskForm2=true" class="float-left ml-2 rounded-md bg-blue-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-            Close task
+            Закрыть задание
           </button>
         </div>
 
@@ -121,16 +121,16 @@
         <div v-if="closeTaskForm2" class="mt-3 ml-3 flex flex-col">
           <form @submit.prevent="closeTask(currentTask, 'completed')" class="w-full">
             <div>
-              <label for="commentary" class="text-l font-bold">Closing reason:</label>
+              <label for="commentary" class="text-l font-bold">Причина закрытия:</label>
               <input id="commentary" v-model="commentary" class="ml-5" required>
             </div>
               
             <div class="mt-5">  
               <button type="submit" class="float-left ml-2 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
-                  Close task
+                Закрыть
               </button>
               <button @click="closeTaskForm2=false, commentary=''" class="float-left ml-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                  Cancel
+                Отмена
               </button>
             </div>
           </form>
@@ -140,7 +140,7 @@
     <div class="flex ml-3">
 
         <div class="w-1/3 mr-1 ml-1 mt-5 mb-12">
-            <h2 class="text-l font-bold">Added scans:</h2>
+            <h2 class="text-l font-bold">Добавленные скан-копии:</h2>
             <ul>
                 <li v-for="scan in scans" :key="scan.id">
                     <a :href="scan.file" target="_blank" class="text-blue-500 hover:text-blue-700">{{ scan.name }}</a>
@@ -151,12 +151,12 @@
         <div v-if="uploadForm" class="w-2/3 mr-1 ml-1 mt-5">
             <form @submit.prevent="uploadScan" class="w-full">
                 <label for="fileInput" class="float-left ml-2 rounded-md bg-orange-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500">
-                    Choose file
+                    Выбрать файл
                 </label>
                 <input type="file" id="fileInput" @change="handleFileChange" class="hidden" />
                 <span class="ml-2">{{ scan.file.name }}</span>
                 <div class="mt-2">
-                    <label for="fileName">Имя:</label>
+                    <label for="fileName">Название:</label>
                     <input type="text" id="fileName" v-model="scan.fileName" required class="w-full rounded-md border px-3 py-2" />
                 </div>
                 <div class="mt-2 mb-4">
@@ -164,7 +164,7 @@
                     <input type="text" id="fileDescription" v-model="scan.fileDescription" class="w-full rounded-md border px-3 py-2" />
                 </div>
                 <button type="submit" v-if="scan.file" class="float-right mt-3 mr-3 mb-3 rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400">
-                    Upload
+                    Загрузить
                 </button>
             </form>
         </div>
