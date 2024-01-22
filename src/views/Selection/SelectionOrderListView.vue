@@ -91,7 +91,7 @@
                       {{ order.time_create }}
                     </td>
                     <td class="px-6 py-3">
-                      {{order.selected}} of {{ order.tasks.length }}
+                      {{order.selected.length}} of {{ order.tasks.length }}
                     </td>
                     <td class="px-6 py-3">
                       {{ order.creator.last_name }} {{ order.creator.first_name }}

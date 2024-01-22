@@ -30,10 +30,10 @@
             </div>
         </div>
 
-        <div v-if="Object(this.message).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
-                {{ this.message }}
-                <button @click="breakChecking" class="py-1 px-2 bg-red-600 text-white rounded-lg">Прервать проверку</button>
-                <button @click="continueChecking" class="py-1 px-2 bg-green-600 text-white rounded-lg">Продолжить проверку</button>
+        <div v-if="message" class="p-6 bg-white border border-gray-200 rounded-lg">
+                <p>В боксе остались несверенные досье. Желаете прервать проверку?</p>
+                <button @click="closeArchiveBoxWithAError" class="py-1 px-2 bg-red-600 text-white rounded-lg mr-4">Прервать проверку</button>
+                <button @click="message=false" class="py-1 px-2 bg-green-600 text-white rounded-lg">Продолжить проверку</button>
         </div>
     
         <div v-if="Object(this.dossiers).length !== 0 || Object(this.addedDossiers).length !== 0" class="p-6 bg-white border border-gray-200 rounded-lg">
@@ -75,7 +75,7 @@
         dossiers: [],
         checkedDossiers: [],
         addedDossiers: [],
-        message: '',
+        message: false,
         'archiveBox': {
             'barcode':'',
             'status':'Under checking',
@@ -135,7 +135,7 @@
         })
   
       } else {
-        this.message = 'You have unchecked dossiers in the box. Do you want to break the checking?'
+        this.message = true;
       }
     },
 
@@ -145,40 +145,17 @@
             response =>{
                 console.log(response.data)
                 this.checkedDossiers = []
+                this.addedDossiers = []
+                this.dossiers = []
                 this.currentArchiveBox = {}
                 this.currentDossier = {}
                 this.archiveBox.barcode = ""
+                this.message = false;
             }
         ).catch(error =>{
             console.log(error)
         })
   
-      
-    },
-    breakChecking(){
-        let notFoundDossiers = [];
-        for (let i = 0; i < this.dossiers.length; i++ ){
-            let dossier = this.dossiers[i];
-            dossier.archive_box = null;
-            dossier.status = 'Not found while checking';
-            notFoundDossiers.push(dossier);
-        }
-        axios.put('/api/units/dossiers_to_update', notFoundDossiers).then(
-            response =>{
-                console.log(response.data)
-                this.dossiers = [];
-                this.message = '';
-                this.closeArchiveBoxWithAError()
-            }
-        ).catch(error =>{
-            console.log(error)
-        });
-        
-        
-    },
-
-    continueChecking(){
-        this.message = '';
     },
 
     isBarcodePresent(jsonData, barcodeToCheck) {
@@ -249,10 +226,12 @@
                     console.log(error.response.data);
                     this.errArray = error.response.data;
                     }
-                    }
-                  )
-                }  
-            }
+                }
+            )
+      }  else if (this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)) {
+            this.dossier.barcode = '';
         }
-  }
+        }    
+      }
+    }
   </script>

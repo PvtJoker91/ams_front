@@ -137,7 +137,7 @@
         </div>
       </div>
     </div>
-    <div class="flex ml-3">
+      <div class="flex ml-3">
 
         <div class="w-1/3 mr-1 ml-1 mt-5 mb-12">
             <h2 class="text-l font-bold">Добавленные скан-копии:</h2>
@@ -168,8 +168,54 @@
                 </button>
             </form>
         </div>
+      </div>
     </div>
-  </div>
+    <div v-if="Object(this.registries).length !==0 && !showForm" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <h2 class="text-xl font-bold mb-2">Созданные реестры:</h2>
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                      <th scope="col" class="px-6 py-3">
+                          N
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Тип реестра
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Дата создания
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Количество досье
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Отправить</span>
+                    </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-for="registry, num in registries" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ num + 1 }}
+                      </th>
+                      <td class="px-6 py-3">
+                        {{ registry.type }}
+                      </td>
+                      <td class="px-6 py-3">
+                        {{ registry.time_create }}
+                      </td>
+                      <td class="px-6 py-3">
+                        {{ registry.dossiers.length }}
+                      </td>
+                      <td class="px-6 py-3">
+                        <button @click="sendRegistry(registry)"
+                        class="rounded-md bg-green-500 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        Отправить  
+                    </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
   </div>
 </template>
 
@@ -205,8 +251,8 @@ export default{
         'fileName':'',
         'fileDescription':''
       },
-
-      'errArray': [],
+      registries:[],
+      errArray: [],
       }
   },
 
@@ -224,7 +270,7 @@ export default{
               this.tasks = response.data
               this.errArray = []
               if(this.tasks.length == 0){
-                this.messege = 'There are no active tasks for this dossier'
+                this.messege = 'По данному досье нет неисполненных заданий'
               }
           }
       ).catch(error =>{
@@ -238,7 +284,7 @@ export default{
 
     getScans(task) {
       this.currentTask = task;
-      axios.get('/api/units/scans/?dossier=' + this.dossierBarcode)
+      axios.get('/api/units/scans/?dossier=' + this.currentTask.dossier)
         .then(response => {
           console.log(response.data)
           this.scans = response.data;
@@ -276,25 +322,6 @@ export default{
         });
     },
 
-    addDossierToRegistry(taskToRegistry, registryType){
-      let registry = {
-        'type':registryType,
-        'status':'creation',
-        'sender':this.userStore.user.id
-      }
-      axios.post(`/api/units/registry/?task_id=${taskToRegistry.id}`, registry
-                  ).then(response =>{
-                          console.log(response.data);
-                          this.tasks = this.tasks.filter(task =>(task != taskToRegistry));
-                          
-                          }         
-              ).catch(error =>{
-                  console.log(error)
-              }
-          );
-
-    },
-
     closeTask(taskToClose, status){
       axios.patch('/api/requests/tasks/'+ taskToClose.id + '/',
               {
@@ -317,8 +344,59 @@ export default{
               }
           );
       this.commentary = '';
-    
-  },
+    },
+
+    addDossierToRegistry(taskToRegistry, registryType){
+      let registry = {
+        'type':registryType,
+        'status':'creation',
+        'sender':this.userStore.user.id
+      }
+      axios.post(`/api/units/registry/?task_id=${taskToRegistry.id}`, registry
+                  ).then(response =>{
+                          console.log(response.data);
+                          this.addRegistry(response.data)
+                          this.tasks = this.tasks.filter(task =>(task != taskToRegistry));
+                          
+                          }         
+              ).catch(error =>{
+                  console.log(error)
+              }
+          );
+
+    },
+
+    addRegistry(registry) {
+      let isElementPresent = false;
+      for (let j = 0; j < this.registries.length; j++) {
+          if (this.registries[j].id === registry.id) {
+              isElementPresent = true;
+              if(this.registries[j].dossiers.length!==registry.dossiers.length){
+                  this.registries[j].dossiers=registry.dossiers
+              }
+              break;
+          }
+      }
+      if (!isElementPresent) {
+          this.registries.push(registry);
+      }
+    },
+
+    sendRegistry(registry){
+        registry.status = 'sent';
+        registry.sender = this.userStore.user.id
+        axios.patch('/api/units/registry/' + registry.id + '/', registry).then(
+            response =>{
+                console.log(response.data);
+                this.registries = this.registries.filter(reg =>(reg != registry));
+            }
+        ).catch(error =>{
+            if (error.response) {
+                console.log(error.response.data);
+                this.errArray = error.response.data;
+                }
+            })
+        },
 
   },
 

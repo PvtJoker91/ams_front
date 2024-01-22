@@ -158,7 +158,7 @@ export default{
     },
 
     
-    moveToDestination(dossier, sourceArray, destinationArray) {
+  moveToDestination(dossier, sourceArray, destinationArray) {
       const index = sourceArray.findIndex(i => i.barcode === dossier.barcode);
       sourceArray.splice(index, 1);
       destinationArray.push(dossier);
@@ -208,7 +208,8 @@ export default{
     } 
       axios.patch('/api/logistics/completion/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
           response =>{
-              console.log(response.data)
+              console.log(response.data);
+              this.dossier.barcode = '';
           }
       ).catch(error =>{
           console.log(error)

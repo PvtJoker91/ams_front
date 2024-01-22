@@ -137,8 +137,20 @@
 
 <script>
 import axios from 'axios'
+import { useUserStore } from '@/stores/user'
+
+
+
+
 
 export default{
+    
+    setup() {
+        const userStore = useUserStore()
+        return {
+            userStore,
+        }
+    },
 
     data(){
         return{
@@ -281,8 +293,9 @@ export default{
         },
   
     registerDossier(){
-        this.currentDossier.status = 'Is registred'
-        this.currentDossier.archive_box = this.currentArchiveBox.id
+        this.currentDossier.status = 'Is registred';
+        this.currentDossier.archive_box = this.currentArchiveBox.id;
+        this.currentDossier.registerer = this.userStore.user.id;
         axios.post('/api/registration/dossier/', this.currentDossier).then(
             response =>{
                 console.log(response.data)

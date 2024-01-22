@@ -46,12 +46,15 @@
               <li><RouterLink to="/requests/list">Заявки</RouterLink></li>
               <li><RouterLink to="/requests/tasks">Задания по заявкам</RouterLink></li>
               <li><RouterLink to="/requests/tasks/execution">Исполнение заданий</RouterLink></li>
-              <li><RouterLink to="/units/card/">Карточка ЕХ</RouterLink></li>
             </ul>
           </div>
 
           <div class="block py-2">
             <RouterLink to="/units/registry">Реестры</RouterLink>
+          </div>
+
+          <div class="block py-2">
+            <RouterLink to="/units/card/">Карточка ЕХ</RouterLink>
           </div>
 
         </template>

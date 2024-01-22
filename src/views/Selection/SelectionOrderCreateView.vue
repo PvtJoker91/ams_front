@@ -241,42 +241,25 @@ export default{
       }
     },
 
-    changeTasksStatuses(){
-        let tasksToUpdate = this.tasks.filter(obj =>this.tasksToSelect.includes(obj.id))
-        tasksToUpdate.forEach(obj => {obj.task_status = "on_selection"});
-        axios.put('/api/requests/tasks/list_update', tasksToUpdate).then(
-            response =>{
-                console.log(response.data);
-                this.tasks = this.tasks.filter(obj =>!this.tasksToSelect.includes(obj.id));
-                this.getTimedLocatedTasks(this.tasks);
-                this.tasksToSelect = [];
-            }
-        ).catch(error =>{
-            console.log(error)
-        });
-
+    filterTasks(){
+        this.tasks = this.tasks.filter(obj =>!this.tasksToSelect.includes(obj.id));
+        this.getTimedLocatedTasks(this.tasks);
+        this.tasksToSelect = [];
     },
 
     saveOrder(){
       this.selectionOrder.creator = this.userStore.user.id;
       this.selectionOrder.tasks = this.tasksToSelect;
-      this.selectionOrder.time_create = this.getCurrentDateTime();
-      console.log(this.selectionOrder)
       axios.post('/api/selection/orders/', this.selectionOrder
                             ).then(response =>{
                                     console.log(response.data)
-                                    this.changeTasksStatuses()
+                                    this.filterTasks()
                                     this.showForm = false
                                     }         
                         ).catch(error =>{
                             console.log(error)
                         })
     },
-    getCurrentDateTime() {
-                const currentDate = new Date();
-                const formattedDate = currentDate.toISOString().slice(0, 19);
-                return formattedDate;
-            },
   }
 
 }

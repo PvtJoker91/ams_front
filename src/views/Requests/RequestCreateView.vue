@@ -79,15 +79,15 @@
     data(){
         return{
         services:[
-                  {type:'Full scanning', id:'full_scanning'},
-                  {type:'Scanning by documents', id:'scanning_by_documents'},
-                  {type:'Temporary issuance', id:'temporary_issuance'},
-                  {type:'Unrecoverable issuance', id:'unrecoverable_issuance'},
+                  {type:'Сканирование в один файл', id:'full_scanning'},
+                  {type:'Сканирование по документам', id:'scanning_by_documents'},
+                  {type:'Выдача во временное пользование', id:'temporary_issuance'},
+                  {type:'Безвозвратная выдача', id:'unrecoverable_issuance'},
               ],
         urgencys:[
-                  {type:'Standard - 40 w.h.', hours:40},
-                  {type:'Increased - 16 w.h.', hours:16},
-                  {type:'High - 8 w.h.', hours:8},
+                  {type:'Стандартная - 40 р.ч.', hours:40},
+                  {type:'Повышенная - 16 р.ч.', hours:16},
+                  {type:'Срочная - 8 р.ч.', hours:8},
               ],             
 
         request:{

@@ -15,31 +15,31 @@
                         <li >
                             <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <input v-model="filteredRequestStatus"  id="filter-radio-example-1" type="radio" value="creation" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Creation</label>
+                                <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Создание</label>
                             </div>
                         </li>
                         <li>
                           <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                               <input v-model="filteredRequestStatus"  id="filter-radio-example-2" type="radio" value="sent_for_processing" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                              <label for="filter-radio-example-2" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Sent</label>
+                              <label for="filter-radio-example-2" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Отправлена</label>
                           </div>
                       </li>
                       <li>
                           <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                               <input v-model="filteredRequestStatus"  id="filter-radio-example-3" type="radio" value="cancelled" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                              <label for="filter-radio-example-3" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Cancelled</label>
+                              <label for="filter-radio-example-3" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Отменена</label>
                           </div>
                       </li>
                       <li>
                           <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                               <input v-model="filteredRequestStatus"  id="filter-radio-example-4" type="radio" value="accepted" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                              <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Accepted</label>
+                              <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Принята</label>
                           </div>
                       </li>
                       <li>
                           <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                               <input v-model="filteredRequestStatus"  id="filter-radio-example-4" type="radio" value="complete" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                              <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Complete</label>
+                              <label for="filter-radio-example-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Исполнена</label>
                           </div>
                       </li>     
                     </ul>

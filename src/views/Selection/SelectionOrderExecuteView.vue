@@ -81,7 +81,6 @@
   
     data(){
         return{
-        selectedDossiers:[],
         registries:[],
         'dossier':{
             'barcode':'',
@@ -97,8 +96,8 @@
         selectDossier(){
         axios.patch('/api/selection/dossier/' + this.dossier.barcode + '/', this.dossier).then(
             response =>{
+                console.log(response.data)
                 this.addRegistry(response.data.registries)
-                this.selectedDossiers.push(response.data)
                 this.dossier.barcode = ''
                 this.errArray = []
             }
