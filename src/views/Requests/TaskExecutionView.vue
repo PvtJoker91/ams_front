@@ -208,7 +208,7 @@
                       </td>
                       <td class="px-6 py-3">
                         <button @click="sendRegistry(registry)"
-                        class="rounded-md bg-green-500 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        class="rounded-md bg-green-500 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-400">
                         Отправить  
                     </button>
                       </td>
@@ -314,7 +314,7 @@ export default{
 
       axios.post(`/api/units/scans/`, formData)
         .then(response => {
-          console.log('Scan uploaded successfully');
+          console.log('Scan uploaded successfully', response.data);
           this.getScans(this.currentTask)
         })
         .catch(error => {

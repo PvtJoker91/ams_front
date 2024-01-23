@@ -60,11 +60,13 @@
         </template>
       </div>
 
-      <div class="py-5 px-8 mt-auto">
+      <div class="py-20 px-8 mt-auto">
         <template v-if="userStore.user.isAuthenticated && userStore.user.id">
-          <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="block py-2 px-2 bg-purple-600 text-white rounded-lg">
-            {{ userStore.user.first_name }} {{ userStore.user.last_name }}
-          </RouterLink>
+             {{ userStore.user.first_name }} {{ userStore.user.last_name }}
+
+          <button @click="logout()" class="inline-block py-2 px-1 bg-red-800 text-s text-white rounded-lg shadow-sm hover:bg-red-700">
+              Log out
+          </button>
         </template>
       </div>
     </aside>
@@ -127,6 +129,13 @@
         hasGroup(groupName) {
             return this.userStore.user && this.userStore.user.groups.some(group => group.name === groupName);
         },
+        logout() {
+            console.log('Log out')
+
+            this.userStore.removeToken()
+
+            this.$router.push('/')
+        }
 
       },
   }

@@ -17,16 +17,17 @@
       <button class="mb-6 mr-6 rounded-md bg-purple-600 px-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-purple-500" 
           @click="showCard=false">Назад
       </button>
-      <h2 class="text-2xl font-bold mb-8">Карточка досье {{dossier.barcode}}</h2>
+      <h2 v-if="Object.keys(dossier).length!=0" class="text-2xl font-bold mb-8">Карточка досье {{dossier.barcode}}</h2>
+      <h2 v-if="Object.keys(archive_box).length!=0" class="text-2xl font-bold mb-8">Карточка архивного бокса {{archive_box.barcode}}</h2>
     </div>
 
     <div class="p-8 bg-white rounded-lg">
       <div class="flex items-center">
-          <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-              @click="showHistory=false">Информация о досье
+          <button class="mr-4 mb-3 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
+              @click="showHistory=false">Информация о EХ
           </button>
-          <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-              @click="showHistory=true">История досье
+          <button class="mb-3 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
+              @click="showHistory=true, currentPage=1">История EХ
           </button>
       </div>
 
@@ -36,24 +37,30 @@
               <div class="container mx-auto grid grid-cols-2 gap-4 mb-6 mt-2">
                   <div>
                       <b class="block">Статус: </b>
-                      <span class="block">{{ dossier.status }}</span>
+                      <span v-if="Object.keys(dossier).length!=0" class="block">{{ dossier.status }}</span>
+                      <span v-if="Object.keys(archive_box).length!=0" class="block">{{ archive_box.status }}</span>
                   </div>
-                  <div>
+                  <div v-if="Object.keys(dossier).length!=0">
                       <b class="block">Архивный бокс: </b>
                       <span v-if="dossier.archive_box!=null" class="block">{{ dossier.archive_box.barcode }}</span>
                   </div>
                   <div>
                       <b class="block">Сектор: </b>
-                      <span class="block">{{ dossier.current_sector}}</span>
+                      <span v-if="Object.keys(dossier).length!=0" class="block">{{ dossier.current_sector.name }}</span>
+                      <span v-if="Object.keys(archive_box).length!=0" class="block">{{ archive_box.current_sector.name }}</span>
                   </div>
                   <div>
-                      <b class="block">Расположение: </b>
-                      <span class="block">{{ dossier.location}}</span>
+                      <b class="block">Размещение в хранилище: </b>
+                      <span v-if="Object.keys(dossier).length!=0" class="block">{{ dossier.location}}</span>
+                      <span v-if="Object.keys(archive_box).length!=0" class="block">{{ archive_box.location}}</span>
+                  </div>
+                  <div v-if="Object.keys(archive_box).length!=0">
+                      <b class="block">Количество досье: </b>
+                      <span class="block">{{ archive_box.dossier_count }}</span>
                   </div>
               </div>
-              <h2 class="text-xl font-bold mb-4">Информация о договоре:</h2>
-              <div class="container mx-auto grid grid-cols-2 gap-4 mb-6 mt-2">
-
+              <h2 v-if="Object.keys(dossier).length!=0" class="text-xl font-bold mb-4">Информация о договоре:</h2>
+              <div v-if="Object.keys(dossier).length!=0" class="container mx-auto grid grid-cols-2 gap-4 mb-6 mt-2">
                   <div>
                       <b class="block">ФИО клиента: </b>
                       <span class="block">{{ dossier.contract.client.last_name }} {{ dossier.contract.client.first_name }} {{ dossier.contract.client.middle_name }}</span>
@@ -71,8 +78,8 @@
                       <span class="block">{{ dossier.contract.time_create }}</span>
                   </div>
               </div>
-              <h2 class="text-xl font-bold mb-4">Информация о регистрации:</h2>
-              <div class="container mx-auto grid grid-cols-2 gap-4 mb-6 mt-2">
+              <h2 v-if="Object.keys(dossier).length!=0" class="text-xl font-bold mb-4">Информация о регистрации:</h2>
+              <div v-if="Object.keys(dossier).length!=0" class="container mx-auto grid grid-cols-2 gap-4 mb-6 mt-2">
                   <div>
                       <b class="block">Дата регистрации: </b>
                       <span class="block">{{ dossier.registration_date }}</span>
@@ -98,8 +105,11 @@
                     <th scope="col" class="px-6 py-3">
                         Статус
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th v-if="Object.keys(dossier).length!=0" scope="col" class="px-6 py-3">
                         Архивный бокс
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Хранение
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Сотрудник
@@ -108,19 +118,22 @@
             </thead>
             <tbody>
                 <tr v-for="change, n in makePage()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {{ n + (currentPage-1)*10 + 1 }}
                     </th>
-                    <td class="px-6 py-3">
+                    <td class="px-6 py-2">
                       {{ change.timestamp }}
                     </td>
-                    <td class="px-6 py-3">
+                    <td class="px-6 py-2">
                       {{change.status}}
                     </td>
-                    <td class="px-6 py-3">
+                    <td v-if="Object.keys(dossier).length!=0" class="px-6 py-2">
                       {{ change.archive_box }}
                     </td>
-                    <td class="px-6 py-3">
+                    <td class="px-6 py-2">
+                      {{ change.location }}
+                    </td>
+                    <td class="px-6 py-2">
                       {{ change.user_last_name }} {{ change.user_first_name }}
                     </td>
                 </tr>
@@ -174,7 +187,8 @@
         history:[],
         currentPage: 1,
         barcode:'',
-        errArray:[],  
+        errArray:[],
+        archive_box:{},
         dossier:{
           'contract':{
               'client':{},
@@ -191,24 +205,46 @@
       }
     },
 
-
-
     methods: {
       unitSearch(){
-        axios.get('/api/units/dossier/' + this.barcode + '/',
+        const dossier_pattern = /D\d{2}-\d{2}-\d{8}$|d{5}-d{5}-d{5}-d{5}-d{5}$|d{25}$/;
+        const ab_pattern = /AB-\d{2}-\d{6}$/;
+        if (dossier_pattern.test(this.barcode)){
+          axios.get('/api/units/dossier/' + this.barcode + '/',
                     ).then(response =>{
                             console.log(response.data)
                             this.dossier = response.data;
                             this.history = response.data.history;
                             this.showCard = true;
+                            this.archive_box = {};
                             }         
                 ).catch(error =>{
                     console.log(error)
                 })
+        } else if (ab_pattern.test(this.barcode)){
+          axios.get('/api/units/archive-box/' + this.barcode + '/',
+                    ).then(response =>{
+                            console.log(response.data)
+                            this.archive_box = response.data;
+                            this.history = response.data.history;
+                            this.showCard = true;
+                            this.dossier = {};
+                            }         
+                ).catch(error =>{
+                    console.log(error)
+                })
+        } else {
+          console.log('Wrong barcode format')
+        }
+
       },
 
       totalPages(){
-        return Math.floor(this.dossier.history.length / 10) + 1
+        if (this.history.length % 10 == 0){
+          return Math.floor(this.history.length / 10)
+        } else {
+          return Math.floor(this.history.length / 10) + 1
+        };
       },
 
       makePage(){

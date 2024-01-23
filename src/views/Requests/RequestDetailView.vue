@@ -7,7 +7,7 @@
                          @click="showSearch=false">Детали заявки
                     </button>
                     <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
-                        @click="showSearch=true">Добавить досье
+                        @click="showSearch=true, errArray=[]">Добавить досье
                         <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
                             {{ addedDossiers.length }}
                         </span>
@@ -121,7 +121,7 @@
                 <div v-if="this.showSearch" class="ml-2">
                     <div v-if="Object(foundDossiers).length==0"  class="mt-5">
                         <div class="mt-4">
-                                <h2 class="text-xl font-bold mb-4">Заполните детали поиска</h2>
+                            <h2 class="text-xl font-bold mb-4">Заполните детали поиска</h2>
                         </div>
 
                         <form @submit.prevent="searchDossiers()">
@@ -179,7 +179,11 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Поиск</button>
+                                <button type="submit" class="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                    Поиск
+                                </button>
+                                <span class="danger">{{ errArray['detail'] ? errArray['detail'].toString() : '' }}</span>
+                                <span id="err" class="danger"></span>
                             </div>
 
                         </form>
@@ -261,6 +265,7 @@
                 foundDossiers:[],
                 addedDossiers:[],
                 emptyResult: false,
+                errArray: [],
                 products:[
                   {name:''},
                   {name:'BSA'},
@@ -320,13 +325,18 @@
                     '&contract__client__middle_name='+this.dossier.contract.client.middle_name +
                     '&contract__client__passport='+this.dossier.contract.client.passport + 
                     '&contract__client__birthday='+this.dossier.contract.client.birthday +
-                    '&contract__product__id='+this.dossier.contract.product.id,
+                    '&contract__product__id='+this.dossier.contract.product.id + 
+                    '&limit=10',
                     ).then(response =>{
-                            console.log(response.data)
-                            this.foundDossiers = response.data
+                            console.log(response.data);
+                            this.foundDossiers = response.data;
+                            this.errArray = [];
                             }                              
                 ).catch(error =>{
-                    console.log(error)
+                    if (error.response) {
+                        console.log(error.response.data);
+                        this.errArray = error.response.data;
+                }
                 }
                 )
             },
@@ -350,7 +360,7 @@
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'requestList'
+                                        name:'myRequests'
                                     })
                                     }         
                         ).catch(error =>{

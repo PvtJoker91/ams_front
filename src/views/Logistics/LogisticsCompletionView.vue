@@ -16,7 +16,7 @@
     
             <!-- Close Archive Box Button -->
             <div v-if="Object.keys(this.currentArchiveBox).length !== 0" class="mt-2">
-                <button @click="closeArchiveBox" class="py-1 px-2 bg-purple-600 text-white rounded-lg">Close archive box</button>
+              <button class="py-1 px-2 bg-purple-600 text-white rounded-lg shadow-sm hover:bg-purple-500" @click="closeArchiveBox()">Закрыть бокс</button>
             </div>
         
     

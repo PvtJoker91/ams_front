@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ProfileView from '../views/ProfileView.vue'
 import ArchiveHomeView from '../views/ArchiveHomeView.vue'
 import RequestsHomeView from '../views/Requests/RequestsHomeView.vue'
 import RequestCreateView from '../views/Requests/RequestCreateView.vue'
@@ -20,7 +19,7 @@ import SelectionOrderCreateView from '../views/Selection/SelectionOrderCreateVie
 import SelectionOrderExecuteView from '../views/Selection/SelectionOrderExecuteView.vue'
 import SelectionOrderPrintView from '../views/Selection/SelectionOrderPrintView.vue'
 import RegistrationView from '../views/Registration/RegistrationView.vue'
-import DossierDetailView from '../views/Units/DossierDetailView.vue'
+import EXDetailView from '../views/Units/EXDetailView.vue'
 import RegistryListView from '../views/Units/RegistryListView.vue'
 import RegistryDetailView from '../views/Units/RegistryDetailView.vue'
 
@@ -32,11 +31,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
-    },
-    {
-      path: '/profile/:id',
-      name: 'profile',
-      component: ProfileView
     },
     {
       path: '/requests',
@@ -135,8 +129,8 @@ const router = createRouter({
     },
     {
       path: '/units/card',
-      name: 'dossierDetail',
-      component: DossierDetailView
+      name: 'eXCard',
+      component: EXDetailView
     },
     {
       path: '/units/registry',

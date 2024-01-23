@@ -21,7 +21,7 @@ AB-00-000004
 AB-00-000005
 AB-00-000006
 10.00.00.-A.00.02"></textarea>
-                <p><button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-lg mt-2">Разместить на хранение</button></p>                                     
+                <p><button type="submit" class="py-2 px-4 bg-blue-600 text-white rounded-lg mt-2 shadow-sm hover:bg-blue-500">Разместить на хранение</button></p>                                     
             </form>
         </div>
   </div>
