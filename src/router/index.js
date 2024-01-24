@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ResetPasswordView from '../views/ResetPasswordView.vue'
 import ArchiveHomeView from '../views/ArchiveHomeView.vue'
 import RequestsHomeView from '../views/Requests/RequestsHomeView.vue'
 import RequestCreateView from '../views/Requests/RequestCreateView.vue'
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/reset-password/:uidb64/:token',
+      name: 'resetPassword',
+      component: ResetPasswordView
     },
     {
       path: '/requests',

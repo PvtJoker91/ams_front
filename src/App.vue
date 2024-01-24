@@ -60,18 +60,18 @@
         </template>
       </div>
 
-      <div class="py-20 px-8 mt-auto">
+      <div class="py-20 px-8 mt-auto text-xs">
         <template v-if="userStore.user.isAuthenticated && userStore.user.id">
              {{ userStore.user.first_name }} {{ userStore.user.last_name }}
 
-          <button @click="logout()" class="inline-block py-2 px-1 bg-red-800 text-s text-white rounded-lg shadow-sm hover:bg-red-700">
+          <button @click="logout()" class="inline-block py-2 px-1 bg-red-800 text-xs text-white rounded-lg shadow-sm hover:bg-red-700">
               Log out
           </button>
         </template>
       </div>
     </aside>
 
-    <main class="flex-1 px-8 py-5">
+    <main class="flex-1 bg-white px-8 py-5">
       <RouterView />
     </main>
 
