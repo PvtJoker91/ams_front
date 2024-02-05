@@ -18,11 +18,11 @@
             </ul>
           </div>
 
-          <div  v-if="hasGroup('Registration')" class="block py-2">
+          <div class="block py-2">
           <RouterLink to="/registration">Регистрация</RouterLink>
           </div>
           
-          <div v-if="hasGroup('Logistics')" class="block py-2">
+          <div class="block py-2">
             <span class="cursor-pointer" @click="toggleLogisticsMenu">Логистика</span>
             <ul v-show="logisticsMenuOpen" class="pl-4">
               <li><RouterLink to="/logistics/checking">Проверка бокса</RouterLink></li>
@@ -31,7 +31,7 @@
             </ul>
           </div>
 
-          <div v-if="hasGroup('Logistics')" class="block py-2">
+          <div class="block py-2">
             <span class="cursor-pointer" @click="toggleSelectionMenu">Подбор досье</span>
             <ul v-show="selectionMenuOpen" class="pl-4">
               <li><RouterLink to="/selection/orders">Наряды на подбор</RouterLink></li>
@@ -40,7 +40,7 @@
             </ul>
           </div>
           
-          <div v-if="hasGroup('Requests')" class="block py-2">
+          <div class="block py-2">
             <span class="cursor-pointer" @click="toggleRequestsFulfillmentMenu">Обработка заявок</span>
             <ul v-show="requestsFulfillmentMenuOpen" class="pl-4">
               <li><RouterLink to="/requests/list">Заявки</RouterLink></li>
@@ -80,7 +80,7 @@
 
 <script>
   import axios from 'axios'
-  import { useUserStore } from '@/stores/user'
+  import { useUserStore } from './stores/user'
 
   export default {
       setup() {

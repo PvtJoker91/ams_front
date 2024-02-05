@@ -2,7 +2,7 @@
     <div class="space-y-3">
     <h2 class="text-3xl font-bold mb-4">Заявка №{{ currentRequest.id }}  {{ currentRequest.time_create }}</h2>
             <div class="p-8 bg-white rounded-lg">
-                <div v-if="currentRequest.status == 'creation'" class="flex items-center">
+                <div v-if="currentRequest.status == 'Создание'" class="flex items-center">
                     <button class="mr-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" 
                          @click="showSearch=false">Детали заявки
                     </button>
@@ -66,26 +66,26 @@
 
                     
                     <div class="flex items-center">    
-                        <div v-if="currentRequest.status == 'sent_for_processing' && !hasGroup('Archive clients')" class="flex items-center">
+                        <div v-if="currentRequest.status == 'Отправлена в архив' && !hasGroup('Archive clients')" class="flex items-center">
                             <button @click="requestAccept()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500" >
                                 Подтвердить заявку
                             </button>
                         </div>
 
                     
-                        <div v-if="this.addedDossiers.length !==0 && currentRequest.status == 'creation'">
+                        <div v-if="this.addedDossiers.length !==0 && currentRequest.status == 'Создание'">
                             <button @click="requestSend()" class="float-left ml-2 mt-4 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
                                     Отправить заявку
                             </button>
                         </div>
                             
-                        <div v-if="currentRequest.status == 'creation'">
+                        <div v-if="currentRequest.status == 'Создание'">
                             <button @click="requestDelete()" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
                                 Удалить заявку
                             </button>
                         </div>
                         
-                        <div v-if="currentRequest.status !== 'creation' && currentRequest.status !== 'cancelled' && currentRequest.status !== 'complete'">
+                        <div v-if="currentRequest.status !== 'Создание' && currentRequest.status !== 'Отменена' && currentRequest.status !== 'Завершена'">
                             <button v-if="!showDialog" @click="showDialog=true" class="float-left ml-2 mt-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
                                 Закрыть заявку
                             </button>
@@ -108,9 +108,15 @@
                         <div v-if="Object(addedDossiers).length!==0">
                             <h2 class="text-xl font-bold mb-4">Досье в заявке:  ({{ addedDossiers.length }})</h2>
                             <li v-for="dossier in addedDossiers">
-                                 {{ dossier.barcode }}
-                                <button v-if="currentRequest.status == 'creation'"
-                                @click="addRemoveDossierToRequest(dossier)" class="rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
+
+                                <RouterLink :to="{name: 'dossierScans', params:{'barcode': dossier.barcode}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                    {{ dossier.barcode }}
+                                </RouterLink>
+
+
+                                <a v-if="currentRequest.status !== 'Создание'">   ({{ dossier.scan_count }})</a>
+                                <button v-if="currentRequest.status == 'Создание'"
+                                @click="addRemoveDossierToRequest(dossier)" class="ml-3 rounded-md bg-indigo-600 px-1 py-0.2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500">
                                     Remove
                                 </button>
                             </li>
@@ -242,7 +248,7 @@
     
     <script>
     import axios from 'axios';
-    import { useUserStore } from '@/stores/user'
+    import { useUserStore } from './stores/user'
 
 
     export default {
@@ -352,7 +358,7 @@
             },
             
             requestSend(){
-                if(this.addedDossiers.length !==0 && this.currentRequest.status == 'creation'){
+                if(this.addedDossiers.length !==0 && this.currentRequest.status == 'Создание'){
                 this.currentRequest.dossiers = this.getID(this.addedDossiers)
                 this.currentRequest.status = 'sent_for_processing'
                 this.currentRequest.time_create = this.getCurrentDateTime()
@@ -365,7 +371,7 @@
                                     }         
                         ).catch(error =>{
                             console.log(error)
-                            this.currentRequest.status = 'creation'
+                            this.currentRequest.status = 'Создание'
                         }
                         )
                 }         
@@ -395,7 +401,7 @@
             },
 
             requestAccept(){
-                if(this.currentRequest.status == 'sent_for_processing'){
+                if(this.currentRequest.status == 'Отправлена в архив'){
                 axios.patch('/api/requests/requests/'+ this.currentRequest.id + '/', {status:'accepted'}
                             ).then(response =>{
                                     console.log(response.data);
@@ -409,7 +415,7 @@
                 }         
             },
             requestCancel(){
-                if(this.currentRequest.status !== 'creation'){
+                if(this.currentRequest.status !== 'Создание'){
                 axios.patch('/api/requests/requests/'+ this.currentRequest.id + '/',
                         {
                         status:'cancelled',
@@ -430,12 +436,12 @@
             },
 
             requestDelete(){
-                if(this.currentRequest.status == 'creation'){
+                if(this.currentRequest.status == 'Создание'){
                 axios.delete('/api/requests/requests/'+ this.currentRequest.id + '/',
                             ).then(response =>{
                                     console.log(response.data)
                                     this.$router.push({
-                                        name:'requestCreate'
+                                        name:'myRequests'
                                     })
                                     }         
                         ).catch(error =>{

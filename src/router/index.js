@@ -23,6 +23,7 @@ import RegistrationView from '../views/Registration/RegistrationView.vue'
 import EXDetailView from '../views/Units/EXDetailView.vue'
 import RegistryListView from '../views/Units/RegistryListView.vue'
 import RegistryDetailView from '../views/Units/RegistryDetailView.vue'
+import DossierScansView from '../views/Units/DossierScansView.vue'
 
 
 const router = createRouter({
@@ -147,6 +148,11 @@ const router = createRouter({
       path: '/units/registry/:id',
       name: 'registryDetail',
       component: RegistryDetailView
+    },
+    {
+      path: '/units/dossier/:barcode',
+      name: 'dossierScans',
+      component: DossierScansView
     },
 
   ]

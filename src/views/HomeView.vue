@@ -70,9 +70,9 @@
 
 <script>
 import axios from 'axios';
-import PasswordRecovery from '@/components/PasswordRecovery.vue';
+import PasswordRecovery from './components/PasswordRecovery.vue';
 
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from './stores/user'
 
 export default {
     

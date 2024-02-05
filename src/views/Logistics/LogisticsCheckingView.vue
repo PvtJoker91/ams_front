@@ -178,35 +178,21 @@
           !this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
           !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)
             ){
-                axios.get('/api/logistics/checking/dossier/'+  this.dossier.barcode + '/').then(
-                    response =>{
-                        console.log(response.data)
-                        this.currentDossier = response.data;
-                        this.currentDossier.archive_box = this.currentArchiveBox.id;
-                        this.currentDossier.status = 'Checked in a box';
-                        axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
-                        response =>{
-                            console.log(response.data)
-                            this.addedDossiers.push(this.currentDossier);
-                            this.checkedDossiers.push(this.currentDossier);
-                            this.dossier.barcode = '';
-                            this.errArray = [];
-                        }).catch(error =>{
-                                if (error.response) {
-                                    console.log(error.response.data);
-                                    this.errArray = error.response.data;
-                                    }
-                                    }
-                                )                   
-
-                             
-                        }).catch(error =>{
-                    if (error.response) {
-                        console.log(error.response.data);
-                        this.errArray = error.response.data;
-                    } 
-                 }
-            )
+                this.currentDossier.archive_box = this.currentArchiveBox.id;
+                this.currentDossier.status = 'Checked in a box';
+                axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                response =>{
+                    console.log(response.data)
+                    this.addedDossiers.push(this.currentDossier);
+                    this.checkedDossiers.push(this.currentDossier);
+                    this.dossier.barcode = '';
+                    this.errArray = [];
+                }).catch(error =>{
+                        if (error.response) {
+                            console.log(error.response.data);
+                            this.errArray = error.response.data;
+                            }
+                    })                      
       } else if (
           this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
           !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)

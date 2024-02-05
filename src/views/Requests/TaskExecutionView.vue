@@ -223,7 +223,7 @@
 
 <script>
 import axios from 'axios'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from './stores/user'
 
 
 export default{
@@ -311,6 +311,7 @@ export default{
       formData.append('file', this.scan.file);
       formData.append('name', this.scan.fileName);
       formData.append('description', this.scan.fileDescription);
+      formData.append('uploader', this.userStore.user.id);
 
       axios.post(`/api/units/scans/`, formData)
         .then(response => {
