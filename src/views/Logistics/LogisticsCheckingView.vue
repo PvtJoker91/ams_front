@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-3">
+    <div v-if="userStore.user.isAuthenticated && userStore.user.id" class="space-y-3">
       <h2 class="text-3xl font-bold mb-4">Проверка комплектности архивного бокса</h2>
         <div class="p-6 bg-white border border-gray-200 rounded-lg">
             <div class="p-1 bg-white  rounded-lg">
@@ -58,20 +58,34 @@
             </div>
         </div>
     </div>
+    <div v-else>
+      <AccessDenied />
+    </div>
   </template>
   
   
   <script>
   import axios from 'axios'
   import _ from 'lodash';
-  
-  
+  import AccessDenied from '../../components/AccessDenied.vue';
+  import { useUserStore } from '../../stores/user'
+
   export default{
-  
+
+    components: {
+    AccessDenied,
+  },
+
+    setup() {
+        const userStore = useUserStore()
+        return {
+            userStore
+        }
+    },
+
     data(){
         return{
         currentArchiveBox: {},
-        currentDossier: {},
         dossiers: [],
         checkedDossiers: [],
         addedDossiers: [],
@@ -102,7 +116,6 @@
                 this.currentArchiveBox = response.data
                 this.dossiers = response.data.dossiers
                 this.dossier.archive_box = this.currentArchiveBox
-                this.currentDossier = {}
                 this.checkedDossiers = []
                 this.errArray = []
             }
@@ -127,7 +140,6 @@
                 this.checkedDossiers = []
                 this.addedDossiers = []
                 this.currentArchiveBox = {}
-                this.currentDossier = {}
                 this.archiveBox.barcode = ""
             }
         ).catch(error =>{
@@ -148,7 +160,6 @@
                 this.addedDossiers = []
                 this.dossiers = []
                 this.currentArchiveBox = {}
-                this.currentDossier = {}
                 this.archiveBox.barcode = ""
                 this.message = false;
             }
@@ -173,19 +184,18 @@
         }
     },
     checkDossier(){
-        this.currentDossier = _.cloneDeep(this.dossier);
+        let currentDossier = _.cloneDeep(this.dossier);
         if (
-          !this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
-          !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)
+          !this.isBarcodePresent(this.dossiers, currentDossier.barcode) &&
+          !this.isBarcodePresent(this.checkedDossiers, currentDossier.barcode)
             ){
-                this.currentDossier.archive_box = this.currentArchiveBox.id;
-                this.currentDossier.status = 'Checked in a box';
-                axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                currentDossier.archive_box = this.currentArchiveBox.id;
+                currentDossier.status = 'Checked in a box';
+                axios.patch('/api/logistics/checking/dossier/' +  currentDossier.barcode + '/', currentDossier).then(
                 response =>{
                     console.log(response.data)
-                    this.addedDossiers.push(this.currentDossier);
-                    this.checkedDossiers.push(this.currentDossier);
-                    this.dossier.barcode = '';
+                    this.addedDossiers.push(currentDossier);
+                    this.checkedDossiers.push(currentDossier);
                     this.errArray = [];
                 }).catch(error =>{
                         if (error.response) {
@@ -194,17 +204,16 @@
                             }
                     })                      
       } else if (
-          this.isBarcodePresent(this.dossiers, this.currentDossier.barcode) &&
-          !this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)
+          this.isBarcodePresent(this.dossiers, currentDossier.barcode) &&
+          !this.isBarcodePresent(this.checkedDossiers, currentDossier.barcode)
             ){
-                this.currentDossier.archive_box = this.currentArchiveBox.id;
-                this.currentDossier.status = 'Checked in a box';
-                axios.patch('/api/logistics/checking/dossier/' +  this.currentDossier.barcode + '/', this.currentDossier).then(
+                currentDossier.archive_box = this.currentArchiveBox.id;
+                currentDossier.status = 'Checked in a box';
+                axios.patch('/api/logistics/checking/dossier/' +  currentDossier.barcode + '/', currentDossier).then(
                 response =>{
                     console.log(response.data);
-                    this.moveToDestination(this.currentDossier, this.dossiers, this.checkedDossiers)
+                    this.moveToDestination(currentDossier, this.dossiers, this.checkedDossiers)
                     this.errArray = [];
-                    this.dossier.barcode = '';
                     this.autoClose()
                 }
             ).catch(error =>{
@@ -214,9 +223,9 @@
                     }
                 }
             )
-      }  else if (this.isBarcodePresent(this.checkedDossiers, this.currentDossier.barcode)) {
-            this.dossier.barcode = '';
-        }
+      };  
+        this.dossier.barcode = '';
+      
         }    
       }
     }
